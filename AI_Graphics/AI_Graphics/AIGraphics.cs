@@ -6,12 +6,12 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
-namespace AILight
+namespace AIGraphics
 {
     [BepInIncompatibility("dhhai4mod")]
     [BepInDependency("RuntimeUnityEditor")]
     [BepInPlugin(GUID, PluginName, Version)]
-    public partial class AILight : BaseUnityPlugin
+    public partial class AIGraphics : BaseUnityPlugin
     {
         public const string GUID = "ore.ai.graphics";
         public const string PluginName = "AI Graphics";
