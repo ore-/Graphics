@@ -1,19 +1,14 @@
 ﻿using AIGraphics.Inspector;
 using MessagePack;
-using System;
 using UnityEngine;
 using UnityEngine.Rendering;
 using static KKAPI.Studio.StudioAPI;
 
-
 namespace AIGraphics.Settings
 {
     [MessagePackObject(keyAsPropertyName: true)]
-    public class RenderSettings 
+    internal class GlobalSettings 
     {
-        internal enum AAMultiplier { Disabled, _2XMultiSampling, _4XMultiSampling, _8XMultiSampling };
-
-        private int _fontSize;
         private int _pixelLightCount;
 
         internal int PixelLightCount
@@ -28,9 +23,9 @@ namespace AIGraphics.Settings
             set => QualitySettings.anisotropicFiltering = value;
         }
 
-        internal AAMultiplier AntiAliasing
+        internal int AntiAliasing
         {
-            get => (AAMultiplier)Enum.Parse(typeof(AAMultiplier), (QualitySettings.antiAliasing).ToString());
+            get => QualitySettings.antiAliasing;
             set => QualitySettings.antiAliasing = (int)value;
         }
 
@@ -95,9 +90,9 @@ namespace AIGraphics.Settings
         internal int FontSize
         {
             get => GUIStyles.FontSize;
-            set => GUIStyles.FontSize = _fontSize = value;
+            set => GUIStyles.FontSize = AIGraphics.ConfigFontSize.Value = value;
         }
 
-        internal bool DebugSettings { get; set; }
+        internal bool ShowAdvancedSettings { get; set; }
     }
 }

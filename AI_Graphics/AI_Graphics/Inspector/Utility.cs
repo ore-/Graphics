@@ -10,22 +10,24 @@ using UnityEngine;
 
 namespace AIGraphics.Inspector
 {
-    internal class Utility
+    internal class Util
     {
-        public static void Slider(float value, float min, float max, string format, string label, Action<float> onChanged = null, bool enabled = true)
+        private static Texture2D colourIndicator = new Texture2D(32, 16, TextureFormat.RGB24, false, true);
+        private static int enableSpacing = 18;
+
+        internal static void Slider(string label, float value, float min, float max, string format, Action<float> onChanged = null, bool enable = true, Action<bool> onChangedEnable = null)
         {
-            if (!enabled) GUI.enabled = false;
             GUILayout.BeginHorizontal();
-            GUILayout.Label(label, GUILayout.ExpandWidth(false));
-            GUILayout.Label("", GUILayout.Width(GUIStyles.labelWidth - GUI.skin.label.CalcSize(new GUIContent(label)).x));
+            int spacing = 0;
+            EnableToggle(label, ref spacing, ref enable, onChangedEnable);
+            if (!enable) GUI.enabled = false;
             float newValue = GUILayout.HorizontalSlider(value, min, max);
             string valueString = newValue.ToString(format);
             string newValueString = GUILayout.TextField(valueString, GUILayout.Width(40), GUILayout.ExpandWidth(false));
 
             if (newValueString != valueString)
             {
-                float parseResult;
-                if (float.TryParse(newValueString, out parseResult))
+                if (float.TryParse(newValueString, out float parseResult))
                     newValue = Mathf.Clamp(parseResult, min, max);
             }
             GUILayout.EndHorizontal();
@@ -33,23 +35,21 @@ namespace AIGraphics.Inspector
             if (onChanged != null && !Mathf.Approximately(value, newValue))
                 onChanged(newValue);
 
-            if (!enabled) GUI.enabled = true;
+            if (!enable) GUI.enabled = true;
         }
 
-        public static void Slider(int value, int min, int max, string format, string label, Action<int> onChanged = null, bool enabled = true)
+        internal static void Slider(string label, int value, int min, int max, Action<int> onChanged = null, bool enable = true, Action<bool> onChangedEnable = null)
         {
-            if (!enabled) GUI.enabled = false;
             GUILayout.BeginHorizontal();
-            GUILayout.Label(label, GUILayout.ExpandWidth(false));
-            GUILayout.Label("", GUILayout.Width(GUIStyles.labelWidth - GUI.skin.label.CalcSize(new GUIContent(label)).x));
+            int spacing = 0;
+            EnableToggle(label, ref spacing, ref enable, onChangedEnable);
+            if (!enable) GUI.enabled = false;            
             int newValue = (int)GUILayout.HorizontalSlider(value, min, max);
-            string valueString = newValue.ToString(format);
-            string newValueString = GUILayout.TextField(valueString, GUILayout.Width(40), GUILayout.ExpandWidth(false));
+            string newValueString = GUILayout.TextField(newValue.ToString(), GUILayout.Width(40), GUILayout.ExpandWidth(false));
 
-            if (newValueString != valueString)
+            if (newValueString != newValue.ToString())
             {
-                int parseResult;
-                if (int.TryParse(newValueString, out parseResult))
+                if (int.TryParse(newValueString, out int parseResult))
                     newValue = Mathf.Clamp(parseResult, min, max);
             }
             GUILayout.EndHorizontal();
@@ -57,23 +57,27 @@ namespace AIGraphics.Inspector
             if (onChanged != null && !Mathf.Approximately(value, newValue))
                 onChanged(newValue);
 
-            if (!enabled) GUI.enabled = true;
+            if (!enable) GUI.enabled = true;
         }
 
         // useColorDisplayColor32 is for setting colour on skybox tint, Color<->Color32 conversion loses precision
-        public static void SliderColor(Color value, Action<Color> onChanged = null, bool useColorDisplayColor32 = false, bool enabled = true)
+        internal static void SliderColor(string label, Color value, Action<Color> onChanged = null, bool useColorDisplayColor32 = false, bool enable = true, Action<bool> onChangedEnable = null)
         {
-            if (!enabled) GUI.enabled = false;
+            GUILayout.BeginHorizontal();
+            int spacing = 0;
+            EnableToggle(label, ref spacing, ref enable, onChangedEnable);
+            if (!enable) GUI.enabled = false;
             GUI.color = new Color(value.r, value.g, value.b, 1f);
-            GUILayout.Label(new Texture2D(32, 16, TextureFormat.RGB24, false, true));
+            GUILayout.Label(colourIndicator);
             GUI.color = Color.white;
+            GUILayout.EndHorizontal();
             GUILayout.BeginVertical();
             if (useColorDisplayColor32)
             {
                 Color color = value;
-                color.r = SliderColor(color.r);
-                color.g = SliderColor(color.g);
-                color.b = SliderColor(color.b);
+                color.r = SliderColor("Red", color.r, spacing);
+                color.g = SliderColor("Green", color.g, spacing);
+                color.b = SliderColor("Blue", color.b, spacing);
                 Color newValue = color;
                 if (onChanged != null && value != newValue)
                     onChanged(newValue);
@@ -81,64 +85,89 @@ namespace AIGraphics.Inspector
             else
             {
                 Color32 color = value;
-                color.r = SliderColor(color.r);
-                color.g = SliderColor(color.g);
-                color.b = SliderColor(color.b);
+                color.r = SliderColor("Red", color.r, spacing);
+                color.g = SliderColor("Green", color.g, spacing);
+                color.b = SliderColor("Blue", color.b, spacing);
                 Color newValue = color;
                 if (onChanged != null && value != newValue)
                     onChanged(newValue);
             }
             GUILayout.EndVertical();
-
-            if (!enabled) GUI.enabled = true;
+            if (!enable) GUI.enabled = true;
         }
 
-        public static float SliderColor(float value)
+        internal static float SliderColor(string label, float value, int spacing)
         {
             GUILayout.BeginHorizontal();
+            if( 0 != spacing) GUILayout.Label("", GUILayout.Width(spacing));
+            GUILayout.Label(label, GUILayout.ExpandWidth(false));
+            GUILayout.Label("", GUILayout.Width(GUIStyles.labelWidth - GUI.skin.label.CalcSize(new GUIContent(label)).x - spacing));
             float newValue = GUILayout.HorizontalSlider(value, 0, 1);
-            GUILayout.TextField((newValue * 255).ToString("N0"), GUIStyles.Skin.label, GUILayout.Width(40), GUILayout.ExpandWidth(false));
+            string valueString = value.ToString();            
+            string newValueString = GUILayout.TextField((newValue * 255).ToString("N0"), GUILayout.Width(40), GUILayout.ExpandWidth(false));
+            if (newValueString != valueString)
+            {
+                if (float.TryParse(newValueString, out float parseResult))
+                    newValue = parseResult / 255;
+            }
             GUILayout.EndHorizontal();
             return newValue;
         }
 
-        public static byte SliderColor(byte value)
+        internal static byte SliderColor(string label, byte value, int spacing)
         {
             GUILayout.BeginHorizontal();
+            if (0 != spacing) GUILayout.Label("", GUILayout.Width(spacing));
+            GUILayout.Label(label, GUILayout.ExpandWidth(false));
+            GUILayout.Label("", GUILayout.Width(GUIStyles.labelWidth - GUI.skin.label.CalcSize(new GUIContent(label)).x - spacing));
             byte newValue = (byte)GUILayout.HorizontalSlider(value, 0, 255);
             string valueString = value.ToString();
             string newValueString = GUILayout.TextField(newValue.ToString(), GUILayout.Width(40), GUILayout.ExpandWidth(false));
             GUILayout.EndHorizontal();
-
             if (newValueString != valueString)
             {
-                byte parseResult;
-                if (byte.TryParse(newValueString, out parseResult))
+                if (byte.TryParse(newValueString, out byte parseResult))
                     newValue = parseResult;
             }
             return newValue;
         }
 
-        internal static void Selection<TEnum>(ref TEnum selected, string label, Action<TEnum> onChanged = null, int columns = 1)
-        {
-            selected = Selection(selected, label, onChanged, columns);
-        }
-
-        internal static TEnum Selection<TEnum>(TEnum selected, string label, Action<TEnum> onChanged = null, int columns = -1)
+        internal static T Selection<T>(string label, T selected, T[] selection, Action<T> onChanged = null, int columns = -1, bool enable = true, Action<bool> onChangedEnable = null)
         {
             GUILayout.BeginHorizontal();
-            GUILayout.Label(label, GUILayout.ExpandWidth(false));
-            GUILayout.Label("", GUILayout.Width(GUIStyles.labelWidth - GUI.skin.label.CalcSize(new GUIContent(label)).x));
+            int spacing = 0;
+            EnableToggle(label, ref spacing, ref enable, onChangedEnable);
+            if (!enable) GUI.enabled = false;
+            string[] selectionString = selection.Select(entry => entry.ToString()).ToArray();
+            int currentIndex = Array.IndexOf(selection, selected);
+            if (-1 == columns) columns = selection.Length;
+            int selectedIndex = GUILayout.SelectionGrid(currentIndex, selectionString, columns);//, GUIStyles.toolbarbutton);
+            if (!enable) GUI.enabled = true;
+            GUILayout.EndHorizontal();
+            if (selectedIndex == currentIndex)
+                return selected;
+            selected = (T)selection.GetValue(selectedIndex);            
+            onChanged?.Invoke(selected);
+            return selected;
+        }
+
+        internal static TEnum Selection<TEnum>(string label, TEnum selected, Action<TEnum> onChanged = null, int columns = -1, bool enable = true, Action<bool> onChangedEnable = null)
+        {
+            GUILayout.BeginHorizontal();
+            int spacing = 0;
+            EnableToggle(label, ref spacing, ref enable, onChangedEnable);
+            if (!enable) GUI.enabled = false;
             string[] selection = Enum.GetNames(typeof(TEnum));
             int currentIndex = Array.IndexOf(selection, selected.ToString());
             if (-1 == columns) columns = selection.Length;
-            int selectedIndex = GUILayout.SelectionGrid(currentIndex, selection, columns, GUIStyles.toolbarbutton);//, GUILayout.ExpandWidth(false));
+            int selectedIndex = GUILayout.SelectionGrid(currentIndex, selection, columns);//, GUIStyles.toolbarbutton);
             GUILayout.EndHorizontal();
             if (selectedIndex == currentIndex)
                 return selected;
             string selectedName = selection.GetValue(selectedIndex).ToString();
             selected = (TEnum)Enum.Parse(typeof(TEnum), selectedName);
             onChanged?.Invoke(selected);
+            if (!enable) GUI.enabled = true;
             return selected;
         }
 
@@ -156,43 +185,88 @@ namespace AIGraphics.Inspector
             return selected;
         }
 
-        internal static bool Toggle(string label, bool toggle)
+        internal static bool Toggle(string label, bool toggle, bool bold = false)
         {
             GUILayout.BeginHorizontal();
-            GUILayout.Label(label, GUILayout.ExpandWidth(false));
+            if (bold)
+                GUILayout.Label(label, GUIStyles.boldlabel, GUILayout.ExpandWidth(false));
+            else
+                GUILayout.Label(label, GUILayout.ExpandWidth(false));
             GUILayout.Label("", GUILayout.Width(GUIStyles.labelWidth - GUI.skin.label.CalcSize(new GUIContent(label)).x));
             toggle = GUILayout.Toggle(toggle, "");
             GUILayout.EndHorizontal();
             return toggle;
         }
 
-        internal static void Text(string label, string text)
+        internal static void Label(string label, string text)
         {
             GUILayout.BeginHorizontal();
             GUILayout.Label(label, GUILayout.ExpandWidth(false));
             GUILayout.Label("", GUILayout.Width(GUIStyles.labelWidth - GUI.skin.label.CalcSize(new GUIContent(label)).x));
-            GUILayout.TextField(text);            
-            GUILayout.EndHorizontal();            
+            GUILayout.Label(text);
+            GUILayout.EndHorizontal();
         }
 
-        internal static int Text(string label, int Integer)
+        internal static int Text(string label, int Integer, bool enable = true, Action<bool> onChangedEnable = null)
         {
             GUILayout.BeginHorizontal();
-            GUILayout.Label(label, GUILayout.ExpandWidth(false));
-            GUILayout.Label("", GUILayout.Width(GUIStyles.labelWidth - GUI.skin.label.CalcSize(new GUIContent(label)).x));
+            int spacing = 0;
+            EnableToggle(label, ref spacing, ref enable, onChangedEnable);
+            if (!enable) GUI.enabled = false;
             int.TryParse(GUILayout.TextField(Integer.ToString()), out int count);
-            GUILayout.EndHorizontal();
+            if (!enable) GUI.enabled = true;
+            GUILayout.EndHorizontal();            
             return count;
         }
 
-        internal static float Text(string label, float Float, string format = "N0")
+        internal static float Text(string label, float Float, string format = "N0", bool enable = true, Action<bool> onChangedEnable = null)
+        {
+            GUILayout.BeginHorizontal();
+            int spacing = 0;
+            EnableToggle(label, ref spacing, ref enable, onChangedEnable);
+            if (!enable) GUI.enabled = false;
+            float.TryParse(GUILayout.TextField(Float.ToString(format)), out float count);
+            if (!enable) GUI.enabled = true;
+            GUILayout.EndHorizontal();            
+            return count;
+        }
+
+        internal static Vector3 Dimension(string label, Vector3 size, Action<Vector3> onChanged = null)
         {
             GUILayout.BeginHorizontal();
             GUILayout.Label(label, GUILayout.ExpandWidth(false));
             GUILayout.Label("", GUILayout.Width(GUIStyles.labelWidth - GUI.skin.label.CalcSize(new GUIContent(label)).x));
-            float.TryParse(GUILayout.TextField(Float.ToString(format)), out float count);
+            GUILayout.Label("X", GUILayout.ExpandWidth(false));
+            float.TryParse(GUILayout.TextField(size.x.ToString()), out float x);
+            GUILayout.Label("Y", GUILayout.ExpandWidth(false));
+            float.TryParse(GUILayout.TextField(size.y.ToString()), out float y);
+            GUILayout.Label("Z", GUILayout.ExpandWidth(false));
+            float.TryParse(GUILayout.TextField(size.z.ToString()), out float z);
+            Vector3 newSize = size;
+            if (x != size.x || y != size.y || z != size.z)
+            {
+                newSize = new Vector3(x, y, z);
+                onChanged?.Invoke(newSize);
+            }
             GUILayout.EndHorizontal();
-            return count;
+            return newSize;
+        }
+
+        private static void EnableToggle(string label, ref int spacing, ref bool enable, Action<bool> onChangedEnable = null)
+        {
+            bool newEnable = enable;
+            if (onChangedEnable != null)
+            {
+                spacing = enableSpacing;
+                newEnable = GUILayout.Toggle(enable, "", GUILayout.ExpandWidth(false));
+            }
+            GUILayout.Label(label, GUILayout.ExpandWidth(false));
+            GUILayout.Label("", GUILayout.Width(GUIStyles.labelWidth - GUI.skin.label.CalcSize(new GUIContent(label)).x - spacing));
+            if (onChangedEnable != null && newEnable != enable)
+            {
+                onChangedEnable(newEnable);
+                enable = newEnable;
+            }
         }
     }
 }

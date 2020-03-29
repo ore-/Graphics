@@ -9,7 +9,7 @@ using KKAPI.Utilities;
 
 namespace AIGraphics.Inspector
 {
-    public static class GUIStyles
+    internal static class GUIStyles
     {
         private static Texture2D _boxNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
         private static Texture2D _winNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
@@ -25,6 +25,18 @@ namespace AIGraphics.Inspector
         private static Texture2D _sliderThumbNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
         private static Texture2D _sliderThumbActiveBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
         private static Texture2D _sliderThumbFocusedBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static Texture2D _scrollHNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static Texture2D _scrollHLNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static Texture2D _scrollHLActiveBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static Texture2D _scrollHRNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static Texture2D _scrollHRActiveBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static Texture2D _scrollVNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static Texture2D _scrollVUNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static Texture2D _scrollVUActiveBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static Texture2D _scrollVDNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static Texture2D _scrollVDActiveBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static Texture2D _scrollHTNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static Texture2D _scrollVTNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
         private static Texture2D _toggleNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
         private static Texture2D _toggleOnNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
         private static Texture2D _toggleActiveBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
@@ -40,12 +52,11 @@ namespace AIGraphics.Inspector
 
         private static GUISkin _skin;
         private static int fontSize = 12;
-        //private static int fontSizeBold = fontSize + 2;
-        //private static int fontSizeSmall = fontSize - 2;
-        private static string[] fonts = new string[] { "Lucida Grande", "Segoe UI", "Terminal" }; //{ "DejaVu Sans Mono", "Segoe UI", "Terminal" }
+        private static string[] fonts = new string[] { "Lucida Grande", "Segoe UI", "Terminal" };
+
         public static GUIStyle toolbarbutton;
         public static GUIStyle boldlabel;
-        public static float labelWidth = 250f;
+        public static float labelWidth = fontSize * 15f;
 
         public static GUISkin Skin
         {
@@ -74,6 +85,7 @@ namespace AIGraphics.Inspector
             set
             {
                 fontSize = value;
+                labelWidth = fontSize * 15f;
                 Font font = Font.CreateDynamicFontFromOSFont(fonts, fontSize);
                 if (_skin != null) _skin.font = font;
             }
@@ -247,8 +259,6 @@ namespace AIGraphics.Inspector
             newSkin.label.margin = new RectOffset(4, 4, 2, 2); //new RectOffset(4, 4, 2, 2);
             newSkin.label.padding = new RectOffset(2, 2, 1, 2); //new RectOffset(2, 2, 1, 2);
             newSkin.label.overflow = new RectOffset(0, 0, 0, 0); //new RectOffset(2, 2, 1, 2);
-            //newSkin.label.font = font;
-            //newSkin.label.fontSize = 0;
             newSkin.label.fontStyle = FontStyle.Normal;
             newSkin.label.alignment = TextAnchor.UpperLeft;
             newSkin.label.wordWrap = false;
@@ -329,7 +339,6 @@ namespace AIGraphics.Inspector
             Object.DontDestroyOnLoad(_sliderThumbFocusedBackground);
             newSkin.horizontalSliderThumb.normal.background = _sliderThumbNormalBackground;
             newSkin.horizontalSliderThumb.normal.textColor = Color.black;
-            newSkin.horizontalSliderThumb.onNormal.background = null;// _sliderThumbNormalBackground;
             newSkin.horizontalSliderThumb.onNormal.textColor = Color.black;
             newSkin.horizontalSliderThumb.hover.background = null;
             newSkin.horizontalSliderThumb.hover.textColor = Color.black;
@@ -337,11 +346,9 @@ namespace AIGraphics.Inspector
             newSkin.horizontalSliderThumb.onHover.textColor = Color.black;
             newSkin.horizontalSliderThumb.active.background = _sliderThumbActiveBackground;
             newSkin.horizontalSliderThumb.active.textColor = Color.black;
-            newSkin.horizontalSliderThumb.onActive.background = null;// _sliderThumbActiveBackground;
             newSkin.horizontalSliderThumb.onActive.textColor = Color.black;
             newSkin.horizontalSliderThumb.focused.background = _sliderThumbFocusedBackground;
             newSkin.horizontalSliderThumb.focused.textColor = Color.black;
-            newSkin.horizontalSliderThumb.onFocused.background = null;// _sliderThumbFocusedBackground;
             newSkin.horizontalSliderThumb.onFocused.textColor = Color.black;
             newSkin.horizontalSliderThumb.border = new RectOffset(0, 0, 0, 0);
             newSkin.horizontalSliderThumb.margin = new RectOffset(0, 0, 0, 0);
@@ -361,6 +368,206 @@ namespace AIGraphics.Inspector
             newSkin.horizontalSliderThumb.stretchWidth = true;
             newSkin.horizontalSliderThumb.stretchHeight = false;
 
+            texData = ResourceUtils.GetEmbeddedResource("scroll horiz.png");
+            LoadImage(_scrollHNormalBackground, texData);
+            Object.DontDestroyOnLoad(_scrollHNormalBackground);
+            newSkin.horizontalScrollbar.normal.background = _scrollHNormalBackground;
+            newSkin.horizontalScrollbar.normal.textColor = Color.black;
+            newSkin.horizontalScrollbar.border = new RectOffset(25, 25, 0, 0);
+            newSkin.horizontalScrollbar.margin = new RectOffset(0, 0, 0, 0);
+            newSkin.horizontalScrollbar.padding = new RectOffset(-1, -1, 0, 0);
+            newSkin.horizontalScrollbar.overflow = new RectOffset(1, 1, 0, 0);
+            newSkin.horizontalScrollbar.font = null;
+            newSkin.horizontalScrollbar.fontSize = 0;
+            newSkin.horizontalScrollbar.fontStyle = FontStyle.Normal;
+            newSkin.horizontalScrollbar.alignment = TextAnchor.UpperLeft;
+            newSkin.horizontalScrollbar.wordWrap = false;
+            newSkin.horizontalScrollbar.richText = false;
+            newSkin.horizontalScrollbar.imagePosition = ImagePosition.ImageOnly;
+            newSkin.horizontalScrollbar.clipping = TextClipping.Clip;
+            newSkin.horizontalScrollbar.contentOffset = new Vector2(0, 0);
+            newSkin.horizontalScrollbar.fixedWidth = 0f;
+            newSkin.horizontalScrollbar.fixedHeight = 15f;
+            newSkin.horizontalScrollbar.stretchWidth = true;
+            newSkin.horizontalScrollbar.stretchHeight = false;
+
+            texData = ResourceUtils.GetEmbeddedResource("scroll vert.png");
+            LoadImage(_scrollVNormalBackground, texData);
+            Object.DontDestroyOnLoad(_scrollVNormalBackground);
+            newSkin.verticalScrollbar.normal.background = _scrollVNormalBackground;
+            newSkin.verticalScrollbar.normal.textColor = Color.black;
+            newSkin.verticalScrollbar.border = new RectOffset(0, 0, 9, 9);
+            newSkin.verticalScrollbar.margin = new RectOffset(0, 0, 0, 0);
+            newSkin.verticalScrollbar.padding = new RectOffset(0, 0, -1, -1);
+            newSkin.verticalScrollbar.overflow = new RectOffset(0, 0, 1, 1);
+            newSkin.verticalScrollbar.font = null;
+            newSkin.verticalScrollbar.fontSize = 0;
+            newSkin.verticalScrollbar.fontStyle = FontStyle.Normal;
+            newSkin.verticalScrollbar.alignment = TextAnchor.UpperLeft;
+            newSkin.verticalScrollbar.wordWrap = false;
+            newSkin.verticalScrollbar.richText = false;
+            newSkin.verticalScrollbar.imagePosition = ImagePosition.ImageLeft;
+            newSkin.verticalScrollbar.clipping = TextClipping.Clip;
+            newSkin.verticalScrollbar.contentOffset = new Vector2(0, 0);
+            newSkin.verticalScrollbar.fixedWidth = 15f;
+            newSkin.verticalScrollbar.fixedHeight = 0f;
+            newSkin.verticalScrollbar.stretchWidth = true;
+            newSkin.verticalScrollbar.stretchHeight = false;
+
+            texData = ResourceUtils.GetEmbeddedResource("scroll horiz thumb.png");
+            LoadImage(_scrollHTNormalBackground, texData);
+            Object.DontDestroyOnLoad(_scrollHTNormalBackground);
+            newSkin.horizontalScrollbarThumb.normal.background = _scrollHTNormalBackground;
+            newSkin.horizontalScrollbarThumb.normal.textColor = Color.black;
+            newSkin.horizontalScrollbarThumb.border = new RectOffset(8, 8, 0, 0);
+            newSkin.horizontalScrollbarThumb.margin = new RectOffset(0, 0, 0, 0);
+            newSkin.horizontalScrollbarThumb.padding = new RectOffset(8, 8, 0, 0);
+            newSkin.horizontalScrollbarThumb.overflow = new RectOffset(0, 0, 0, 0);
+            newSkin.horizontalScrollbarThumb.font = null;
+            newSkin.horizontalScrollbarThumb.fontSize = 0;
+            newSkin.horizontalScrollbarThumb.fontStyle = FontStyle.Normal;
+            newSkin.horizontalScrollbarThumb.alignment = TextAnchor.UpperLeft;
+            newSkin.horizontalScrollbarThumb.wordWrap = false;
+            newSkin.horizontalScrollbarThumb.richText = false;
+            newSkin.horizontalScrollbarThumb.imagePosition = ImagePosition.ImageLeft;
+            newSkin.horizontalScrollbarThumb.clipping = TextClipping.Clip;
+            newSkin.horizontalScrollbarThumb.contentOffset = new Vector2(0, 0);
+            newSkin.horizontalScrollbarThumb.fixedWidth = 0f;
+            newSkin.horizontalScrollbarThumb.fixedHeight = 15f;
+            newSkin.horizontalScrollbarThumb.stretchWidth = true;
+            newSkin.horizontalScrollbarThumb.stretchHeight = false;
+
+            texData = ResourceUtils.GetEmbeddedResource("scroll vert thumb.png");
+            LoadImage(_scrollVTNormalBackground, texData);
+            Object.DontDestroyOnLoad(_scrollVTNormalBackground);
+            newSkin.verticalScrollbarThumb.normal.background = _scrollVTNormalBackground;
+            newSkin.verticalScrollbarThumb.normal.textColor = Color.black;
+            newSkin.verticalScrollbarThumb.border = new RectOffset(0, 0, 8, 8);
+            newSkin.verticalScrollbarThumb.margin = new RectOffset(0, 0, 0, 0);
+            newSkin.verticalScrollbarThumb.padding = new RectOffset(0, 0, 10, 10);
+            newSkin.verticalScrollbarThumb.overflow = new RectOffset(0, 0, 0, 0);
+            newSkin.verticalScrollbarThumb.font = null;
+            newSkin.verticalScrollbarThumb.fontSize = 0;
+            newSkin.verticalScrollbarThumb.fontStyle = FontStyle.Normal;
+            newSkin.verticalScrollbarThumb.alignment = TextAnchor.UpperLeft;
+            newSkin.verticalScrollbarThumb.wordWrap = false;
+            newSkin.verticalScrollbarThumb.richText = false;
+            newSkin.verticalScrollbarThumb.imagePosition = ImagePosition.ImageOnly;
+            newSkin.verticalScrollbarThumb.clipping = TextClipping.Clip;
+            newSkin.verticalScrollbarThumb.contentOffset = new Vector2(0, 0);
+            newSkin.verticalScrollbarThumb.fixedWidth = 15f;
+            newSkin.verticalScrollbarThumb.fixedHeight = 0f;
+            newSkin.verticalScrollbarThumb.stretchWidth = false;
+            newSkin.verticalScrollbarThumb.stretchHeight = true;
+
+            texData = ResourceUtils.GetEmbeddedResource("scroll horiz left.png");
+            LoadImage(_scrollHLNormalBackground, texData);
+            Object.DontDestroyOnLoad(_scrollHLNormalBackground);
+            texData = ResourceUtils.GetEmbeddedResource("scroll horiz left act.png");
+            LoadImage(_scrollHLActiveBackground, texData);
+            Object.DontDestroyOnLoad(_scrollHLActiveBackground);
+            newSkin.horizontalScrollbarLeftButton.normal.background = _scrollHLNormalBackground;
+            newSkin.horizontalScrollbarLeftButton.normal.textColor = Color.black;
+            newSkin.horizontalScrollbarLeftButton.active.background = _scrollHLActiveBackground;
+            newSkin.horizontalScrollbarLeftButton.border = new RectOffset(0, 0, 0, 0);
+            newSkin.horizontalScrollbarLeftButton.margin = new RectOffset(0, 0, 0, 0);
+            newSkin.horizontalScrollbarLeftButton.padding = new RectOffset(0, 0, 0, 0);
+            newSkin.horizontalScrollbarLeftButton.overflow = new RectOffset(0, 8, 0, 0);
+            newSkin.horizontalScrollbarLeftButton.font = null;
+            newSkin.horizontalScrollbarLeftButton.fontSize = 0;
+            newSkin.horizontalScrollbarLeftButton.fontStyle = FontStyle.Normal;
+            newSkin.horizontalScrollbarLeftButton.alignment = TextAnchor.UpperLeft;
+            newSkin.horizontalScrollbarLeftButton.wordWrap = false;
+            newSkin.horizontalScrollbarLeftButton.richText = false;
+            newSkin.horizontalScrollbarLeftButton.imagePosition = ImagePosition.ImageLeft;
+            newSkin.horizontalScrollbarLeftButton.clipping = TextClipping.Clip;
+            newSkin.horizontalScrollbarLeftButton.contentOffset = new Vector2(0, 0);
+            newSkin.horizontalScrollbarLeftButton.fixedWidth = 17f;
+            newSkin.horizontalScrollbarLeftButton.fixedHeight = 15f;
+            newSkin.horizontalScrollbarLeftButton.stretchWidth = true;
+            newSkin.horizontalScrollbarLeftButton.stretchHeight = false;
+
+            texData = ResourceUtils.GetEmbeddedResource("scroll horiz right.png");
+            LoadImage(_scrollHRNormalBackground, texData);
+            Object.DontDestroyOnLoad(_scrollHRNormalBackground);
+            texData = ResourceUtils.GetEmbeddedResource("scroll horiz right act.png");
+            LoadImage(_scrollHRActiveBackground, texData);
+            Object.DontDestroyOnLoad(_scrollHRActiveBackground);
+            newSkin.horizontalScrollbarRightButton.normal.background = _scrollHRNormalBackground;
+            newSkin.horizontalScrollbarRightButton.normal.textColor = Color.black;
+            newSkin.horizontalScrollbarRightButton.active.background = _scrollHRActiveBackground;
+            newSkin.horizontalScrollbarRightButton.border = new RectOffset(0, 0, 0, 0);
+            newSkin.horizontalScrollbarRightButton.margin = new RectOffset(0, 0, 0, 0);
+            newSkin.horizontalScrollbarRightButton.padding = new RectOffset(0, 0, 0, 0);
+            newSkin.horizontalScrollbarRightButton.overflow = new RectOffset(8, 0, 0, 0);
+            newSkin.horizontalScrollbarRightButton.font = null;
+            newSkin.horizontalScrollbarRightButton.fontSize = 0;
+            newSkin.horizontalScrollbarRightButton.fontStyle = FontStyle.Normal;
+            newSkin.horizontalScrollbarRightButton.alignment = TextAnchor.UpperLeft;
+            newSkin.horizontalScrollbarRightButton.wordWrap = false;
+            newSkin.horizontalScrollbarRightButton.richText = false;
+            newSkin.horizontalScrollbarRightButton.imagePosition = ImagePosition.ImageLeft;
+            newSkin.horizontalScrollbarRightButton.clipping = TextClipping.Clip;
+            newSkin.horizontalScrollbarRightButton.contentOffset = new Vector2(0, 0);
+            newSkin.horizontalScrollbarRightButton.fixedWidth = 17.24739f;
+            newSkin.horizontalScrollbarRightButton.fixedHeight = 15f;
+            newSkin.horizontalScrollbarRightButton.stretchWidth = true;
+            newSkin.horizontalScrollbarRightButton.stretchHeight = false;
+
+            texData = ResourceUtils.GetEmbeddedResource("scroll vert up.png");
+            LoadImage(_scrollVUNormalBackground, texData);
+            Object.DontDestroyOnLoad(_scrollVUNormalBackground);
+            texData = ResourceUtils.GetEmbeddedResource("scroll vert up act.png");
+            LoadImage(_scrollVUActiveBackground, texData);
+            Object.DontDestroyOnLoad(_scrollVUActiveBackground);
+            newSkin.verticalScrollbarUpButton.normal.background = _scrollVUNormalBackground;
+            newSkin.verticalScrollbarUpButton.normal.textColor = Color.black;
+            newSkin.verticalScrollbarUpButton.active.background = _scrollVUActiveBackground;            
+            newSkin.verticalScrollbarUpButton.border = new RectOffset(0, 0, 0, 0);
+            newSkin.verticalScrollbarUpButton.margin = new RectOffset(0, 0, 0, 0);
+            newSkin.verticalScrollbarUpButton.padding = new RectOffset(0, 0, 0, 0);
+            newSkin.verticalScrollbarUpButton.overflow = new RectOffset(0, 0, 0, 8);
+            newSkin.verticalScrollbarUpButton.font = null;
+            newSkin.verticalScrollbarUpButton.fontSize = 0;
+            newSkin.verticalScrollbarUpButton.fontStyle = FontStyle.Normal;
+            newSkin.verticalScrollbarUpButton.alignment = TextAnchor.UpperLeft;
+            newSkin.verticalScrollbarUpButton.wordWrap = false;
+            newSkin.verticalScrollbarUpButton.richText = false;
+            newSkin.verticalScrollbarUpButton.imagePosition = ImagePosition.ImageLeft;
+            newSkin.verticalScrollbarUpButton.clipping = TextClipping.Clip;
+            newSkin.verticalScrollbarUpButton.contentOffset = new Vector2(0, 0);
+            newSkin.verticalScrollbarUpButton.fixedWidth = 15f;
+            newSkin.verticalScrollbarUpButton.fixedHeight = 17f;
+            newSkin.verticalScrollbarUpButton.stretchWidth = true;
+            newSkin.verticalScrollbarUpButton.stretchHeight = false;
+
+            texData = ResourceUtils.GetEmbeddedResource("scroll vert down.png");
+            LoadImage(_scrollVDNormalBackground, texData);
+            Object.DontDestroyOnLoad(_scrollVDNormalBackground);
+            texData = ResourceUtils.GetEmbeddedResource("scroll vert down act.png");
+            LoadImage(_scrollVDActiveBackground, texData);
+            Object.DontDestroyOnLoad(_scrollVDActiveBackground);
+            newSkin.verticalScrollbarDownButton.normal.background = _scrollVDNormalBackground;
+            newSkin.verticalScrollbarDownButton.normal.textColor = Color.black;
+            newSkin.verticalScrollbarDownButton.active.background = _scrollVDActiveBackground;
+            newSkin.verticalScrollbarDownButton.border = new RectOffset(0, 0, 0, 0);
+            newSkin.verticalScrollbarDownButton.margin = new RectOffset(0, 0, 0, 0);
+            newSkin.verticalScrollbarDownButton.padding = new RectOffset(0, 0, 0, 0);
+            newSkin.verticalScrollbarDownButton.overflow = new RectOffset(0, 0, 8, 0);
+            newSkin.verticalScrollbarDownButton.font = null;
+            newSkin.verticalScrollbarDownButton.fontSize = 0;
+            newSkin.verticalScrollbarDownButton.fontStyle = FontStyle.Normal;
+            newSkin.verticalScrollbarDownButton.alignment = TextAnchor.UpperLeft;
+            newSkin.verticalScrollbarDownButton.wordWrap = false;
+            newSkin.verticalScrollbarDownButton.richText = false;
+            newSkin.verticalScrollbarDownButton.imagePosition = ImagePosition.ImageLeft;
+            newSkin.verticalScrollbarDownButton.clipping = TextClipping.Clip;
+            newSkin.verticalScrollbarDownButton.contentOffset = new Vector2(0, 0);
+            newSkin.verticalScrollbarDownButton.fixedWidth = 15f;
+            newSkin.verticalScrollbarDownButton.fixedHeight = 17f;
+            newSkin.verticalScrollbarDownButton.stretchWidth = true;
+            newSkin.verticalScrollbarDownButton.stretchHeight = false;
+
             boldlabel = new GUIStyle();
             boldlabel.name = "boldlabel";
             boldlabel.normal.textColor = newSkin.label.normal.textColor;
@@ -370,7 +577,6 @@ namespace AIGraphics.Inspector
             boldlabel.overflow = newSkin.label.overflow;
             boldlabel.stretchWidth = newSkin.label.stretchWidth;
             boldlabel.stretchHeight = newSkin.label.stretchHeight;
-            //boldlabel.fontSize = fontSizeBold;
             boldlabel.fontStyle = FontStyle.Bold;
             boldlabel.alignment = TextAnchor.UpperLeft;
             boldlabel.wordWrap = false;
@@ -417,10 +623,6 @@ namespace AIGraphics.Inspector
             toolbarbutton.margin = new RectOffset(0, 0, 0, 0);
             toolbarbutton.padding = new RectOffset(5, 5, 0, 0);
             toolbarbutton.overflow = new RectOffset(0, 1, 0, 0);
-            /*
-            toolbarbutton.font = null;
-            toolbarbutton.fontSize = fontSizeSmall;
-            */
             toolbarbutton.fontStyle = FontStyle.Normal;
             toolbarbutton.alignment = TextAnchor.MiddleCenter;
             toolbarbutton.wordWrap = false;

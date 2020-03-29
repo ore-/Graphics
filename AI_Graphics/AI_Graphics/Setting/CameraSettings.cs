@@ -1,15 +1,12 @@
-﻿using BepInEx;
-using Cinemachine;
+﻿using Cinemachine;
 using MessagePack;
-using System;
-using System.Reflection;
 using UnityEngine;
 using static KKAPI.Studio.StudioAPI;
 
 namespace AIGraphics.Settings
 {
     [MessagePackObject(keyAsPropertyName: true)]
-    public class CameraSettings 
+    internal class CameraSettings 
     {
         private Camera _camera;
         private CameraClearFlags _clearFlags;
@@ -32,63 +29,72 @@ namespace AIGraphics.Settings
             _dynamicResolution = MainCamera.allowDynamicResolution;
         }
 
-        internal CameraClearFlags ClearFlag
+        internal enum AICameraClearFlags
         {
-            get => _clearFlags;
-            set
-            {
-                MainCamera.clearFlags = _clearFlags = value;
-            }
+            Skybox = CameraClearFlags.Skybox,
+            Colour = CameraClearFlags.SolidColor,
+            Depth = CameraClearFlags.Depth,
+            Nothing = CameraClearFlags.Nothing,
         }
 
-        internal RenderingPath RenderingPath
+        internal enum AIRenderingPath
         {
-            get => _renderingPath;
+            VertexLit = UnityEngine.RenderingPath.VertexLit,
+            Forward = UnityEngine.RenderingPath.Forward,
+            Deferred = UnityEngine.RenderingPath.DeferredShading,
+        }
+
+        internal AICameraClearFlags ClearFlag
+        {
+            get => (AICameraClearFlags) MainCamera.clearFlags;
+            set => _clearFlags = MainCamera.clearFlags = (CameraClearFlags) value;
+        }
+
+        internal AIRenderingPath RenderingPath
+        {
+            get => (AIRenderingPath) MainCamera.renderingPath;
             set
             {
-                MainCamera.renderingPath = _renderingPath = value;
-                if (RenderingPath.DeferredShading == value) MSAA = false;
+                if (AIRenderingPath.Forward != value) MSAA = false;
+                _renderingPath = MainCamera.renderingPath = (RenderingPath) value;
             }
         }
 
         internal bool OcculsionCulling
         {
-            get => _occulsionCulling;
-            set => MainCamera.useOcclusionCulling = _occulsionCulling = value;
+            get => MainCamera.useOcclusionCulling;
+            set => _occulsionCulling = MainCamera.useOcclusionCulling = value;
         }
 
         internal bool HDR
         {
-            get => _hdr;
-            set
-            {
-                MainCamera.allowHDR = _hdr = value;
-            }
+            get => MainCamera.allowHDR;
+            set => _hdr = MainCamera.allowHDR = value;
         }
 
         internal bool MSAA
         {
-            get => _msaa;
+            get => MainCamera.allowMSAA;
             set
             {
-                MainCamera.allowMSAA = _msaa = value;                
+                //MSAA is Forward only
+                if (value && RenderingPath != AIRenderingPath.Forward)
+                    return;
+                _msaa = MainCamera.allowMSAA = value;                
             }
         }
 
         internal bool DynamicResolution
         {
-            get => _dynamicResolution;
-            set
-            {
-                MainCamera.allowDynamicResolution = _dynamicResolution = value;
-            }
+            get => MainCamera.allowDynamicResolution;
+            set => _dynamicResolution = MainCamera.allowDynamicResolution = value;
         }
 
         internal float Fov
         {
             get
             {
-                if (default(float) == _fov)
+//                if (default(float) == _fov)
                 {
                     if (InsideStudio)
                     {
@@ -100,7 +106,7 @@ namespace AIGraphics.Settings
                         return MainCamera.fieldOfView;
                     }
                 }
-                return _fov;
+//                return _fov;
             }
             set
             {
@@ -125,7 +131,7 @@ namespace AIGraphics.Settings
         {
             get 
             {
-                if (default(float) == _nearClipPlane)
+  //              if (default(float) == _nearClipPlane)
                 {
                     if (InsideStudio)
                     {
@@ -137,7 +143,7 @@ namespace AIGraphics.Settings
                         return MainCamera.nearClipPlane;
                     }
                 }
-                return _nearClipPlane;
+//                return _nearClipPlane;
             }
             set
             {
@@ -165,7 +171,7 @@ namespace AIGraphics.Settings
         {
             get 
             {
-                if (default(float) == _farClipPlane)
+//                if (default(float) == _farClipPlane)
                 {
                     if (InsideStudio)
                     {
@@ -177,7 +183,7 @@ namespace AIGraphics.Settings
                         return MainCamera.farClipPlane;
                     }
                 }
-                return _farClipPlane;
+//                return _farClipPlane;
             }
             set
             {
@@ -207,7 +213,7 @@ namespace AIGraphics.Settings
             {
                 if (null == _camera && 0 < Camera.allCameras.Length)
                 {   
-                    foreach (var cam in Camera.allCameras)
+                    //foreach (var cam in Camera.allCameras)
                     _camera = Camera.main;
                 }
                 return _camera;

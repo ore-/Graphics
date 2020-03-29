@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace AIGraphics
 {
-    public static class ReflectionExtensions
+    internal static class ReflectionExtensions
     {
-        public static T GetFieldValue<T>(this object obj, string name)
+        internal static T GetFieldValue<T>(this object obj, string name)
         {
             // Set the flags so that private and public fields from instances will be found
             var bindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
@@ -17,7 +17,7 @@ namespace AIGraphics
             return (T)field?.GetValue(obj);
         }
 
-        public static void SetFieldValue<T>(this object obj, string name, object value)
+        internal static void SetFieldValue<T>(this object obj, string name, object value)
         {
             // Set the flags so that private and public fields from instances will be found
             var bindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
