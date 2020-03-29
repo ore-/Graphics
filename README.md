@@ -8,3 +8,6 @@ https://docs.unity3d.com/2018.2/Documentation/Manual/PostProcessingOverview.html
 
 日本語
 https://docs.unity3d.com/ja/2018.2/Manual/PostProcessingOverview.html
+
+Sample cubemaps for image based lighting (IBL):
+https://mega.nz/#F!PEMRkASB!I0ZTv4OgV-mSxX07MWDMQw
