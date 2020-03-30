@@ -117,7 +117,7 @@ namespace AIGraphics.Inspector
                 }
                 else if (AmbientOcclusionMode.ScalableAmbientObscurance == settings.ambientOcclusionLayers[volumeIndex].mode.value)
                 {
-                    Slider("Raidus", settings.ambientOcclusionLayers[volumeIndex].radius.value, 1f, 10f, "N2",
+                    Slider("Radius", settings.ambientOcclusionLayers[volumeIndex].radius.value, 1f, 10f, "N2",
                         radius => settings.ambientOcclusionLayers[volumeIndex].radius.value = radius, settings.ambientOcclusionLayers[volumeIndex].radius.overrideState,
                         overrideState => settings.ambientOcclusionLayers[volumeIndex].radius.overrideState = overrideState);
                 }
