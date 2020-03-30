@@ -9,11 +9,12 @@ namespace AIGraphics.Inspector
 {
     internal static class PostProcessingInspector
     {
+        private static int selectedLensDirtIndex = -1;
         private static Vector2 postScrollView;
         private static int selectedVolumeIndex = 0;
         private static PostProcessVolume selectedVolume;
 
-        internal static void Draw(PostProcessingSettings postProcessingSettings, FocusPuller focusPuller, bool showAdvanced)
+        internal static void Draw(PostProcessingSettings postProcessingSettings, PostProcessingManager postprocessingManager, FocusPuller focusPuller, bool showAdvanced)
         {
             GUILayout.BeginVertical(GUIStyles.Skin.box);
             {
@@ -82,13 +83,13 @@ namespace AIGraphics.Inspector
                     }
                 }
                 postScrollView = GUILayout.BeginScrollView(postScrollView);
-                PostProcessVolumeSettings(postProcessingSettings, selectedVolumeIndex, selectedVolume, focusPuller, showAdvanced);
+                PostProcessVolumeSettings(postProcessingSettings, selectedVolumeIndex, selectedVolume, postprocessingManager, focusPuller, showAdvanced);
                 GUILayout.EndScrollView();
             }
             GUILayout.EndVertical();
         }
 
-        private static void PostProcessVolumeSettings(PostProcessingSettings settings, int volumeIndex, PostProcessVolume volume, FocusPuller focusPuller, bool showAdvanced)
+        private static void PostProcessVolumeSettings(PostProcessingSettings settings, int volumeIndex, PostProcessVolume volume, PostProcessingManager postprocessingManager, FocusPuller focusPuller, bool showAdvanced)
         {
             GUILayout.Space(10);
             Slider("Weight", volume.weight, 0f, 1f, "N1", weight => volume.weight = weight);
@@ -178,6 +179,11 @@ namespace AIGraphics.Inspector
                 SliderColor("Colour", settings.bloomLayers[volumeIndex].color.value, colour => { settings.bloomLayers[volumeIndex].color.value = colour; }, settings.bloomLayers[volumeIndex].color.overrideState,
                     settings.bloomLayers[volumeIndex].color.overrideState, overrideState => settings.bloomLayers[volumeIndex].color.overrideState = overrideState);
                 settings.bloomLayers[volumeIndex].fastMode.value = Toggle("Fast Mode", settings.bloomLayers[volumeIndex].fastMode.value);
+                selectedLensDirtIndex = SelectionTexture("Lens Dirt", selectedLensDirtIndex, postprocessingManager.LensDirtPreviews.ToArray(), Inspector.Width / 100,
+                    settings.bloomLayers[volumeIndex].dirtTexture.overrideState, overrideState => settings.bloomLayers[volumeIndex].dirtTexture.overrideState = overrideState, GUIStyles.Skin.box);
+                if (-1 != selectedLensDirtIndex) settings.bloomLayers[volumeIndex].dirtTexture.value = postprocessingManager.LensDirts.ToArray()[selectedLensDirtIndex];
+                settings.bloomLayers[volumeIndex].dirtIntensity.value = Text("Dirt Intensity", settings.bloomLayers[volumeIndex].dirtIntensity.value, "N2",
+                    settings.bloomLayers[volumeIndex].dirtIntensity.overrideState, overrideState => settings.bloomLayers[volumeIndex].dirtIntensity.overrideState = overrideState);
             }
             /*
             GUILayout.Space(10);

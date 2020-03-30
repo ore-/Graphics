@@ -6,7 +6,6 @@ using KKAPI;
 using KKAPI.Studio.SaveLoad;
 using System;
 using System.Collections;
-using System.Linq;
 using UnityEngine;
 
 namespace AIGraphics
@@ -22,6 +21,7 @@ namespace AIGraphics
 
         public KeyCode ShowHotkey { get; set; } = KeyCode.F5;
         public static ConfigEntry<string> ConfigCubeMapPath { get; private set; }
+        public static ConfigEntry<string> ConfigLensDirtPath { get; private set; }
         public static ConfigEntry<int> ConfigFontSize { get; internal set; }
         public static ConfigEntry<int> ConfigWindowWidth { get; internal set; }
         public static ConfigEntry<int> ConfigWindowHeight { get; internal set; }
@@ -32,10 +32,11 @@ namespace AIGraphics
         private CursorLockMode _previousCursorLockState;
         private bool _previousCursorVisible;
 
-        private GameObject _skyboxGO;
+        private GameObject _skyboxGO, _postGO;
         private SkyboxManager _skyboxManager;
         private FocusPuller _focusPuller;
         private LightManager _lightManager;
+        private PostProcessingManager _postProcessingManager;
         private Inspector.Inspector _inspector;
 
         internal GlobalSettings Settings { get; private set; }
@@ -51,7 +52,8 @@ namespace AIGraphics
                 throw new InvalidOperationException("Can only create one instance of AIGraphics");
             Instance = this;
 
-            ConfigCubeMapPath = Config.Bind("Config", "Cubemap location", Application.dataPath + "/../cubemaps/", new ConfigDescription("Where cubemaps are stored"));
+            ConfigCubeMapPath = Config.Bind("Config", "Cubemap path", Application.dataPath + "/../cubemaps/", new ConfigDescription("Where cubemaps are stored"));
+            ConfigLensDirtPath = Config.Bind("Config", "Lens dirt texture path", Application.dataPath + "/../lensdirts/", new ConfigDescription("Where lens dirt textures are stored"));
             ConfigFontSize = Config.Bind("Config", "Font Size", 12, new ConfigDescription("Font Size"));
             GUIStyles.FontSize = ConfigFontSize.Value;
             ConfigWindowWidth = Config.Bind("Config", "Window Width", 750, new ConfigDescription("Window Width"));
@@ -96,6 +98,10 @@ namespace AIGraphics
             _skyboxManager.CubemapPath = ConfigCubeMapPath.Value;
             _skyboxManager.Logger = Logger;
 
+            _postGO = new GameObject("PostProcessingManager");
+            _postProcessingManager = _postGO.AddComponent<PostProcessingManager>();
+            _postProcessingManager.LensDirtTexturesPath = ConfigLensDirtPath.Value;
+
             _focusPuller = CameraSettings.MainCamera.gameObject.AddComponent<FocusPuller>();
             _focusPuller.init(this, CameraSettings.MainCamera);
 
@@ -105,6 +111,7 @@ namespace AIGraphics
         }
 
         internal SkyboxManager SkyboxManager { get => _skyboxManager; }
+        internal PostProcessingManager PostProcessingManager { get => _postProcessingManager; }
         internal LightManager LightManager { get => _lightManager; }
         internal FocusPuller FocusPuller { get => _focusPuller; }
 
@@ -137,7 +144,7 @@ namespace AIGraphics
             }
         }
 
-        internal  void LateUpdate()
+        internal void LateUpdate()
         {
             if (Show)
             {
