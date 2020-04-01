@@ -8,32 +8,34 @@ using UnityEngine.Rendering;
 namespace AIGraphics.Settings
 {
     [MessagePackObject(keyAsPropertyName: true)]
-    internal class LightingSettings
+    public class LightingSettings
     {
         private string textAmbientIntensity = "1";
         private string textReflectionIntensity = "1";
         private string textReflectionBounces = "1";
 
         internal static int[] ReflectionResolutions = { 128, 256, 512, 1024, 2048 };
-        internal enum AIAmbientMode
+        public enum AIAmbientMode
         {
             Skybox = AmbientMode.Skybox,
             Trilight = AmbientMode.Trilight,
             Flat = AmbientMode.Flat,
         }
 
+        // TODO: Route this with primitive type to parse with messagepack.
         internal Material SkyboxSetting
         {
             get => RenderSettings.skybox;
             set => RenderSettings.skybox = value;
         }
 
+        // TODO: Route this with primitive type to parse with messagepack.
         internal Light SunSetting
         {
             get => RenderSettings.sun;
         }
 
-        internal AIAmbientMode AmbientModeSetting
+        public AIAmbientMode AmbientModeSetting
         {
             get => (AIAmbientMode) RenderSettings.ambientMode;
             set
@@ -46,7 +48,7 @@ namespace AIGraphics.Settings
             }
         }
 
-        internal float AmbientIntensity
+        public float AmbientIntensity
         {
             get => RenderSettings.ambientIntensity;
             set
@@ -59,19 +61,19 @@ namespace AIGraphics.Settings
             }
         }
 
-        internal DefaultReflectionMode ReflectionMode
+        public DefaultReflectionMode ReflectionMode
         {
             get => RenderSettings.defaultReflectionMode;
             set => RenderSettings.defaultReflectionMode = value;
         }
 
-        internal int ReflectionResolution
+        public int ReflectionResolution
         {
             get => RenderSettings.defaultReflectionResolution;
             set => RenderSettings.defaultReflectionResolution = value;
         }
 
-        internal float ReflectionIntensity
+        public float ReflectionIntensity
         {
             get => RenderSettings.reflectionIntensity;
             set
@@ -84,7 +86,7 @@ namespace AIGraphics.Settings
             }
         }
 
-        internal int ReflectionBounces
+        public int ReflectionBounces
         {
             get => RenderSettings.reflectionBounces;
             set

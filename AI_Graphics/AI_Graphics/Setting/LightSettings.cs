@@ -8,7 +8,7 @@ using UnityEngine.Rendering;
 namespace AIGraphics.Settings
 {
     [MessagePackObject(keyAsPropertyName: true)]
-    internal class LightSettings
+    public class LightSettings
     {
         internal static float IntensityMin = 0f;
         internal static float IntensityMax = 8f;

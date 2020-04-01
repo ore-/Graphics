@@ -15,21 +15,24 @@ namespace AIGraphics
         public float exposure;
         public float rotation;
         public Color tint;
-        public SkyboxParams(float exposure, float rotation, Color tint)
+        public string selectedCubeMap;
+
+        public SkyboxParams(float exposure, float rotation, Color tint, string selectedCubeMap)
         {
             this.exposure = exposure;
             this.rotation = rotation;
             this.tint = tint;
+            this.selectedCubeMap = selectedCubeMap;
         }
     };
 
-    internal class SkyboxManager : MonoBehaviour
+    public class SkyboxManager : MonoBehaviour
     {
         static readonly int _Exposure = Shader.PropertyToID("_Exposure");
         static readonly int _Rotation = Shader.PropertyToID("_Rotation");
         static readonly int _Tint = Shader.PropertyToID("_Tint");
 
-        public SkyboxParams skyboxParams = new SkyboxParams(1f, 0f, new Color32(128, 128, 128, 128));
+        public SkyboxParams skyboxParams = new SkyboxParams(1f, 0f, new Color32(128, 128, 128, 128), "");
         public Material Skyboxbg { get; set; }
         public Material Skybox { get; set; }
         public Material MapSkybox { get; set; }
@@ -79,11 +82,18 @@ namespace AIGraphics
             //MapSkybox = RenderSettings.skybox;
             MapSkybox = Parent.LightingSettings.SkyboxSetting;
         }
-        public void SaveSkyboxParams()
-        {
+        public void LoadSkyboxParams() {
+            CurrentCubeMap = skyboxParams.selectedCubeMap;
+            Exposure = skyboxParams.exposure;
+            Tint = skyboxParams.tint;
+            Rotation = skyboxParams.rotation;
+        }
+
+        public void SaveSkyboxParams() {
             skyboxParams.exposure = Exposure;
-            skyboxParams.rotation = Rotation;
             skyboxParams.tint = Tint;
+            skyboxParams.rotation = Rotation;
+            skyboxParams.selectedCubeMap = CurrentCubeMap;
         }
         public void TurnOffCubeMap(Camera camera)
         {
@@ -104,8 +114,8 @@ namespace AIGraphics
             get => Skybox.GetFloat(_Exposure);
             set
             {
-                Skybox.SetFloat(_Exposure, value);
-                Skyboxbg.SetFloat(_Exposure, value);
+                Skybox?.SetFloat(_Exposure, value);
+                Skyboxbg?.SetFloat(_Exposure, value);
                 skyboxParams.exposure = value;
             }
         }
@@ -114,8 +124,8 @@ namespace AIGraphics
             get => Skybox.GetColor(_Tint);
             set
             {
-                Skybox.SetColor(_Tint, value);
-                Skyboxbg.SetColor(_Tint, value);
+                Skybox?.SetColor(_Tint, value);
+                Skyboxbg?.SetColor(_Tint, value);
                 skyboxParams.tint = value;
             }
         }
@@ -124,8 +134,8 @@ namespace AIGraphics
             get => Skybox.GetFloat(_Rotation);
             set
             {
-                Skyboxbg.SetFloat(_Rotation, value);
-                Skybox.SetFloat(_Rotation, value);
+                Skyboxbg?.SetFloat(_Rotation, value);
+                Skybox?.SetFloat(_Rotation, value);
                 skyboxParams.rotation = value;
             }
         }
@@ -164,7 +174,7 @@ namespace AIGraphics
                 //if cubemap is changed
                 if (null != value && value != selectedCubeMap)
                 {
-                    //switch off cubemap
+                    //switch off cubemapb
                     if (noCubemap == value)
                     {
                         this.TurnOffCubeMap(Camera);
@@ -187,6 +197,7 @@ namespace AIGraphics
                         StartCoroutine(LoadCubemap(value, Camera));
                     }
                     selectedCubeMap = value;
+                    skyboxParams.selectedCubeMap = value;
                 }
             }
         }

@@ -9,7 +9,7 @@ using static KKAPI.Studio.StudioAPI;
 namespace AIGraphics.Settings
 {
     [MessagePackObject(keyAsPropertyName: true)]
-    internal class PostProcessingSettings
+    public class PostProcessingSettings
     {
         internal enum Antialiasing
         {
@@ -34,7 +34,12 @@ namespace AIGraphics.Settings
         internal List<ScreenSpaceReflections> screenSpaceReflectionsLayers = new List<ScreenSpaceReflections> { };
         internal List<Vignette> vignetteLayers = new List<Vignette> { };
 
-        internal PostProcessingSettings(Camera camera)
+        public PostProcessingSettings() {
+            postProcessVolumes = GameObject.FindObjectsOfType<PostProcessVolume>();
+            volumeNames = postProcessVolumes.Select(volume => volume.name).ToArray();
+        }
+
+        public PostProcessingSettings(Camera camera)
         {
             _postProcessLayer = camera.GetComponent<PostProcessLayer>();
             postProcessVolumes = GameObject.FindObjectsOfType<PostProcessVolume>();

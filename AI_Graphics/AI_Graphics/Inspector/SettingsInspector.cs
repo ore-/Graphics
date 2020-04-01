@@ -10,7 +10,7 @@ namespace AIGraphics.Inspector
         private const float FOVMax = 120f;
         private const float FOVDefault = 23.5f;
 
-        internal static void Draw(CameraSettings cameraSettings, GlobalSettings renderingSettings)
+        internal static void Draw(CameraSettings cameraSettings, GlobalSettings renderingSettings, AIGraphics parent)
         {
             GUILayout.BeginVertical(GUIStyles.Skin.box);
             {
@@ -47,7 +47,13 @@ namespace AIGraphics.Inspector
                 Slider("Window Width", Inspector.Width, 400, Screen.width / 2, size => Inspector.Width = size);
                 Slider("Window Height", Inspector.Height, 400, Screen.height, size => Inspector.Height = size);
                 GUILayout.Space(10);
-                renderingSettings.ShowAdvancedSettings = Toggle("Show Advanced Settings", renderingSettings.ShowAdvancedSettings);                
+                renderingSettings.ShowAdvancedSettings = Toggle("Show Advanced Settings", renderingSettings.ShowAdvancedSettings);
+                if (GUILayout.Button("Save Default Preset")) {
+                    parent.preset.Save();
+                }
+                if (GUILayout.Button("Load Default Preset")) {
+                    parent.preset.Load();
+                }
             }
             GUILayout.EndVertical();
         }

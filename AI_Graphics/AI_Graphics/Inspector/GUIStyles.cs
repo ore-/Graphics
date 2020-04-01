@@ -84,7 +84,8 @@ namespace AIGraphics.Inspector
             get => fontSize;
             set
             {
-                fontSize = value;
+                // Need to limit fontSize to prevent permantly breaking GUI from loading preset values.
+                fontSize = Math.Max(Math.Min(17, value), 12);
                 labelWidth = fontSize * 15f;
                 Font font = Font.CreateDynamicFontFromOSFont(fonts, fontSize);
                 if (_skin != null) _skin.font = font;
