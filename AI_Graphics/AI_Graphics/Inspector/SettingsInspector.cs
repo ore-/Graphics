@@ -44,8 +44,8 @@ namespace AIGraphics.Inspector
                 renderingSettings.ShadowNearPlaneOffset = Text("Shadow Near Plane Offset", renderingSettings.ShadowNearPlaneOffset);
                 GUILayout.Space(10);
                 Slider("Font Size", renderingSettings.FontSize, 12, 17, size => renderingSettings.FontSize = size);
-                Slider("Window Width", Inspector.Width, 750, Screen.width / 2, size => Inspector.Width = size);
-                Slider("Window Height", Inspector.Height, 1024, Screen.height, size => Inspector.Height = size);
+                Slider("Window Width", Inspector.Width, 400, Screen.width / 2, size => Inspector.Width = size);
+                Slider("Window Height", Inspector.Height, 400, Screen.height, size => Inspector.Height = size);
                 GUILayout.Space(10);
                 renderingSettings.ShowAdvancedSettings = Toggle("Show Advanced Settings", renderingSettings.ShowAdvancedSettings);                
             }

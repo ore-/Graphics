@@ -1,11 +1,5 @@
-﻿using BepInEx;
-using BepInEx.Configuration;
-using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using UnityEngine;
 
 namespace AIGraphics.Inspector
@@ -141,7 +135,7 @@ namespace AIGraphics.Inspector
             string[] selectionString = selection.Select(entry => entry.ToString()).ToArray();
             int currentIndex = Array.IndexOf(selection, selected);
             if (-1 == columns) columns = selection.Length;
-            int selectedIndex = GUILayout.SelectionGrid(currentIndex, selectionString, columns);//, GUIStyles.toolbarbutton);
+            int selectedIndex = GUILayout.SelectionGrid(currentIndex, selectionString, columns);
             if (!enable) GUI.enabled = true;
             GUILayout.EndHorizontal();
             if (selectedIndex == currentIndex)
@@ -160,7 +154,7 @@ namespace AIGraphics.Inspector
             string[] selection = Enum.GetNames(typeof(TEnum));
             int currentIndex = Array.IndexOf(selection, selected.ToString());
             if (-1 == columns) columns = selection.Length;
-            int selectedIndex = GUILayout.SelectionGrid(currentIndex, selection, columns);//, GUIStyles.toolbarbutton);
+            int selectedIndex = GUILayout.SelectionGrid(currentIndex, selection, columns);
             GUILayout.EndHorizontal();
             if (selectedIndex == currentIndex)
                 return selected;
@@ -169,6 +163,19 @@ namespace AIGraphics.Inspector
             onChanged?.Invoke(selected);
             if (!enable) GUI.enabled = true;
             return selected;
+        }
+
+        internal static int SelectionTexture(string label, int currentIndex, Texture[] selection, int columns = -1, bool enable = true, Action<bool> onChangedEnable = null, GUIStyle style = null)
+        {
+            GUILayout.BeginHorizontal();
+            int spacing = 0;
+            EnableToggle(label, ref spacing, ref enable, onChangedEnable);
+            if (!enable) GUI.enabled = false;
+            if (-1 == columns) columns = selection.Length;
+            int selectedIndex = null == style ? GUILayout.SelectionGrid(currentIndex, selection, columns) : GUILayout.SelectionGrid(currentIndex, selection, columns, style);
+            if (!enable) GUI.enabled = true;
+            GUILayout.EndHorizontal();
+            return selectedIndex;
         }
 
         internal static TEnum Toolbar<TEnum>(TEnum selected)

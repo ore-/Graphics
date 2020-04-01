@@ -1,5 +1,4 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 using static AIGraphics.Inspector.Util;
 
 namespace AIGraphics.Inspector
@@ -80,7 +79,7 @@ namespace AIGraphics.Inspector
                     LightInspector.Draw(Parent.Settings, Parent.LightManager, Parent.Settings.ShowAdvancedSettings);
                     break;
                 case Tab.PostProcessing:
-                    PostProcessingInspector.Draw(Parent.PostProcessingSettings, Parent.FocusPuller, Parent.Settings.ShowAdvancedSettings);
+                    PostProcessingInspector.Draw(Parent.PostProcessingSettings, Parent.PostProcessingManager, Parent.FocusPuller, Parent.Settings.ShowAdvancedSettings);
                     break;
                 case Tab.Settings:
                     SettingsInspector.Draw(Parent.CameraSettings, Parent.Settings);
