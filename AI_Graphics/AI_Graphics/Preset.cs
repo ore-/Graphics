@@ -25,16 +25,19 @@ namespace AIGraphics {
             this.skybox = skybox;
         }
 
+        public byte[] ToBytes() {
+            skybox = GameObject.Find("SkyboxManager").GetComponent<SkyboxManager>().skyboxParams;
+            return MessagePackSerializer.Serialize(this);
+        }
         public void Save(string name = "default", string path = "", bool overwrite = true) {
             if (path == "")
                 path = AIGraphics.ConfigPresetPath.Value; // Runtime Config Preset Path.
 
             string targetPath = Path.Combine(path, name + ".preset");
             Directory.CreateDirectory(Path.GetDirectoryName(targetPath));
-            byte[] bytes = MessagePackSerializer.Serialize(this);
+            byte[] bytes = this.ToBytes();
             if (File.Exists(targetPath) && overwrite) {
                 File.Delete(targetPath);
-                skybox = GameObject.Find("SkyboxManager").GetComponent<SkyboxManager>().skyboxParams;
                 File.WriteAllBytes(targetPath, bytes);
                 File.WriteAllText(Path.Combine(path, "debug.json"), MessagePackSerializer.ToJson(this));
             } else
@@ -49,12 +52,7 @@ namespace AIGraphics {
             if (File.Exists(targetPath)) {
                 try {
                     byte[] bytes = File.ReadAllBytes(targetPath);
-                    this = MessagePackSerializer.Deserialize<Preset>(bytes);
-                    SkyboxManager manager = GameObject.Find("SkyboxManager").GetComponent<SkyboxManager>();
-                    if (manager) {
-                        manager.skyboxParams = this.skybox;
-                        manager.LoadSkyboxParams();
-                    }
+                    Load(bytes);
                     Debug.Log(string.Format("Loaded preset file '{0}'", name + ".preset"));
                     return true;
                 } catch {
@@ -65,6 +63,29 @@ namespace AIGraphics {
                 Debug.Log(string.Format("Couldn't find preset file '{0}'", name + ".preset"));
                 return false;
             }
+        }
+
+        public bool Load(byte[] bytes) {
+            Debug.Log("miggas");
+            this = MessagePackSerializer.Deserialize<Preset>(bytes);
+            SkyboxManager manager = GameObject.Find("SkyboxManager").GetComponent<SkyboxManager>();
+            if (manager) {
+                manager.skyboxParams = this.skybox;
+                manager.LoadSkyboxParams();
+                Debug.Log(skybox.selectedCubeMap);
+            }
+            return true;
+            //try {
+            //    this = MessagePackSerializer.Deserialize<Preset>(bytes);
+            //    SkyboxManager manager = GameObject.Find("SkyboxManager").GetComponent<SkyboxManager>();
+            //    if (manager) {
+            //        manager.skyboxParams = this.skybox;
+            //        manager.LoadSkyboxParams();
+            //    }
+            //    return true;
+            //} catch {
+            //    return false;
+            //}
         }
     }
 }

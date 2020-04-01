@@ -1,6 +1,8 @@
-﻿using KKAPI.Studio.SaveLoad;
+﻿using ExtensibleSaveFormat;
+using KKAPI.Studio.SaveLoad;
 using KKAPI.Utilities;
 using Studio;
+using UnityEngine;
 
 namespace AIGraphics
 {
@@ -11,11 +13,19 @@ namespace AIGraphics
             Studio.Studio studio = GetStudio();
             AIGraphics parent = GetComponentInParent<AIGraphics>();            
             parent?.SkyboxManager?.SetupDefaultReflectionProbe();
+
+            PluginData saveData = GetExtendedData();
+            if (saveData != null && saveData.data.TryGetValue("bytes", out var val)) {
+                AIGraphics.Instance.preset.Load((byte[]) val);
+            }
         }
 
         protected override void OnSceneSave()
         {
-            //throw new NotImplementedException();
+            PluginData saveData = new PluginData();
+            saveData.data.Add("bytes", AIGraphics.Instance.preset.ToBytes());
+            saveData.version = 1;
+            SetExtendedData(saveData);
         }
     }
 }

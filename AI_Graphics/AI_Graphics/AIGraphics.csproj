@@ -35,6 +35,10 @@
       <HintPath>..\packages\IllusionModdingAPI.AIAPI.1.9.9\lib\net46\AIAPI.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="AI_ExtensibleSaveFormat, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExtensibleSaveFormat.AIGirl.13.1.1\lib\net46\AI_ExtensibleSaveFormat.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Alloy, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\IllusionLibs.AIGirl.UnityEngine.AssetBundleModule.2018.2.21.1\lib\net46\Alloy.dll</HintPath>
     </Reference>
