@@ -14,6 +14,7 @@ using UnityEngine.Rendering.PostProcessing;
 namespace AIGraphics.PostProcessingParameter {
     [MessagePackObject(keyAsPropertyName: true)]
     public class AutoExposure {
+        public bool enabled;
         public float[] filtering; // vector2
         public float minLuminance;
         public float maxLuminance;
@@ -22,6 +23,7 @@ namespace AIGraphics.PostProcessingParameter {
         public float speedUp;
         public float speedDown;
         public void Save(UnityEngine.Rendering.PostProcessing.AutoExposure layer) {
+            enabled = layer.enabled.value;
             if (layer != null) {
                 filtering = new float[2] { layer.filtering.value[0], layer.filtering.value[1] };
                 minLuminance = layer.minLuminance.value;
@@ -34,6 +36,7 @@ namespace AIGraphics.PostProcessingParameter {
         }
 
         public void Load(UnityEngine.Rendering.PostProcessing.AutoExposure layer) {
+            layer.enabled.value = enabled;
             if (layer != null) {
                 layer.filtering.value = new Vector2(filtering[0], filtering[1]);
                 layer.minLuminance.value = minLuminance;
@@ -48,6 +51,7 @@ namespace AIGraphics.PostProcessingParameter {
 
     [MessagePackObject(keyAsPropertyName: true)]
     public class AmbientOcclusion {
+        public bool enabled;
         public AmbientOcclusionMode mode;
         public float intensity;
         public float[] color;
@@ -60,6 +64,7 @@ namespace AIGraphics.PostProcessingParameter {
         public float radius;
         public AmbientOcclusionQuality quality;
         public void Save(UnityEngine.Rendering.PostProcessing.AmbientOcclusion layer) {
+            enabled = layer.enabled.value;
             if (layer != null) {
                 mode = layer.mode.value;
                 intensity = layer.intensity.value;
@@ -76,6 +81,7 @@ namespace AIGraphics.PostProcessingParameter {
         }
 
         public void Load(UnityEngine.Rendering.PostProcessing.AmbientOcclusion layer) {
+            layer.enabled.value = enabled;
             if (layer != null) {
                 layer.mode.value = mode;
                 layer.intensity.value = intensity;
@@ -94,11 +100,13 @@ namespace AIGraphics.PostProcessingParameter {
 
     [MessagePackObject(keyAsPropertyName: true)]
     public class AmplifyOcclusion {
+        public bool enabled;
         // TODO: figure out how to work with it
     }
 
     [MessagePackObject(keyAsPropertyName: true)]
     public class Bloom {
+        public bool enabled;
         public float intensity;
         public float threshold;
         public float softKnee;
@@ -110,6 +118,7 @@ namespace AIGraphics.PostProcessingParameter {
         public string dirtTexture;
         public float dirtIntensity;
         public void Save(UnityEngine.Rendering.PostProcessing.Bloom layer, string dirtTexturePath = "") {
+            enabled = layer.enabled.value;
             intensity = layer.intensity.value;
             threshold = layer.threshold.value;
             softKnee = layer.softKnee.value;
@@ -124,6 +133,7 @@ namespace AIGraphics.PostProcessingParameter {
             dirtTexture = dirtTexturePath;
         }
         public void Load(UnityEngine.Rendering.PostProcessing.Bloom layer) {
+            layer.enabled.value = enabled;
             layer.intensity.value = intensity;
             layer.threshold.value = threshold;
             layer.softKnee.value = softKnee;
@@ -133,7 +143,7 @@ namespace AIGraphics.PostProcessingParameter {
             layer.color.value = new Color(color[0], color[1], color[2]);
             layer.fastMode.value = fastMode;
             layer.dirtIntensity.value = dirtIntensity;
-            
+
             // Load from path.
             // layer.dirtTexture.value = dirtTexture
         }
@@ -141,17 +151,20 @@ namespace AIGraphics.PostProcessingParameter {
 
     [MessagePackObject(keyAsPropertyName: true)]
     public class ChromaticAberration {
+        public bool enabled;
         public string spectralLut;
         public float intensity;
         public bool fastMode;
         public void Save(UnityEngine.Rendering.PostProcessing.ChromaticAberration layer, string spectralLutPath = "") {
+            enabled = layer.enabled.value;
             intensity = layer.intensity.value;
             fastMode = layer.fastMode.value;
-            
+
             //Save Texture path.
             //spectralLut = spectralLutPath;
         }
         public void Load(UnityEngine.Rendering.PostProcessing.ChromaticAberration layer) {
+            layer.enabled.value = enabled;
             layer.intensity.value = intensity;
             layer.fastMode.value = fastMode;
 
@@ -162,6 +175,7 @@ namespace AIGraphics.PostProcessingParameter {
 
     [MessagePackObject(keyAsPropertyName: true)]
     public class ColorGrading {
+        public bool enabled;
         //internal SplineParameter redCurve; // Figure out messagepack parser later.
         //internal SplineParameter greenCurve; // Figure out messagepack parser later.
         //internal SplineParameter blueCurve; // Figure out messagepack parser later.
@@ -203,6 +217,7 @@ namespace AIGraphics.PostProcessingParameter {
         public string externalLutPath; // Formerly Texture.
 
         public void Save(UnityEngine.Rendering.PostProcessing.ColorGrading layer, string lutPath = "", string extLutPath = "") {
+            enabled = layer.enabled.value;
             gradingMode = layer.gradingMode.value;
             mixerGreenOutGreenIn = layer.mixerGreenOutGreenIn.value;
             mixerGreenOutBlueIn = layer.mixerGreenOutBlueIn.value;
@@ -212,7 +227,7 @@ namespace AIGraphics.PostProcessingParameter {
             lift = new float[4] { layer.lift.value[0], layer.lift.value[1], layer.lift.value[2], layer.lift.value[3] };
             gamma = new float[4] { layer.gamma.value[0], layer.gamma.value[1], layer.gamma.value[2], layer.gamma.value[3] };
             mixerGreenOutRedIn = layer.mixerGreenOutRedIn.value;
-            gain = new float[4] { layer.gain.value[0], layer.gain.value[1], layer.gain.value[2], layer.gain.value[3]};
+            gain = new float[4] { layer.gain.value[0], layer.gain.value[1], layer.gain.value[2], layer.gain.value[3] };
             mixerRedOutBlueIn = layer.mixerRedOutBlueIn.value;
             mixerRedOutGreenIn = layer.mixerRedOutGreenIn.value;
             toneCurveToeStrength = layer.toneCurveToeStrength.value;
@@ -225,7 +240,7 @@ namespace AIGraphics.PostProcessingParameter {
             tonemapper = layer.tonemapper.value;
             ldrLutContribution = layer.ldrLutContribution.value;
             tint = layer.tint.value;
-        colorFilter = new float[4] { layer.colorFilter.value[0], layer.colorFilter.value[1], layer.colorFilter.value[2], layer.colorFilter.value[3] };
+            colorFilter = new float[4] { layer.colorFilter.value[0], layer.colorFilter.value[1], layer.colorFilter.value[2], layer.colorFilter.value[3] };
             hueShift = layer.hueShift.value;
             saturation = layer.saturation.value;
             brightness = layer.brightness.value;
@@ -238,6 +253,7 @@ namespace AIGraphics.PostProcessingParameter {
 
         }
         public void Load(UnityEngine.Rendering.PostProcessing.ColorGrading layer) {
+            layer.enabled.value = enabled;
             layer.gradingMode.value = gradingMode;
             layer.mixerGreenOutGreenIn.value = mixerGreenOutGreenIn;
             layer.mixerGreenOutBlueIn.value = mixerGreenOutBlueIn;
@@ -276,18 +292,21 @@ namespace AIGraphics.PostProcessingParameter {
 
     [MessagePackObject(keyAsPropertyName: true)]
     public class DepthOfField {
+        public bool enabled;
         public float focusDistance;
         public float aperture;
         public float focalLength;
         public KernelSize kernelSize;
 
         public void Save(UnityEngine.Rendering.PostProcessing.DepthOfField layer) {
+            enabled = layer.enabled.value;
             focusDistance = layer.focusDistance.value;
             aperture = layer.aperture.value;
             focalLength = layer.focalLength.value;
             kernelSize = layer.kernelSize.value; // KernelSize
         }
         public void Load(UnityEngine.Rendering.PostProcessing.DepthOfField layer) {
+            layer.enabled.value = enabled;
             layer.focusDistance.value = focusDistance;
             layer.aperture.value = aperture;
             layer.focalLength.value = focalLength;
@@ -297,18 +316,21 @@ namespace AIGraphics.PostProcessingParameter {
 
     [MessagePackObject(keyAsPropertyName: true)]
     public class GrainLayer {
+        public bool enabled;
         public bool colored;
         public float intensity;
         public float size;
         public float lumContrib;
 
         public void Save(UnityEngine.Rendering.PostProcessing.Grain layer) {
+            enabled = layer.enabled.value;
             colored = layer.colored.value;
             intensity = layer.intensity.value;
             size = layer.size.value;
             lumContrib = layer.lumContrib.value;
         }
         public void Load(UnityEngine.Rendering.PostProcessing.Grain layer) {
+            layer.enabled.value = enabled;
             layer.colored.value = colored;
             layer.intensity.value = intensity;
             layer.size.value = size;
@@ -318,6 +340,7 @@ namespace AIGraphics.PostProcessingParameter {
 
     [MessagePackObject(keyAsPropertyName: true)]
     public class ScreenSpaceReflection {
+        public bool enabled;
         public ScreenSpaceReflectionPreset preset;
         public int maximumIterationCount;
         public ScreenSpaceReflectionResolution resolution;
@@ -327,6 +350,7 @@ namespace AIGraphics.PostProcessingParameter {
         public float vignette;
 
         public void Save(UnityEngine.Rendering.PostProcessing.ScreenSpaceReflections layer) {
+            enabled = layer.enabled.value;
             preset = layer.preset.value;
             maximumIterationCount = layer.maximumIterationCount.value;
             resolution = layer.resolution.value;
@@ -336,6 +360,7 @@ namespace AIGraphics.PostProcessingParameter {
             vignette = layer.vignette.value;
         }
         public void Load(UnityEngine.Rendering.PostProcessing.ScreenSpaceReflections layer) {
+            layer.enabled.value = enabled;
             layer.preset.value = preset;
             layer.maximumIterationCount.value = maximumIterationCount;
             layer.resolution.value = resolution;
@@ -348,6 +373,7 @@ namespace AIGraphics.PostProcessingParameter {
 
     [MessagePackObject(keyAsPropertyName: true)]
     public class Vignette {
+        public bool enabled;
         public VignetteMode mode;
         public float[] color; //vector3
         public float[] center; //vector2
@@ -359,6 +385,7 @@ namespace AIGraphics.PostProcessingParameter {
         public float opacity;
 
         public void Save(UnityEngine.Rendering.PostProcessing.Vignette layer, string maskPath = "") {
+            enabled = layer.enabled.value;
             mode = layer.mode.value;
             color = new float[3] { layer.color.value[0], layer.color.value[1], layer.color.value[2] };
             center = new float[2] { layer.center.value[0], layer.center.value[1] };
@@ -372,6 +399,7 @@ namespace AIGraphics.PostProcessingParameter {
             //mask = maskPath;
         }
         public void Load(UnityEngine.Rendering.PostProcessing.Vignette layer) {
+            layer.enabled.value = enabled;
             layer.mode.value = mode;
             layer.color.value = new Color(color[0], color[1], color[2]);
             layer.center.value = new Vector2(center[0], center[1]);
