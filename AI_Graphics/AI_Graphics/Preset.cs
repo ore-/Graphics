@@ -27,6 +27,7 @@ namespace AIGraphics {
 
         public byte[] ToBytes() {
             skybox = GameObject.Find("SkyboxManager").GetComponent<SkyboxManager>().skyboxParams;
+            post.SaveParameters();
             return MessagePackSerializer.Serialize(this);
         }
         public void Save(string name = "default", string path = "", bool overwrite = true) {
@@ -66,12 +67,12 @@ namespace AIGraphics {
         }
 
         public bool Load(byte[] bytes) {
-            Debug.Log("miggas");
             this = MessagePackSerializer.Deserialize<Preset>(bytes);
             SkyboxManager manager = GameObject.Find("SkyboxManager").GetComponent<SkyboxManager>();
             if (manager) {
                 manager.skyboxParams = this.skybox;
                 manager.LoadSkyboxParams();
+                post.LoadParameters();
                 Debug.Log(skybox.selectedCubeMap);
             }
             return true;

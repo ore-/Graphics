@@ -68,12 +68,12 @@ namespace AIGraphics
         }
         public void ApplySkyboxParams()
         {
-            Skyboxbg.SetFloat(_Exposure, skyboxParams.exposure);
-            Skyboxbg.SetFloat(_Rotation, skyboxParams.rotation);
-            Skyboxbg.SetColor(_Tint, skyboxParams.tint);
-            Skybox.SetFloat(_Exposure, skyboxParams.exposure);
-            Skybox.SetColor(_Tint, skyboxParams.tint);
-            Skybox.SetFloat(_Rotation, skyboxParams.rotation);
+            Skyboxbg?.SetFloat(_Exposure, skyboxParams.exposure);
+            Skyboxbg?.SetFloat(_Rotation, skyboxParams.rotation);
+            Skyboxbg?.SetColor(_Tint, skyboxParams.tint);
+            Skybox?.SetFloat(_Exposure, skyboxParams.exposure);
+            Skybox?.SetColor(_Tint, skyboxParams.tint);
+            Skybox?.SetFloat(_Rotation, skyboxParams.rotation);
         }
         public void SaveMapSkyBox()
         {
