@@ -11,7 +11,7 @@ using UnityEngine.Rendering.PostProcessing;
 // This is funny
 // TODO: Find Better Names and change the names with refactoring tools.
 // TODO: Is this the best way to do this?
-namespace AIGraphics.PostProcessingParameter {
+namespace AIGraphics.Parameters {
     [MessagePackObject(keyAsPropertyName: true)]
     public class AutoExposure {
         public bool enabled;

@@ -1,33 +1,33 @@
 ﻿using AIGraphics.Settings;
 using MessagePack;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace AIGraphics {
     [MessagePackObject(keyAsPropertyName: true)]
     public struct Preset {
-        public CameraSettings camera;
         public GlobalSettings global;
-        public LightingSettings light;
-        public PostProcessingSettings post;
-        public SkyboxParams skybox;
+        public CameraSettings camera;
+        public LightingSettings lights;
+        public PostProcessingSettings pp;
+        public SkyboxParams skybox; 
 
-        public Preset(GlobalSettings global, CameraSettings camera, LightingSettings light, PostProcessingSettings post, SkyboxParams skybox) {
+        public Preset(GlobalSettings global, CameraSettings camera, LightingSettings lights, PostProcessingSettings pp, SkyboxParams skybox) {
             this.camera = camera;
             this.global = global;
-            this.light = light;
-            this.post = post;
+            this.lights = lights;
+            this.pp = pp;
             this.skybox = skybox;
         }
 
-        public byte[] ToBytes() {
+        public void UpdateParameters() {
+            global.parameters.Save(global);
+            camera.parameters.Save(camera);
+            lights.parameters.Save(lights);
+            pp.SaveParameters();
             skybox = GameObject.Find("SkyboxManager").GetComponent<SkyboxManager>().skyboxParams;
-            post.SaveParameters();
+        }
+        public byte[] Serialize() {
             return MessagePackSerializer.Serialize(this);
         }
         public void Save(string name = "default", string path = "", bool overwrite = true) {
@@ -36,7 +36,8 @@ namespace AIGraphics {
 
             string targetPath = Path.Combine(path, name + ".preset");
             Directory.CreateDirectory(Path.GetDirectoryName(targetPath));
-            byte[] bytes = this.ToBytes();
+            UpdateParameters();
+            byte[] bytes = this.Serialize();
             if (File.Exists(targetPath) && overwrite) {
                 File.Delete(targetPath);
                 File.WriteAllBytes(targetPath, bytes);
@@ -44,7 +45,6 @@ namespace AIGraphics {
             } else
                 File.WriteAllBytes(targetPath, bytes);
         }
-
         public bool Load(string name = "default", string path = "") {
             if (path == "")
                 path = AIGraphics.ConfigPresetPath.Value; // Runtime Config Preset Path.
@@ -66,27 +66,26 @@ namespace AIGraphics {
             }
         }
 
-        public bool Load(byte[] bytes) {
+        public void Load(byte[] bytes) {
+            Deserialize(bytes);
+            ApplyParameters();
+        }
+
+        public void Deserialize(byte[] bytes) {
             this = MessagePackSerializer.Deserialize<Preset>(bytes);
+        }
+
+        public void ApplyParameters() {
+            global.parameters.Load(global);
+            camera.parameters.Load(camera);
+            lights.parameters.Load(lights);
+            pp.LoadParameters();
+
             SkyboxManager manager = GameObject.Find("SkyboxManager").GetComponent<SkyboxManager>();
             if (manager) {
                 manager.skyboxParams = this.skybox;
                 manager.LoadSkyboxParams();
-                post.LoadParameters();
-                Debug.Log(skybox.selectedCubeMap);
             }
-            return true;
-            //try {
-            //    this = MessagePackSerializer.Deserialize<Preset>(bytes);
-            //    SkyboxManager manager = GameObject.Find("SkyboxManager").GetComponent<SkyboxManager>();
-            //    if (manager) {
-            //        manager.skyboxParams = this.skybox;
-            //        manager.LoadSkyboxParams();
-            //    }
-            //    return true;
-            //} catch {
-            //    return false;
-            //}
         }
     }
 }

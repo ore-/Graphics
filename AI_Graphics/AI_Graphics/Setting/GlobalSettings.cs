@@ -4,80 +4,80 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using static KKAPI.Studio.StudioAPI;
 
-namespace AIGraphics.Settings
-{
+namespace AIGraphics.Settings {
     [MessagePackObject(keyAsPropertyName: true)]
-    public class GlobalSettings 
-    {
+    public class GlobalSettings {
+        public Parameters.Graphic parameters = new Parameters.Graphic();
+
         private int _pixelLightCount;
 
-        public int PixelLightCount
+        internal int PixelLightCount
         {
             get => QualitySettings.pixelLightCount;
             set => QualitySettings.pixelLightCount = _pixelLightCount = value;
         }
 
-        public AnisotropicFiltering AnisotropicFiltering
+        internal AnisotropicFiltering AnisotropicFiltering
         {
             get => QualitySettings.anisotropicFiltering;
             set => QualitySettings.anisotropicFiltering = value;
         }
 
-        public int AntiAliasing
+        internal int AntiAliasing
         {
             get => QualitySettings.antiAliasing;
             set => QualitySettings.antiAliasing = (int)value;
         }
 
-        public bool RealtimeReflectionProbes
+        internal bool RealtimeReflectionProbes
         {
             get => QualitySettings.realtimeReflectionProbes;
             set => QualitySettings.realtimeReflectionProbes = value;
         }
 
-        public ShadowmaskMode ShadowmaskModeSetting
+        internal ShadowmaskMode ShadowmaskModeSetting
         {
             get => QualitySettings.shadowmaskMode;
             set => QualitySettings.shadowmaskMode = value;
         }
 
-        public ShadowQuality ShadowQualitySetting
+        internal ShadowQuality ShadowQualitySetting
         {
             get => QualitySettings.shadows;
             set => QualitySettings.shadows = value;
         }
 
-        public ShadowResolution ShadowResolutionSetting
+        internal ShadowResolution ShadowResolutionSetting
         {
             get => QualitySettings.shadowResolution;
             set => QualitySettings.shadowResolution = value;
         }
 
-        public ShadowProjection ShadowProjectionSetting
+        internal ShadowProjection ShadowProjectionSetting
         {
             get => QualitySettings.shadowProjection;
             set => QualitySettings.shadowProjection = value;
         }
 
-        public float ShadowDistance
+        internal float ShadowDistance
         {
             get => QualitySettings.shadowDistance;
             set => QualitySettings.shadowDistance = value;
         }
 
-        public float ShadowNearPlaneOffset
+        internal float ShadowNearPlaneOffset
         {
             get => QualitySettings.shadowNearPlaneOffset;
             set => QualitySettings.shadowNearPlaneOffset = value;
         }
 
-        public bool LightsUseLinearIntensity
+        internal bool LightsUseLinearIntensity
         {
             get => GraphicsSettings.lightsUseLinearIntensity;
             set => GraphicsSettings.lightsUseLinearIntensity = value;
         }
 
-        public bool LightsUseColorTemperature
+        internal bool LightsUseColorTemperature
         {
             get => GraphicsSettings.lightsUseColorTemperature;
             set
@@ -87,12 +87,12 @@ namespace AIGraphics.Settings
             }
         }
 
-        public int FontSize
+        internal int FontSize
         {
             get => GUIStyles.FontSize;
             set => GUIStyles.FontSize = AIGraphics.ConfigFontSize.Value = value;
         }
 
-        public bool ShowAdvancedSettings { get; set; }
+        internal bool ShowAdvancedSettings { get; set; }
     }
 }

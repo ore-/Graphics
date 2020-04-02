@@ -23,7 +23,7 @@ namespace AIGraphics
         protected override void OnSceneSave()
         {
             PluginData saveData = new PluginData();
-            saveData.data.Add("bytes", AIGraphics.Instance.preset.ToBytes());
+            saveData.data.Add("bytes", AIGraphics.Instance.preset.Serialize());
             saveData.version = 1;
             SetExtendedData(saveData);
         }

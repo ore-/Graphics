@@ -1,15 +1,6 @@
-﻿using AIGraphics;
-using MessagePack;
-using System.Linq;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Rendering;
+﻿namespace AIGraphics.Settings {
 
-namespace AIGraphics.Settings
-{
-    [MessagePackObject(keyAsPropertyName: true)]
-    public class LightSettings
-    {
+    internal class LightSettings {
         internal static float IntensityMin = 0f;
         internal static float IntensityMax = 8f;
         internal static float IntensityDefault = 1f;

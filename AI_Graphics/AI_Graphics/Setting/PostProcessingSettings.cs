@@ -1,5 +1,4 @@
-﻿using AIGraphics.Inspector;
-using MessagePack;
+﻿using MessagePack;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -10,6 +9,18 @@ using static KKAPI.Studio.StudioAPI;
 namespace AIGraphics.Settings {
     [MessagePackObject(keyAsPropertyName: true)]
     public class PostProcessingSettings {
+        // Parameters for Messagepack Save
+        public Parameters.AmbientOcclusion paramAmbientOcclusion = new Parameters.AmbientOcclusion();
+        public Parameters.AutoExposure paramAutoExposure = new Parameters.AutoExposure();
+        public Parameters.Bloom paramBloom = new Parameters.Bloom();
+        public Parameters.ChromaticAberration paramChromaticAberration = new Parameters.ChromaticAberration();
+        public Parameters.ColorGrading paramColorGrading = new Parameters.ColorGrading();
+        public Parameters.DepthOfField paramDepthOfField = new Parameters.DepthOfField();
+        public Parameters.GrainLayer paramGrainLayer = new Parameters.GrainLayer();
+        public Parameters.ScreenSpaceReflection paramScreenSpaceReflection = new Parameters.ScreenSpaceReflection();
+        public Parameters.Vignette paramVignette = new Parameters.Vignette();
+        //public PostProcessingParameter.AmplifyOcclusion paramAmplifyOcclusion; // not implemented yet
+
         internal enum Antialiasing {
             None = PostProcessLayer.Antialiasing.None,
             FXAA = PostProcessLayer.Antialiasing.FastApproximateAntialiasing,
@@ -34,18 +45,6 @@ namespace AIGraphics.Settings {
         internal List<Grain> grainLayers = new List<Grain> { };
         internal List<ScreenSpaceReflections> screenSpaceReflectionsLayers = new List<ScreenSpaceReflections> { };
         internal List<Vignette> vignetteLayers = new List<Vignette> { };
-
-        // Parameters for Messagepack Save
-        public PostProcessingParameter.AmbientOcclusion paramAmbientOcclusion = new PostProcessingParameter.AmbientOcclusion();
-        public PostProcessingParameter.AutoExposure paramAutoExposure = new PostProcessingParameter.AutoExposure();
-        public PostProcessingParameter.Bloom paramBloom = new PostProcessingParameter.Bloom();
-        public PostProcessingParameter.ChromaticAberration paramChromaticAberration = new PostProcessingParameter.ChromaticAberration();
-        public PostProcessingParameter.ColorGrading paramColorGrading = new PostProcessingParameter.ColorGrading();
-        public PostProcessingParameter.DepthOfField paramDepthOfField = new PostProcessingParameter.DepthOfField();
-        public PostProcessingParameter.GrainLayer paramGrainLayer = new PostProcessingParameter.GrainLayer();
-        public PostProcessingParameter.ScreenSpaceReflection paramScreenSpaceReflection = new PostProcessingParameter.ScreenSpaceReflection();
-        public PostProcessingParameter.Vignette paramVignette = new PostProcessingParameter.Vignette();
-        //public PostProcessingParameter.AmplifyOcclusion paramAmplifyOcclusion; // not implemented yet
 
         public PostProcessingSettings() {
             postProcessVolumes = GameObject.FindObjectsOfType<PostProcessVolume>();
