@@ -111,10 +111,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReflectionExtensions.cs" />
     <Compile Include="SceneController.cs" />
-    <Compile Include="SettingParams\Camera.cs" />
-    <Compile Include="SettingParams\Global.cs" />
-    <Compile Include="SettingParams\Lighting.cs" />
-    <Compile Include="SettingParams\PostProcessing.cs" />
     <Compile Include="Setting\CameraSettings.cs" />
     <Compile Include="Inspector\GUIStyles.cs" />
     <Compile Include="Inspector\SettingsInspector.cs" />
@@ -122,6 +118,7 @@
     <Compile Include="Inspector\GUIUtility.cs" />
     <Compile Include="Setting\LightingSettings.cs" />
     <Compile Include="Setting\LightSettings.cs" />
+    <Compile Include="Setting\PostProcessingParameters.cs" />
     <Compile Include="Setting\PostProcessingSettings.cs" />
     <Compile Include="Setting\GlobalSettings.cs" />
     <Compile Include="SkyboxManager.cs" />

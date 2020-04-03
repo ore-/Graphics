@@ -21,9 +21,6 @@ namespace AIGraphics {
         }
 
         public void UpdateParameters() {
-            global.parameters.Save(global);
-            camera.parameters.Save(camera);
-            lights.parameters.Save(lights);
             pp.SaveParameters();
             skybox = GameObject.Find("SkyboxManager").GetComponent<SkyboxManager>().skyboxParams;
         }
@@ -51,9 +48,9 @@ namespace AIGraphics {
 
             string targetPath = Path.Combine(path, name + ".preset");
             if (File.Exists(targetPath)) {
+                byte[] bytes = File.ReadAllBytes(targetPath);
+                Load(bytes);
                 try {
-                    byte[] bytes = File.ReadAllBytes(targetPath);
-                    Load(bytes);
                     Debug.Log(string.Format("Loaded preset file '{0}'", name + ".preset"));
                     return true;
                 } catch {
@@ -76,9 +73,6 @@ namespace AIGraphics {
         }
 
         public void ApplyParameters() {
-            global.parameters.Load(global);
-            camera.parameters.Load(camera);
-            lights.parameters.Load(lights);
             pp.LoadParameters();
 
             SkyboxManager manager = GameObject.Find("SkyboxManager").GetComponent<SkyboxManager>();
