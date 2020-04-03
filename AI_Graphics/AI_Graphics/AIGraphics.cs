@@ -21,12 +21,15 @@ namespace AIGraphics
 
         public KeyCode ShowHotkey { get; set; } = KeyCode.F5;
         public static ConfigEntry<string> ConfigCubeMapPath { get; private set; }
+        public static ConfigEntry<string> ConfigPresetPath { get; private set; }
         public static ConfigEntry<string> ConfigLensDirtPath { get; private set; }
         public static ConfigEntry<int> ConfigFontSize { get; internal set; }
         public static ConfigEntry<int> ConfigWindowWidth { get; internal set; }
         public static ConfigEntry<int> ConfigWindowHeight { get; internal set; }
         public static ConfigEntry<int> ConfigWindowOffsetX { get; internal set; }
         public static ConfigEntry<int> ConfigWindowOffsetY { get; internal set; }
+
+        public Preset preset;
 
         private bool _showGUI;
         private CursorLockMode _previousCursorLockState;
@@ -44,7 +47,7 @@ namespace AIGraphics
         internal LightingSettings LightingSettings { get; private set; }
         internal PostProcessingSettings PostProcessingSettings { get; private set; }
         
-        internal static AIGraphics Instance { get; private set; }
+        public static AIGraphics Instance { get; private set; }
 
         public AIGraphics()
         {
@@ -52,6 +55,7 @@ namespace AIGraphics
                 throw new InvalidOperationException("Can only create one instance of AIGraphics");
             Instance = this;
 
+            ConfigPresetPath = Config.Bind("Config", "Preset Location", Application.dataPath + "/../iblpresets/", new ConfigDescription("Where presets are stored"));
             ConfigCubeMapPath = Config.Bind("Config", "Cubemap path", Application.dataPath + "/../cubemaps/", new ConfigDescription("Where cubemaps are stored"));
             ConfigLensDirtPath = Config.Bind("Config", "Lens dirt texture path", Application.dataPath + "/../lensdirts/", new ConfigDescription("Where lens dirt textures are stored"));
             ConfigFontSize = Config.Bind("Config", "Font Size", 12, new ConfigDescription("Font Size"));
@@ -107,7 +111,15 @@ namespace AIGraphics
 
             _lightManager = new LightManager(this);
             
-            _inspector = new Inspector.Inspector(this);            
+            _inspector = new Inspector.Inspector(this);
+
+            // It takes some time to fully loaded in studio to save/load stuffs.
+            yield return new WaitUntil(() => {
+                return (KoikatuAPI.GetCurrentGameMode() == GameMode.Studio) ? KKAPI.Studio.StudioAPI.InsideStudio && _skyboxManager != null : true;
+            });
+
+            preset = new Preset(Settings, CameraSettings, LightingSettings, PostProcessingSettings, SkyboxManager.skyboxParams);
+            preset.Load();
         }
 
         internal SkyboxManager SkyboxManager { get => _skyboxManager; }

@@ -82,7 +82,7 @@ namespace AIGraphics.Inspector
                     PostProcessingInspector.Draw(Parent.PostProcessingSettings, Parent.PostProcessingManager, Parent.FocusPuller, Parent.Settings.ShowAdvancedSettings);
                     break;
                 case Tab.Settings:
-                    SettingsInspector.Draw(Parent.CameraSettings, Parent.Settings);
+                    SettingsInspector.Draw(Parent.CameraSettings, Parent.Settings, Parent);
                     break;
             }
         }

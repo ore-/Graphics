@@ -3,10 +3,9 @@ using MessagePack;
 using UnityEngine;
 using static KKAPI.Studio.StudioAPI;
 
-namespace AIGraphics.Settings
-{
+namespace AIGraphics.Settings {
     [MessagePackObject(keyAsPropertyName: true)]
-    internal class CameraSettings 
+    public class CameraSettings 
     {
         private Camera _camera;
         private CameraClearFlags _clearFlags;
@@ -19,7 +18,7 @@ namespace AIGraphics.Settings
         private float _nearClipPlane;
         private float _farClipPlane;
 
-        internal CameraSettings()
+        public CameraSettings()
         {
             _clearFlags = MainCamera.clearFlags;
             _renderingPath = MainCamera.renderingPath;
@@ -29,7 +28,7 @@ namespace AIGraphics.Settings
             _dynamicResolution = MainCamera.allowDynamicResolution;
         }
 
-        internal enum AICameraClearFlags
+        public enum AICameraClearFlags
         {
             Skybox = CameraClearFlags.Skybox,
             Colour = CameraClearFlags.SolidColor,
@@ -37,20 +36,20 @@ namespace AIGraphics.Settings
             Nothing = CameraClearFlags.Nothing,
         }
 
-        internal enum AIRenderingPath
+        public enum AIRenderingPath
         {
             VertexLit = UnityEngine.RenderingPath.VertexLit,
             Forward = UnityEngine.RenderingPath.Forward,
             Deferred = UnityEngine.RenderingPath.DeferredShading,
         }
 
-        internal AICameraClearFlags ClearFlag
+        public AICameraClearFlags ClearFlag
         {
             get => (AICameraClearFlags) MainCamera.clearFlags;
             set => _clearFlags = MainCamera.clearFlags = (CameraClearFlags) value;
         }
 
-        internal AIRenderingPath RenderingPath
+        public AIRenderingPath RenderingPath
         {
             get => (AIRenderingPath) MainCamera.renderingPath;
             set
@@ -60,19 +59,19 @@ namespace AIGraphics.Settings
             }
         }
 
-        internal bool OcculsionCulling
+        public bool OcculsionCulling
         {
             get => MainCamera.useOcclusionCulling;
             set => _occulsionCulling = MainCamera.useOcclusionCulling = value;
         }
 
-        internal bool HDR
+        public bool HDR
         {
             get => MainCamera.allowHDR;
             set => _hdr = MainCamera.allowHDR = value;
         }
 
-        internal bool MSAA
+        public bool MSAA
         {
             get => MainCamera.allowMSAA;
             set
@@ -84,13 +83,13 @@ namespace AIGraphics.Settings
             }
         }
 
-        internal bool DynamicResolution
+        public bool DynamicResolution
         {
             get => MainCamera.allowDynamicResolution;
             set => _dynamicResolution = MainCamera.allowDynamicResolution = value;
         }
 
-        internal float Fov
+        public float Fov
         {
             get
             {
@@ -127,7 +126,7 @@ namespace AIGraphics.Settings
             }
         }
 
-        internal float NearClipPlane
+        public float NearClipPlane
         {
             get 
             {
@@ -167,7 +166,7 @@ namespace AIGraphics.Settings
             }
         }
 
-        internal float FarClipPlane
+        public float FarClipPlane
         {
             get 
             {
