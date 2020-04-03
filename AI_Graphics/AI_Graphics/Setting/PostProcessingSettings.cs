@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 using static KKAPI.Studio.StudioAPI;
 
-// TODO: Make Post Process Layer more cleaner?
+// TODO: Messagepack clears out layer lists for a frame. Need to figure out to remove temporary solutions
 namespace AIGraphics.Settings {
     [MessagePackObject(keyAsPropertyName: true)]
     public class PostProcessingSettings {
@@ -19,7 +19,7 @@ namespace AIGraphics.Settings {
         internal GrainLayerParams paramGrainLayer = new GrainLayerParams();
         internal ScreenSpaceReflectionParams paramScreenSpaceReflection = new ScreenSpaceReflectionParams();
         internal VignetteParams paramVignette = new VignetteParams();
-        //public PostProcessingParameter.AmplifyOcclusion paramAmplifyOcclusion; // not implemented yet
+        //internal AmplifyOcclusion paramAmplifyOcclusion; // not implemented yet
 
         public enum Antialiasing {
             None = PostProcessLayer.Antialiasing.None,
@@ -210,7 +210,7 @@ namespace AIGraphics.Settings {
         }
 
         public float FocalDistance {
-            get => (depthOfFieldLayers.Count > 0) ? depthOfFieldLayers[0].focusDistance.value : 0;
+            get => (depthOfFieldLayers.Count > 0) ? depthOfFieldLayers[0].focusDistance.value : 0f;
             set {
                 if (depthOfFieldLayers.Count > 0) 
                     depthOfFieldLayers[0].focusDistance.value = value;
