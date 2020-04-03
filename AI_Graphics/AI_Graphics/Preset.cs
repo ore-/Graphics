@@ -48,9 +48,9 @@ namespace AIGraphics {
 
             string targetPath = Path.Combine(path, name + ".preset");
             if (File.Exists(targetPath)) {
-                byte[] bytes = File.ReadAllBytes(targetPath);
-                Load(bytes);
                 try {
+                    byte[] bytes = File.ReadAllBytes(targetPath);
+                    Load(bytes);
                     Debug.Log(string.Format("Loaded preset file '{0}'", name + ".preset"));
                     return true;
                 } catch {

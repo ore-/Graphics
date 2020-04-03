@@ -117,6 +117,7 @@ namespace AIGraphics
             yield return new WaitUntil(() => {
                 return (KoikatuAPI.GetCurrentGameMode() == GameMode.Studio) ? KKAPI.Studio.StudioAPI.InsideStudio && _skyboxManager != null : true;
             });
+
             preset = new Preset(Settings, CameraSettings, LightingSettings, PostProcessingSettings, SkyboxManager.skyboxParams);
             preset.Load();
         }
