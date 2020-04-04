@@ -29,16 +29,16 @@ namespace AIGraphics.Inspector
                 GUILayout.Label("Environment Skybox", GUIStyles.boldlabel);
                 GUILayout.Space(1);
                 //inactivate controls if no cubemap
-                if (skyboxManager.CubemapPaths.IsNullOrEmpty())
+                if (SkyboxManager.CubemapPaths.IsNullOrEmpty())
                 {
                     GUILayout.Label("No custom cubemap found");
                 }
                 else
                 {
                     cubeMapScrollView = GUILayout.BeginScrollView(cubeMapScrollView);
-                    int selectedCubeMapIdx = Array.IndexOf(skyboxManager.CubemapPaths.ToArray(), skyboxManager.CurrentCubeMap);
+                    int selectedCubeMapIdx = Array.IndexOf(SkyboxManager.CubemapPaths.ToArray(), skyboxManager.CurrentCubeMap);
                     selectedCubeMapIdx = GUILayout.SelectionGrid(selectedCubeMapIdx, skyboxManager.CubemapPreviewTextures.ToArray(), Inspector.Width / 150, GUIStyles.Skin.box);
-                    if (-1 != selectedCubeMapIdx) skyboxManager.CurrentCubeMap = skyboxManager.CubemapPaths[selectedCubeMapIdx];
+                    if (-1 != selectedCubeMapIdx) skyboxManager.CurrentCubeMap = SkyboxManager.CubemapPaths[selectedCubeMapIdx];
                     GUILayout.EndScrollView();
                 }
                 GUILayout.Space(10);

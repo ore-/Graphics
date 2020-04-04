@@ -37,7 +37,7 @@ namespace AIGraphics
         public Material Skybox { get; set; }
         public Material MapSkybox { get; set; }
 
-        internal List<string> CubemapPaths { get; set; }
+        internal static List<string> CubemapPaths { get; set; }
         internal List<Texture2D> CubemapPreviewTextures { get; set; }
 
         internal static string noCubemap = "No skybox";
