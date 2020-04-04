@@ -9,7 +9,6 @@ namespace AIGraphics.Inspector
 {
     internal static class PostProcessingInspector
     {
-        private static int selectedLensDirtIndex = -1;
         private static Vector2 postScrollView;
         private static int selectedVolumeIndex = 0;
         private static PostProcessVolume selectedVolume;
@@ -179,9 +178,13 @@ namespace AIGraphics.Inspector
                 SliderColor("Colour", settings.bloomLayers[volumeIndex].color.value, colour => { settings.bloomLayers[volumeIndex].color.value = colour; }, settings.bloomLayers[volumeIndex].color.overrideState,
                     settings.bloomLayers[volumeIndex].color.overrideState, overrideState => settings.bloomLayers[volumeIndex].color.overrideState = overrideState);
                 settings.bloomLayers[volumeIndex].fastMode.value = Toggle("Fast Mode", settings.bloomLayers[volumeIndex].fastMode.value);
-                selectedLensDirtIndex = SelectionTexture("Lens Dirt", selectedLensDirtIndex, postprocessingManager.LensDirtPreviews.ToArray(), Inspector.Width / 100,
+
+                PostProcessingManager.currentDirtIndex = SelectionTexture("Lens Dirt", PostProcessingManager.currentDirtIndex, postprocessingManager.LensDirtPreviews.ToArray(), Inspector.Width / 100,
                     settings.bloomLayers[volumeIndex].dirtTexture.overrideState, overrideState => settings.bloomLayers[volumeIndex].dirtTexture.overrideState = overrideState, GUIStyles.Skin.box);
-                if (-1 != selectedLensDirtIndex) settings.bloomLayers[volumeIndex].dirtTexture.value = postprocessingManager.LensDirts.ToArray()[selectedLensDirtIndex];
+                if (-1 != PostProcessingManager.currentDirtIndex) {
+                    settings.bloomLayers[volumeIndex].dirtTexture.value = PostProcessingManager.DirtTexture;
+                }
+
                 settings.bloomLayers[volumeIndex].dirtIntensity.value = Text("Dirt Intensity", settings.bloomLayers[volumeIndex].dirtIntensity.value, "N2",
                     settings.bloomLayers[volumeIndex].dirtIntensity.overrideState, overrideState => settings.bloomLayers[volumeIndex].dirtIntensity.overrideState = overrideState);
             }

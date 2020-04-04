@@ -112,7 +112,8 @@ namespace AIGraphics.Settings {
         public bool fastMode;
         public string dirtTexture;
         public float dirtIntensity;
-        public void Save(UnityEngine.Rendering.PostProcessing.Bloom layer, string dirtTexturePath = "") {
+
+        public void Save(UnityEngine.Rendering.PostProcessing.Bloom layer) {
             if (layer != null) {
                 enabled = layer.enabled.value;
                 intensity = layer.intensity.value;
@@ -124,8 +125,9 @@ namespace AIGraphics.Settings {
                 color = new float[3] { layer.color.value[0], layer.color.value[1], layer.color.value[2] };
                 fastMode = layer.fastMode.value;
                 dirtIntensity = layer.dirtIntensity.value;
-                // Save Path
-                dirtTexture = dirtTexturePath;
+                dirtTexture = PostProcessingManager.DirtTexturePath;
+                // dirtTexture is getting saved when dirtTexture is being set from PostProcessingSettings.
+                // ref: PostProcessingSettings.cs:167
             }
         }
         public void Load(UnityEngine.Rendering.PostProcessing.Bloom layer) {
@@ -141,8 +143,9 @@ namespace AIGraphics.Settings {
                 layer.fastMode.value = fastMode;
                 layer.dirtIntensity.value = dirtIntensity;
 
-                // Load from path.
-                // layer.dirtTexture.value = dirtTexture
+                int textureIndex = PostProcessingManager.FindIndexByPath(dirtTexture);
+                if (textureIndex > 0) // found texture index?
+                    layer.dirtTexture.value = PostProcessingManager.LensDirts[textureIndex];
             }
         }
     }

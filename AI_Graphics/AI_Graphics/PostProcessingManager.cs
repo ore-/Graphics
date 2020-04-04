@@ -9,9 +9,19 @@ namespace AIGraphics
     internal class PostProcessingManager : MonoBehaviour
     {
         private string _lensDirtTexturePath;
-        internal List<string> LensDirtPaths { get; private set; }
+        // Texture Lists don't have to be instanced.
+        internal static List<string> LensDirtPaths { get; private set; }
+        internal static List<Texture2D> LensDirts { get; private set; }
         internal List<Texture2D> LensDirtPreviews { get; private set; }
-        internal List<Texture2D> LensDirts { get; private set; }
+        internal static int currentDirtIndex = -1;
+
+        internal static Texture2D DirtTexture {
+            get => LensDirts.ToArray()[currentDirtIndex];
+        }
+        internal static string DirtTexturePath {
+            get => LensDirtPaths.ToArray()[currentDirtIndex];
+        }
+        public static int FindIndexByPath(string path) => LensDirtPaths.FindIndex(x => x.Equals(path));
 
         internal string LensDirtTexturesPath
         {
