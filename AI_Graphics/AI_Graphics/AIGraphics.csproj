@@ -31,16 +31,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AIAPI, Version=1.9.9.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\IllusionModdingAPI.AIAPI.1.9.9\lib\net46\AIAPI.dll</HintPath>
+    <Reference Include="AIAPI, Version=1.10.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\IllusionModdingAPI.AIAPI.1.10.0\lib\net46\AIAPI.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="AI_ExtensibleSaveFormat, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ExtensibleSaveFormat.AIGirl.13.1.1\lib\net46\AI_ExtensibleSaveFormat.dll</HintPath>
       <Private>False</Private>
-    </Reference>
-    <Reference Include="Alloy, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\IllusionLibs.AIGirl.UnityEngine.AssetBundleModule.2018.2.21.1\lib\net46\Alloy.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\IllusionLibs.AIGirl.Assembly-CSharp.2019.12.20\lib\net46\Assembly-CSharp.dll</HintPath>
@@ -101,6 +98,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AIGraphics.cs" />
+    <Compile Include="Alloy\AlloyPropertyAttributes.cs" />
+    <Compile Include="Alloy\AlloyUtils.cs" />
+    <Compile Include="Alloy\AreaLight\AlloyAreaLight.cs" />
     <Compile Include="FocusPuller.cs" />
     <Compile Include="Inspector\LightingInspector.cs" />
     <Compile Include="Inspector\LightInspector.cs" />
@@ -167,6 +167,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Alloy\AreaLight\Defaults\DefaultSpotCookie.tif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
