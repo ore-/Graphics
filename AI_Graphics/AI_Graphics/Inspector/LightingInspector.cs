@@ -31,7 +31,7 @@ namespace AIGraphics.Inspector
                 //inactivate controls if no cubemap
                 if (skyboxManager.CubemapPaths.IsNullOrEmpty())
                 {
-                    GUILayout.Label("No custom cubemap found");
+                    GUILayout.Label("No custom cubemaps found");
                 }
                 else
                 {

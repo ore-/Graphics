@@ -105,9 +105,11 @@
     <Compile Include="Inspector\LightingInspector.cs" />
     <Compile Include="Inspector\LightInspector.cs" />
     <Compile Include="Inspector\PostProcessingInspector.cs" />
+    <Compile Include="Inspector\PresetInspector.cs" />
     <Compile Include="LightManager.cs" />
     <Compile Include="PostProcessingManager.cs" />
     <Compile Include="Preset.cs" />
+    <Compile Include="PresetManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReflectionExtensions.cs" />
     <Compile Include="SceneController.cs" />

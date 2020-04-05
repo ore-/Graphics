@@ -12,25 +12,14 @@ namespace AIGraphics
         protected override void OnSceneLoad(SceneOperationKind operation, ReadOnlyDictionary<int, ObjectCtrlInfo> loadedItems)
         {
             Studio.Studio studio = GetStudio();
-            AIGraphics parent = GetComponentInParent<AIGraphics>();            
+            AIGraphics parent = AIGraphics.Instance;
             parent?.SkyboxManager?.SetupDefaultReflectionProbe();
-
-            PluginData saveData = GetExtendedData();
-            if (saveData != null && saveData.data.TryGetValue("bytes", out var val)) {
-                byte[] presetData = (byte[])val;
-                if (!presetData.IsNullOrEmpty())
-                    AIGraphics.Instance.preset.Load((byte[])presetData);
-            }
+            parent?.PresetManager?.Load(GetExtendedData());
         }
 
         protected override void OnSceneSave()
         {
-            PluginData saveData = new PluginData();
-            AIGraphics.Instance.preset.UpdateParameters();
-            byte[] presetData = AIGraphics.Instance.preset.Serialize();
-            saveData.data.Add("bytes", presetData);
-            saveData.version = 1;
-            SetExtendedData(saveData);
+            SetExtendedData(AIGraphics.Instance?.PresetManager.GetExtendedData());
         }
     }
 }
