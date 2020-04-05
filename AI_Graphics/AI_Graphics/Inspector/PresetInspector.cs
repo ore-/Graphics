@@ -8,6 +8,12 @@ namespace AIGraphics.Inspector
     {
         private const string _nameCue = "(preset name)";
         private static string _nameToSave = _nameCue;
+        private static int _presetIndexOld = -1;
+        private static int _presetIndexCurrent = -1;
+
+        private static bool ShouldUpdate {
+            get => _presetIndexCurrent != -1 && _presetIndexCurrent != _presetIndexOld;
+        }
 
         private static Vector2 presetScrollView;
         internal static void Draw(PresetManager presetManager)
@@ -22,9 +28,13 @@ namespace AIGraphics.Inspector
             else
             {
                 presetScrollView = GUILayout.BeginScrollView(presetScrollView);
-                int selectedPresetIdx = Array.IndexOf(presetManager.PresetNames, presetManager.CurrentPreset);
-                selectedPresetIdx = GUILayout.SelectionGrid(selectedPresetIdx, presetManager.PresetNames, Inspector.Width / 150);
-                if (-1 != selectedPresetIdx) presetManager.CurrentPreset = presetManager.PresetNames[selectedPresetIdx];
+                _presetIndexCurrent = Array.IndexOf(presetManager.PresetNames, presetManager.CurrentPreset);
+                _presetIndexCurrent = GUILayout.SelectionGrid(_presetIndexCurrent, presetManager.PresetNames, Inspector.Width / 150);
+                if (ShouldUpdate) {
+                    presetManager.CurrentPreset = presetManager.PresetNames[_presetIndexCurrent];
+                    _presetIndexOld = _presetIndexCurrent; // to prevent continous update;
+                }
+
                 GUILayout.EndScrollView();
             }
             GUILayout.Space(1);
