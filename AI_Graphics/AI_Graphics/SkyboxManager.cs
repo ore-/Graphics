@@ -37,8 +37,8 @@ namespace AIGraphics
         public Material Skybox { get; set; }
         public Material MapSkybox { get; set; }
 
-        internal List<string> CubemapPaths { get; set; }
-        internal List<Texture2D> CubemapPreviewTextures { get; set; }
+        internal static List<string> CubemapPaths { get; set; }
+        internal static List<Texture2D> CubemapPreviewTextures { get; set; }
 
         internal static string noCubemap = "No skybox";
         private string selectedCubeMap = noCubemap;
@@ -48,6 +48,7 @@ namespace AIGraphics
         
         private GameObject probeParent;
         private ReflectionProbe probe;
+        private string isLoadingCubeMap = null; // to track currently used assetbundle path.
 
         internal Camera Camera { get; set; }
         internal AIGraphics Parent { get; set; }
@@ -140,8 +141,8 @@ namespace AIGraphics
             }
         }
 
-        public IEnumerator LoadCubemap(string filePath, Camera camera)
-        {
+        public IEnumerator LoadCubemap(string filePath, Camera camera) {
+            yield return new WaitUntil(() => isLoadingCubeMap == null); // Check if preview is loading the bundle.
             AssetBundleCreateRequest assetBundleCreateRequest = AssetBundle.LoadFromFileAsync(filePath);
             yield return assetBundleCreateRequest;
             AssetBundle cubemapbundle = assetBundleCreateRequest.assetBundle;
@@ -224,6 +225,7 @@ namespace AIGraphics
 
         public IEnumerator LoadCubeMapPreview(string filePath)
         {
+            isLoadingCubeMap = filePath;
             AssetBundleCreateRequest assetBundleCreateRequest = AssetBundle.LoadFromFileAsync(filePath);
             yield return assetBundleCreateRequest;
             AssetBundle cubemapbundle = assetBundleCreateRequest?.assetBundle;
@@ -244,6 +246,7 @@ namespace AIGraphics
             assetBundleCreateRequest = null;
             CubeMapColors = null;
             texture = null;
+            isLoadingCubeMap = null;
             yield break;
         }
 
