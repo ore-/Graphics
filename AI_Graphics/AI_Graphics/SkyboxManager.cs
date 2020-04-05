@@ -241,12 +241,12 @@ namespace AIGraphics
             CubemapPreviewTextures.Add(texture);
             CubemapPaths.Add(filePath);
             cubemapbundle.Unload(false);
-            currentPath = null;
             cubemapbundle = null;
             bundleRequest = null;
             assetBundleCreateRequest = null;
             CubeMapColors = null;
             texture = null;
+            currentPath = null;
             yield break;
         }
 
