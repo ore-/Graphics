@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using static AIGraphics.Inspector.Util;
 
-namespace AIGraphics.Inspector
-{
+namespace AIGraphics.Inspector {
     internal class Inspector
     {
         private static Rect _windowRect;

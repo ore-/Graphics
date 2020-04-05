@@ -239,10 +239,9 @@ namespace AIGraphics.Settings {
         }
         public BloomParams Bloom {
             get => paramBloom;
-            set {
-                paramBloom = value;
-            }
+            set => paramBloom = value;
         }
+
         public ChromaticAberrationParams ChromaticAberration {
             get => paramChromaticAberration;
             set {
