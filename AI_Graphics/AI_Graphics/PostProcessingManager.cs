@@ -16,10 +16,10 @@ namespace AIGraphics
         internal static int currentDirtIndex = -1;
 
         internal static Texture2D DirtTexture {
-            get => LensDirts.ToArray()[currentDirtIndex];
+            get => currentDirtIndex > 0 ? LensDirts.ToArray()[currentDirtIndex] : null;
         }
         internal static string DirtTexturePath {
-            get => LensDirtPaths.ToArray()[currentDirtIndex];
+            get => currentDirtIndex > 0 ? LensDirtPaths.ToArray()[currentDirtIndex] : "";
         }
         public static int FindIndexByPath(string path) => LensDirtPaths.FindIndex(x => x.Equals(path));
 
