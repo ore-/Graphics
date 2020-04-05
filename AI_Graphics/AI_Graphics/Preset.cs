@@ -53,9 +53,11 @@ namespace AIGraphics {
                     Load(bytes);
                     return true;
                 } catch {
+                    Debug.Log(string.Format("Failed to load preset file '{0}'", name + ".preset"));
                     return false;
                 }
             } else {
+                Debug.Log(string.Format("Couldn't find preset file '{0}'", name + ".preset"));
                 return false;
             }
         }
