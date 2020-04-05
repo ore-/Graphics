@@ -163,10 +163,6 @@ namespace AIGraphics.Settings {
         internal Transform VolumeTriggerSetting {
             get => _postProcessLayer.volumeTrigger;
         }
-        
-        internal string BloomTexturePath {
-            set => this.paramBloom.dirtTexture = value;
-        }
 
         public LayerMask VolumeLayerSetting {
             //get => LayerMask.LayerToName(_postProcessLayer.volumeLayer.value);
