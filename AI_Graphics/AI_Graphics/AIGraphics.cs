@@ -40,6 +40,7 @@ namespace AIGraphics
         private FocusPuller _focusPuller;
         private LightManager _lightManager;
         private PostProcessingManager _postProcessingManager;
+        private PresetManager _presetManager;
         private Inspector.Inspector _inspector;
 
         internal GlobalSettings Settings { get; private set; }
@@ -55,7 +56,7 @@ namespace AIGraphics
                 throw new InvalidOperationException("Can only create one instance of AIGraphics");
             Instance = this;
 
-            ConfigPresetPath = Config.Bind("Config", "Preset Location", Application.dataPath + "/../iblpresets/", new ConfigDescription("Where presets are stored"));
+            ConfigPresetPath = Config.Bind("Config", "Preset Location", Application.dataPath + "/../presets/", new ConfigDescription("Where presets are stored"));
             ConfigCubeMapPath = Config.Bind("Config", "Cubemap path", Application.dataPath + "/../cubemaps/", new ConfigDescription("Where cubemaps are stored"));
             ConfigLensDirtPath = Config.Bind("Config", "Lens dirt texture path", Application.dataPath + "/../lensdirts/", new ConfigDescription("Where lens dirt textures are stored"));
             ConfigFontSize = Config.Bind("Config", "Font Size", 12, new ConfigDescription("Font Size"));
@@ -110,6 +111,8 @@ namespace AIGraphics
             _focusPuller.init(this, CameraSettings.MainCamera);
 
             _lightManager = new LightManager(this);
+
+            _presetManager = new PresetManager(ConfigPresetPath.Value, this);
             
             _inspector = new Inspector.Inspector(this);
 
@@ -117,15 +120,13 @@ namespace AIGraphics
             yield return new WaitUntil(() => {
                 return (KoikatuAPI.GetCurrentGameMode() == GameMode.Studio) ? KKAPI.Studio.StudioAPI.InsideStudio && _skyboxManager != null : true;
             });
-
-            preset = new Preset(Settings, CameraSettings, LightingSettings, PostProcessingSettings, SkyboxManager.skyboxParams);
-            preset.Load();
         }
 
         internal SkyboxManager SkyboxManager { get => _skyboxManager; }
         internal PostProcessingManager PostProcessingManager { get => _postProcessingManager; }
         internal LightManager LightManager { get => _lightManager; }
         internal FocusPuller FocusPuller { get => _focusPuller; }
+        internal PresetManager PresetManager { get => _presetManager; }
 
         internal void OnGUI()
         {

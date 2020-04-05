@@ -51,7 +51,6 @@ namespace AIGraphics {
                 try {
                     byte[] bytes = File.ReadAllBytes(targetPath);
                     Load(bytes);
-                    Debug.Log(string.Format("Loaded preset file '{0}'", name + ".preset"));
                     return true;
                 } catch {
                     Debug.Log(string.Format("Failed to load preset file '{0}'", name + ".preset"));

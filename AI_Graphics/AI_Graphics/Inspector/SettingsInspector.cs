@@ -48,12 +48,6 @@ namespace AIGraphics.Inspector
                 Slider("Window Height", Inspector.Height, 400, Screen.height, size => Inspector.Height = size);
                 GUILayout.Space(10);
                 renderingSettings.ShowAdvancedSettings = Toggle("Show Advanced Settings", renderingSettings.ShowAdvancedSettings);
-                if (GUILayout.Button("Save Default Preset")) {
-                    parent.preset.Save();
-                }
-                if (GUILayout.Button("Load Default Preset")) {
-                    parent.preset.Load();
-                }
             }
             GUILayout.EndVertical();
         }
