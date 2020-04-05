@@ -179,7 +179,7 @@ namespace AIGraphics.Inspector
                     settings.bloomLayers[volumeIndex].color.overrideState, overrideState => settings.bloomLayers[volumeIndex].color.overrideState = overrideState);
                 settings.bloomLayers[volumeIndex].fastMode.value = Toggle("Fast Mode", settings.bloomLayers[volumeIndex].fastMode.value);
 
-                PostProcessingManager.currentDirtIndex = SelectionTexture("Lens Dirt", PostProcessingManager.currentDirtIndex, postprocessingManager.LensDirtPreviews.ToArray(), Inspector.Width / 100,
+                PostProcessingManager.currentDirtIndex = SelectionTexture("Lens Dirt", PostProcessingManager.currentDirtIndex, PostProcessingManager.LensDirtPreviews.ToArray(), Inspector.Width / 100,
                     settings.bloomLayers[volumeIndex].dirtTexture.overrideState, overrideState => settings.bloomLayers[volumeIndex].dirtTexture.overrideState = overrideState, GUIStyles.Skin.box);
                 if (-1 != PostProcessingManager.currentDirtIndex) {
                     settings.bloomLayers[volumeIndex].dirtTexture.value = PostProcessingManager.DirtTexture;

@@ -12,7 +12,7 @@ namespace AIGraphics
         // Texture Lists don't have to be instanced.
         internal static List<string> LensDirtPaths { get; private set; }
         internal static List<Texture2D> LensDirts { get; private set; }
-        internal List<Texture2D> LensDirtPreviews { get; private set; }
+        internal static List<Texture2D> LensDirtPreviews { get; private set; }
         internal static int currentDirtIndex = -1;
 
         internal static Texture2D DirtTexture {
