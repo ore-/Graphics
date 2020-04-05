@@ -37,7 +37,7 @@ namespace AIGraphics.Inspector
                 {
                     cubeMapScrollView = GUILayout.BeginScrollView(cubeMapScrollView);
                     int selectedCubeMapIdx = Array.IndexOf(SkyboxManager.CubemapPaths.ToArray(), skyboxManager.CurrentCubeMap);
-                    selectedCubeMapIdx = GUILayout.SelectionGrid(selectedCubeMapIdx, skyboxManager.CubemapPreviewTextures.ToArray(), Inspector.Width / 150, GUIStyles.Skin.box);
+                    selectedCubeMapIdx = GUILayout.SelectionGrid(selectedCubeMapIdx, SkyboxManager.CubemapPreviewTextures.ToArray(), Inspector.Width / 150, GUIStyles.Skin.box);
                     if (-1 != selectedCubeMapIdx) skyboxManager.CurrentCubeMap = SkyboxManager.CubemapPaths[selectedCubeMapIdx];
                     GUILayout.EndScrollView();
                 }
