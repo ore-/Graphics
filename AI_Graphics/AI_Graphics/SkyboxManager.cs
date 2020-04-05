@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using AIGraphics.Settings;
 using static AIGraphics.Settings.CameraSettings;
+using System.IO;
 
 namespace AIGraphics
 {
@@ -142,6 +143,8 @@ namespace AIGraphics
         }
 
         public IEnumerator LoadCubemap(string filePath, Camera camera) {
+            if (filePath == "" || !File.Exists(filePath))
+                yield break;
             yield return new WaitUntil(() => isLoadingCubeMap == null); // Check if preview is loading the bundle.
             AssetBundleCreateRequest assetBundleCreateRequest = AssetBundle.LoadFromFileAsync(filePath);
             yield return assetBundleCreateRequest;
