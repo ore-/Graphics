@@ -48,7 +48,7 @@ namespace AIGraphics
         
         private GameObject probeParent;
         private ReflectionProbe probe;
-        private string currentPath = null; // to track currently used assetbundle path.
+        private string isLoadingCubeMap = null; // to track currently used assetbundle path.
 
         internal Camera Camera { get; set; }
         internal AIGraphics Parent { get; set; }
@@ -142,7 +142,7 @@ namespace AIGraphics
         }
 
         public IEnumerator LoadCubemap(string filePath, Camera camera) {
-            yield return new WaitUntil(() => currentPath == null); // Check if preview is loading the bundle.
+            yield return new WaitUntil(() => isLoadingCubeMap == null); // Check if preview is loading the bundle.
             AssetBundleCreateRequest assetBundleCreateRequest = AssetBundle.LoadFromFileAsync(filePath);
             yield return assetBundleCreateRequest;
             AssetBundle cubemapbundle = assetBundleCreateRequest.assetBundle;
@@ -225,7 +225,7 @@ namespace AIGraphics
 
         public IEnumerator LoadCubeMapPreview(string filePath)
         {
-            currentPath = filePath;
+            isLoadingCubeMap = filePath;
             AssetBundleCreateRequest assetBundleCreateRequest = AssetBundle.LoadFromFileAsync(filePath);
             yield return assetBundleCreateRequest;
             AssetBundle cubemapbundle = assetBundleCreateRequest?.assetBundle;
@@ -246,7 +246,7 @@ namespace AIGraphics
             assetBundleCreateRequest = null;
             CubeMapColors = null;
             texture = null;
-            currentPath = null;
+            isLoadingCubeMap = null;
             yield break;
         }
 
