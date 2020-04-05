@@ -1,6 +1,5 @@
 ﻿using AIGraphics.Inspector;
 using AIGraphics.Settings;
-using AIProject;
 using BepInEx;
 using BepInEx.Configuration;
 using KKAPI;
