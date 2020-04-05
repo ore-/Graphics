@@ -123,6 +123,7 @@
     <Compile Include="Setting\PostProcessingParameters.cs" />
     <Compile Include="Setting\PostProcessingSettings.cs" />
     <Compile Include="Setting\GlobalSettings.cs" />
+    <Compile Include="Setting\PostProcessingValues.cs" />
     <Compile Include="SkyboxManager.cs" />
     <Compile Include="Utility.cs" />
   </ItemGroup>
