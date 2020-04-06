@@ -116,16 +116,10 @@ namespace AIGraphics
             
             _inspector = new Inspector.Inspector(this);
 
-            if (KoikatuAPI.GetCurrentGameMode() == GameMode.Maker) {
-                yield return new WaitUntil(() => {
-                    return (KoikatuAPI.GetCurrentGameMode() == GameMode.Maker && _skyboxGO == null);
-                });
-                StartCoroutine(Start()); // Start Loop for Maker
-            }
-            //yield return new WaitUntil(() => {
-            //    return (KoikatuAPI.GetCurrentGameMode() == GameMode.Studio) ? KKAPI.Studio.StudioAPI.InsideStudio && _skyboxManager != null : true;
-            //});
-            // Place for Loading Default Actions
+            // It takes some time to fully loaded in studio to save/load stuffs.
+            yield return new WaitUntil(() => {
+                return (KoikatuAPI.GetCurrentGameMode() == GameMode.Studio) ? KKAPI.Studio.StudioAPI.InsideStudio && _skyboxManager != null : true;
+            });
         }
 
         internal SkyboxManager SkyboxManager { get => _skyboxManager; }
@@ -150,10 +144,10 @@ namespace AIGraphics
 
         internal void Update()
         {
-            if (KKAPI.KoikatuAPI.GetCurrentGameMode() != KKAPI.GameMode.Maker && KKAPI.KoikatuAPI.GetCurrentGameMode() != KKAPI.GameMode.Studio)
+            if (KKAPI.KoikatuAPI.GetCurrentGameMode() != KKAPI.GameMode.Maker && KKAPI.KoikatuAPI.GetCurrentGameMode() != KKAPI.GameMode.Studio )
                 return;
 
-            if(Input.GetKeyDown(ShowHotkey))
+            if( Input.GetKeyDown(ShowHotkey))
                 Show = !Show;
 
             if (Show)
