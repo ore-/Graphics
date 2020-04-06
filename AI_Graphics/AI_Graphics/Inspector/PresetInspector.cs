@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using UnityEngine;
 using static AIGraphics.Inspector.Util;
 
@@ -44,7 +45,8 @@ namespace AIGraphics.Inspector
             bool isCue = (_nameCue == _nameToSave);
             if (GUILayout.Button("Save", GUILayout.ExpandWidth(false)) && isValidFileName && !isCue) {
                 presetManager.Save(_nameToSave);
-                _presetIndexCurrent = Array.IndexOf(presetManager.PresetNames, presetManager.CurrentPreset);
+                presetManager.CurrentPreset = _nameToSave;
+                _presetIndexOld = Array.IndexOf(presetManager.PresetNames, presetManager.CurrentPreset);
             }
             GUILayout.EndHorizontal();
             GUILayout.Space(1);
