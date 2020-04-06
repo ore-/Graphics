@@ -32,8 +32,8 @@ namespace AIGraphics.Settings {
 
         public void Load(UnityEngine.Rendering.PostProcessing.AutoExposure layer) {
             if (layer != null) {
-                layer.active = layer.enabled.value;
                 enabled.Fill(layer.enabled);
+                layer.active = layer.enabled.value;
                 filtering.Fill(layer.filtering);
                 minLuminance.Fill(layer.minLuminance);
                 maxLuminance.Fill(layer.maxLuminance);
@@ -78,8 +78,8 @@ namespace AIGraphics.Settings {
 
         public void Load(UnityEngine.Rendering.PostProcessing.AmbientOcclusion layer) {
             if (layer != null) {
-                layer.active = layer.enabled.value;
                 this.enabled.Fill(layer.enabled);
+                layer.active = layer.enabled.value;
                 this.mode.Fill(layer.mode);
                 this.intensity.Fill(layer.intensity);
                 this.color.Fill(layer.color);
@@ -136,8 +136,8 @@ namespace AIGraphics.Settings {
         }
         public void Load(UnityEngine.Rendering.PostProcessing.Bloom layer) {
             if (layer != null) {
-                layer.active = layer.enabled.value;
                 this.enabled.Fill(layer.enabled);
+                layer.active = layer.enabled.value;
                 this.intensity.Fill(layer.intensity);
                 this.threshold.Fill(layer.threshold);
                 this.softKnee.Fill(layer.softKnee);
@@ -148,10 +148,9 @@ namespace AIGraphics.Settings {
                 this.fastMode.Fill(layer.fastMode);
                 this.dirtIntensity.Fill(layer.dirtIntensity);
 
-                int textureIndex = PostProcessingManager.FindIndexByPath(dirtTexture);
-                if (textureIndex > 0) // found texture index?
-                    layer.dirtTexture.value = PostProcessingManager.LensDirts[textureIndex];
                 layer.dirtTexture.overrideState = dirtState;
+                int textureIndex = PostProcessingManager.FindIndexByPath(dirtTexture);
+                layer.dirtTexture.value = (textureIndex > 0) ? PostProcessingManager.LensDirts[textureIndex] : null;
             }
         }
     }
@@ -174,8 +173,8 @@ namespace AIGraphics.Settings {
         }
         public void Load(UnityEngine.Rendering.PostProcessing.ChromaticAberration layer) {
             if (layer != null) {
-                layer.active = layer.enabled.value;
                 enabled.Fill(layer.enabled);
+                layer.active = layer.enabled.value;
                 intensity.Fill(layer.intensity);
                 fastMode.Fill(layer.fastMode);
 
@@ -269,8 +268,8 @@ namespace AIGraphics.Settings {
         }
         public void Load(UnityEngine.Rendering.PostProcessing.ColorGrading layer) {
             if (layer != null) {
-                layer.active = layer.enabled.value;
                 this.enabled.Fill(layer.enabled);
+                layer.active = layer.enabled.value;
                 this.gradingMode.Fill(layer.gradingMode);
                 this.mixerGreenOutGreenIn.Fill(layer.mixerGreenOutGreenIn);
                 this.mixerGreenOutBlueIn.Fill(layer.mixerGreenOutBlueIn);
@@ -327,8 +326,8 @@ namespace AIGraphics.Settings {
         }
         public void Load(UnityEngine.Rendering.PostProcessing.DepthOfField layer) {
             if (layer != null) {
-                layer.active = layer.enabled.value;
                 enabled.Fill(layer.enabled);
+                layer.active = layer.enabled.value;
                 focusDistance.Fill(layer.focusDistance);
                 aperture.Fill(layer.aperture);
                 focalLength.Fill(layer.focalLength);
@@ -356,8 +355,8 @@ namespace AIGraphics.Settings {
         }
         public void Load(UnityEngine.Rendering.PostProcessing.Grain layer) {
             if (layer != null) {
-                layer.active = layer.enabled.value;
                 enabled.Fill(layer.enabled);
+                layer.active = layer.enabled.value;
                 colored.Fill(layer.colored);
                 intensity.Fill(layer.intensity);
                 size.Fill(layer.size);
@@ -391,8 +390,8 @@ namespace AIGraphics.Settings {
         }
         public void Load(UnityEngine.Rendering.PostProcessing.ScreenSpaceReflections layer) {
             if (layer != null) {
-                layer.active = layer.enabled.value;
                 enabled.Fill(layer.enabled);
+                layer.active = layer.enabled.value;
                 preset.Fill(layer.preset);
                 maximumIterationCount.Fill(layer.maximumIterationCount);
                 resolution.Fill(layer.resolution);
@@ -435,8 +434,8 @@ namespace AIGraphics.Settings {
         }
         public void Load(UnityEngine.Rendering.PostProcessing.Vignette layer) {
             if (layer != null) {
-                layer.active = layer.enabled.value;
                 enabled.Fill(layer.enabled);
+                layer.active = layer.enabled.value;
                 mode.Fill(layer.mode);
                 color.Fill(layer.color);
                 center.Fill(layer.center);
