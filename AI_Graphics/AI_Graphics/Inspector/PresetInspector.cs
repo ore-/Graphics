@@ -42,8 +42,10 @@ namespace AIGraphics.Inspector
             _nameToSave = GUILayout.TextField(_nameToSave);
             bool isValidFileName = (0 != _nameToSave.Length && 256 >= _nameToSave.Length);
             bool isCue = (_nameCue == _nameToSave);
-            if (GUILayout.Button("Save", GUILayout.ExpandWidth(false)) && isValidFileName && !isCue )
+            if (GUILayout.Button("Save", GUILayout.ExpandWidth(false)) && isValidFileName && !isCue) {
                 presetManager.Save(_nameToSave);
+                _presetIndexCurrent = Array.IndexOf(presetManager.PresetNames, presetManager.CurrentPreset);
+            }
             GUILayout.EndHorizontal();
             GUILayout.Space(1);
             if (!isCue && !isValidFileName )
