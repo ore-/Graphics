@@ -35,7 +35,6 @@ namespace AIGraphics
         private CursorLockMode _previousCursorLockState;
         private bool _previousCursorVisible;
 
-        private GameObject _skyboxGO, _postGO;
         private SkyboxManager _skyboxManager;
         private FocusPuller _focusPuller;
         private LightManager _lightManager;
@@ -94,21 +93,18 @@ namespace AIGraphics
             Settings = new GlobalSettings();
             CameraSettings = new CameraSettings();
             LightingSettings = new LightingSettings();
-            PostProcessingSettings = new PostProcessingSettings(CameraSettings.MainCamera);            
+            PostProcessingSettings = new PostProcessingSettings(CameraSettings.MainCamera);
 
-            _skyboxGO = new GameObject("SkyboxManager");
-            _skyboxManager = _skyboxGO.AddComponent<SkyboxManager>();
+            _skyboxManager = Instance.GetOrAddComponent<SkyboxManager>();            
             _skyboxManager.Parent = this;
-            _skyboxManager.Camera = CameraSettings.MainCamera;
             _skyboxManager.CubemapPath = ConfigCubeMapPath.Value;
             _skyboxManager.Logger = Logger;
 
-            _postGO = new GameObject("PostProcessingManager");
-            _postProcessingManager = _postGO.AddComponent<PostProcessingManager>();
+            _postProcessingManager = Instance.GetOrAddComponent<PostProcessingManager>();
             _postProcessingManager.LensDirtTexturesPath = ConfigLensDirtPath.Value;
-
-            _focusPuller = CameraSettings.MainCamera.gameObject.AddComponent<FocusPuller>();
-            _focusPuller.init(this, CameraSettings.MainCamera);
+            
+            _focusPuller = Instance.GetOrAddComponent<FocusPuller>();
+            _focusPuller.init(this);
 
             _lightManager = new LightManager(this);
 

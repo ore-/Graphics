@@ -47,13 +47,14 @@ namespace AIGraphics
         private string cubemapPath;
         private FolderAssist CubemapFolder;
         
-        private GameObject probeParent;
-        private ReflectionProbe probe;
+        private ReflectionProbe _probe;
         private string isLoadingCubeMap = null; // to track currently used assetbundle path.
 
-        internal Camera Camera { get; set; }
-        internal AIGraphics Parent { get; set; }
+        internal ReflectionProbe DefaultProbe{ get => _probe ? DefaultReflectionProbe() : _probe; }
 
+        internal AIGraphics Parent { get; set; }
+        internal Camera Camera { get => Parent.CameraSettings.MainCamera; }
+        
         public bool Update { get; set; }
 
         internal BepInEx.Logging.ManualLogSource Logger { get; set; }
@@ -253,32 +254,32 @@ namespace AIGraphics
             yield break;
         }
 
-        internal void DefaultReflectionProbe()
+        internal ReflectionProbe DefaultReflectionProbe()
         {
-            probeParent = new GameObject("RealtimeReflectionProbe");
-            probe = probeParent.AddComponent<ReflectionProbe>();
-            probe.name = "Default Reflection Probe";
-            probe.mode = ReflectionProbeMode.Realtime;
-            probe.boxProjection = false;
-            probe.intensity = 1f;
-            probe.importance = 100;
-            probe.resolution = 512;
-            probe.backgroundColor = Color.white;
-            probe.hdr = true;
-            probe.cullingMask = 1 | ~Camera.cullingMask;
-            probe.clearFlags = ReflectionProbeClearFlags.Skybox;
-            probe.size = new Vector3(10, 10, 10);
-            probe.nearClipPlane = 1;
-            probeParent.transform.position = new Vector3(0, 0, 0);
-            probe.refreshMode = ReflectionProbeRefreshMode.EveryFrame;
-            probe.timeSlicingMode = ReflectionProbeTimeSlicingMode.AllFacesAtOnce;
+            _probe = this.GetOrAddComponent<ReflectionProbe>();
+            _probe.name = "Default Reflection Probe";
+            _probe.mode = ReflectionProbeMode.Realtime;
+            _probe.boxProjection = false;
+            _probe.intensity = 1f;
+            _probe.importance = 100;
+            _probe.resolution = 512;
+            _probe.backgroundColor = Color.white;
+            _probe.hdr = true;
+            _probe.cullingMask = 1 | ~Camera.cullingMask;
+            _probe.clearFlags = ReflectionProbeClearFlags.Skybox;
+            _probe.size = new Vector3(10, 10, 10);
+            _probe.nearClipPlane = 1;
+            _probe.transform.position = new Vector3(0, 0, 0);
+            _probe.refreshMode = ReflectionProbeRefreshMode.EveryFrame;
+            _probe.timeSlicingMode = ReflectionProbeTimeSlicingMode.AllFacesAtOnce;
+            return _probe;
         }
 
         internal void SetupDefaultReflectionProbe()
         {
             ReflectionProbe[] rps = GetReflectinProbes();
             //disable default realtime reflection probe if scene has realtime reflection probes.
-            probe.intensity = (rps.Select(probe => probe.mode == ReflectionProbeMode.Realtime).ToArray().Length > 1) ? 0 : 1;
+            DefaultProbe.intensity = (rps.Select(probe => probe.mode == ReflectionProbeMode.Realtime).ToArray().Length > 1) ? 0 : 1;
         }
 
         internal ReflectionProbe[] GetReflectinProbes()
