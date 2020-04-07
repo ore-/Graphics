@@ -68,7 +68,7 @@ namespace AIGraphics
         internal bool Load(string presetName)
         {
             Preset preset = new Preset(_parent.Settings, _parent.CameraSettings, _parent.LightingSettings, _parent.PostProcessingSettings, _parent.SkyboxManager.skyboxParams);
-            return preset.Load(presetName); ;
+            return preset.Load(presetName);
         }
 
         internal void Load(PluginData data)
