@@ -78,37 +78,40 @@ namespace AIGraphics.Inspector
             {
                 GUILayout.Label("Reflection Probes", GUIStyles.boldlabel);
                 ReflectionProbe[] rps = skyboxManager.GetReflectinProbes();
-                string[] probeNames = rps.Select(probe => probe.name).ToArray();                
-                selectedProbe = GUILayout.SelectionGrid(selectedProbe, probeNames, 3, GUIStyles.toolbarbutton);
-                ReflectionProbe rp = rps[selectedProbe];
-                GUILayout.Space(1);
-                GUILayout.BeginVertical(GUIStyles.Skin.box);
-                probeSettingsScrollView = GUILayout.BeginScrollView(probeSettingsScrollView);
+                if (0 < rps.Length)
                 {
-                    Label("Type", rp.mode.ToString());
-                    GUILayout.Label("Runtime settings");
-                    Slider("Importance", rp.importance, 0, 1000, importance => rp.importance = importance);
-                    Slider("Intensity", rp.intensity, 0, 10, "N2", intensity => rp.intensity = intensity);
-                    rp.boxProjection = Toggle("Box Projection", rp.boxProjection);
-                    rp.blendDistance = Text("Blend Distance", rp.blendDistance);
-                    Dimension("Box Size", rp.size, size => rp.size = size);
-                    Dimension("Box Offset", rp.center, size => rp.center = size);
-                    GUILayout.Space(10);
-                    GUILayout.Label("Cubemap capture settings");
-                    Selection("Resolution", rp.resolution, LightingSettings.ReflectionResolutions, resolution => rp.resolution = resolution);
-                    rp.hdr = Toggle("HDR", rp.hdr);                    
-                    rp.shadowDistance = Text("Shadow Distance", rp.shadowDistance);
-                    GUILayout.Label("Clear Flags");                    
-                    Selection("Clear Flags", rp.clearFlags, flag => rp.clearFlags = flag);                    
-                    SliderColor("Background", rp.backgroundColor, colour => { rp.backgroundColor = colour; });
-                    Label("Culling Mask", rp.cullingMask.ToString());
-                    rp.nearClipPlane = Text("Clipping Planes - Near", rp.nearClipPlane, "N1");
-                    rp.farClipPlane = Text("Clipping Planes - Far", rp.farClipPlane, "N1");
-                    Selection("Time Slicing Mode", rp.timeSlicingMode, mode => rp.timeSlicingMode = mode);
-                    
+                    string[] probeNames = rps.Select(probe => probe.name).ToArray();
+                    selectedProbe = GUILayout.SelectionGrid(selectedProbe, probeNames, 3, GUIStyles.toolbarbutton);
+                    ReflectionProbe rp = rps[selectedProbe];
+                    GUILayout.Space(1);
+                    GUILayout.BeginVertical(GUIStyles.Skin.box);
+                    probeSettingsScrollView = GUILayout.BeginScrollView(probeSettingsScrollView);
+                    {
+                        Label("Type", rp.mode.ToString());
+                        GUILayout.Label("Runtime settings");
+                        Slider("Importance", rp.importance, 0, 1000, importance => rp.importance = importance);
+                        Slider("Intensity", rp.intensity, 0, 10, "N2", intensity => rp.intensity = intensity);
+                        rp.boxProjection = Toggle("Box Projection", rp.boxProjection);
+                        rp.blendDistance = Text("Blend Distance", rp.blendDistance);
+                        Dimension("Box Size", rp.size, size => rp.size = size);
+                        Dimension("Box Offset", rp.center, size => rp.center = size);
+                        GUILayout.Space(10);
+                        GUILayout.Label("Cubemap capture settings");
+                        Selection("Resolution", rp.resolution, LightingSettings.ReflectionResolutions, resolution => rp.resolution = resolution);
+                        rp.hdr = Toggle("HDR", rp.hdr);
+                        rp.shadowDistance = Text("Shadow Distance", rp.shadowDistance);
+                        GUILayout.Label("Clear Flags");
+                        Selection("Clear Flags", rp.clearFlags, flag => rp.clearFlags = flag);
+                        SliderColor("Background", rp.backgroundColor, colour => { rp.backgroundColor = colour; });
+                        Label("Culling Mask", rp.cullingMask.ToString());
+                        rp.nearClipPlane = Text("Clipping Planes - Near", rp.nearClipPlane, "N1");
+                        rp.farClipPlane = Text("Clipping Planes - Far", rp.farClipPlane, "N1");
+                        Selection("Time Slicing Mode", rp.timeSlicingMode, mode => rp.timeSlicingMode = mode);
+
+                    }
+                    GUILayout.EndScrollView();
+                    GUILayout.EndVertical();
                 }
-                GUILayout.EndScrollView();
-                GUILayout.EndVertical();
             }
             GUILayout.EndVertical();            
             GUI.enabled = true;
