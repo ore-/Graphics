@@ -7,6 +7,7 @@ using KKAPI.Studio.SaveLoad;
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace AIGraphics
 {
@@ -32,8 +33,10 @@ namespace AIGraphics
         public Preset preset;
 
         private bool _showGUI;
+        private bool _isLoaded = false;
         private CursorLockMode _previousCursorLockState;
         private bool _previousCursorVisible;
+        private float _previousTimeScale;
 
         private SkyboxManager _skyboxManager;
         private FocusPuller _focusPuller;
@@ -85,6 +88,8 @@ namespace AIGraphics
                         return KKAPI.Maker.MakerAPI.InsideAndLoaded;
                     case KKAPI.GameMode.Studio:
                         return KKAPI.Studio.StudioAPI.StudioLoaded;
+                    case KKAPI.GameMode.MainGame:
+                        return null != GameObject.Find("MapScene") && SceneManager.GetActiveScene().isLoaded && null != Camera.main; //KKAPI doesn't provide an api for in game check 
                     default:
                         return false;
                 }
@@ -116,6 +121,8 @@ namespace AIGraphics
             yield return new WaitUntil(() => {
                 return (KoikatuAPI.GetCurrentGameMode() == GameMode.Studio) ? KKAPI.Studio.StudioAPI.InsideStudio && _skyboxManager != null : true;
             });
+
+            _isLoaded = true;
         }
 
         internal SkyboxManager SkyboxManager { get => _skyboxManager; }
@@ -140,10 +147,9 @@ namespace AIGraphics
 
         internal void Update()
         {
-            if (KKAPI.KoikatuAPI.GetCurrentGameMode() != KKAPI.GameMode.Maker && KKAPI.KoikatuAPI.GetCurrentGameMode() != KKAPI.GameMode.Studio )
-                return;
+            if (!_isLoaded) return;
 
-            if( Input.GetKeyDown(ShowHotkey))
+            if ( Input.GetKeyDown(ShowHotkey))
                 Show = !Show;
 
             if (Show)
@@ -171,11 +177,18 @@ namespace AIGraphics
                 {
                     if (value)
                     {
+                        if (KKAPI.KoikatuAPI.GetCurrentGameMode() == KKAPI.GameMode.MainGame)
+                        {
+                            _previousTimeScale = Time.timeScale;
+                            Time.timeScale = 0;
+                        }
                         _previousCursorLockState = Cursor.lockState;
                         _previousCursorVisible = Cursor.visible;
                     }
                     else
                     {
+                        if (KKAPI.KoikatuAPI.GetCurrentGameMode() == KKAPI.GameMode.MainGame) Time.timeScale = _previousTimeScale;
+
                         if (!_previousCursorVisible || _previousCursorLockState != CursorLockMode.None)
                         {
                             Cursor.lockState = _previousCursorLockState;
