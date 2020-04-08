@@ -30,7 +30,6 @@ namespace AIGraphics.Settings {
         };
 
         private string selectedLUT;
-        private PostProcessVolume _volume;
         internal List<string> LUTNames {
             get; set;
         }
@@ -53,32 +52,36 @@ namespace AIGraphics.Settings {
         public PostProcessingSettings(Camera camera) {
             initialCamera = camera;
             _postProcessLayer = camera.GetComponent<PostProcessLayer>();
-            SetupVolume();
             LUTNames = GetLUTNames();
+            SetupVolume();
         }
 
         internal PostProcessLayer PostProcessLayer {
             get => (_postProcessLayer == null) ? (initialCamera == null ? Camera.main : initialCamera).GetComponent<PostProcessLayer>() : _postProcessLayer;
         }
 
+        internal PostProcessVolume _volume;
         internal PostProcessVolume Volume {
-            get => (_volume == null) ? SetupVolume() : _volume;
+            get => AIGraphics.Instance.GetOrAddComponent<PostProcessVolume>();
         }
 
         internal PostProcessVolume SetupVolume() {
             // Turn off everything, We're not going to use 
-            PostProcessProfile profile = null;
             foreach (PostProcessVolume postProcessVolume in GameObject.FindObjectsOfType<PostProcessVolume>()) {
-                if (postProcessVolume.name == "PostProcessVolume3D" || postProcessVolume.name == "PostProcessVolume")
-                    profile = GameObject.Instantiate(postProcessVolume.profile);
+                if (SettingValues.profile == null && (postProcessVolume.name == "PostProcessVolume3D" || postProcessVolume.name == "PostProcessVolume")) {
+                    SettingValues.profile = GameObject.Instantiate(postProcessVolume.profile);
+                    SettingValues.profile.name = "AIGraphics Post Processing Profile";
+                    InitializeProfiles();
+                }
 
                 postProcessVolume.weight = 0;
                 postProcessVolume.enabled = false;
             }
-            if (profile == null)
-                profile = (PostProcessProfile) ScriptableObject.CreateInstance("PostProcessProfile");
-
-            profile.name = "AIGraphics Post Processing Profile";
+            if (SettingValues.profile == null) {
+                // Just in case
+                SettingValues.profile = (PostProcessProfile)ScriptableObject.CreateInstance("PostProcessProfile");
+                InitializeProfiles();
+            }
 
             _volume = AIGraphics.Instance.GetOrAddComponent<PostProcessVolume>();
             _volume.enabled = true;
@@ -87,32 +90,40 @@ namespace AIGraphics.Settings {
             _volume.weight = 1;
             _volume.priority = 1;
             _volume.useGUILayout = true;
-            _volume.sharedProfile = profile;
-            _volume.profile = profile;
+            _volume.sharedProfile = SettingValues.profile;
+            _volume.profile = SettingValues.profile;
             _volume.gameObject.layer = LayerMask.NameToLayer("PostProcessing");
 
-            if (!_volume.profile.TryGetSettings(out chromaticAberrationLayer))
-                chromaticAberrationLayer = _volume.profile.AddSettings<ChromaticAberration>();
-            if (!_volume.profile.TryGetSettings(out grainLayer))
-                grainLayer = _volume.profile.AddSettings<Grain>();
-            if (!_volume.profile.TryGetSettings(out ambientOcclusionLayer))
-                ambientOcclusionLayer = _volume.profile.AddSettings<AmbientOcclusion>();
-            if (!_volume.profile.TryGetSettings(out autoExposureLayer))
-                autoExposureLayer = _volume.profile.AddSettings<AutoExposure>();
-            if (!_volume.profile.TryGetSettings(out bloomLayer))
-                bloomLayer = _volume.profile.AddSettings<Bloom>();
-            if (!_volume.profile.TryGetSettings(out colorGradingLayer))
-                colorGradingLayer = _volume.profile.AddSettings<ColorGrading>();
-            if (!_volume.profile.TryGetSettings(out depthOfFieldLayer))
-                depthOfFieldLayer = _volume.profile.AddSettings<DepthOfField>();
-            if (!_volume.profile.TryGetSettings(out screenSpaceReflectionsLayer))
-                screenSpaceReflectionsLayer = _volume.profile.AddSettings<ScreenSpaceReflections>();
-            if (!_volume.profile.TryGetSettings(out vignetteLayer))
-                vignetteLayer = _volume.profile.AddSettings<Vignette>();
-
-            depthOfFieldLayer.enabled.value = false; // Make people use Depth of Field Manually
-
             return _volume;
+        }
+
+        internal void InitializeProfiles() {
+            if (!SettingValues.profile.TryGetSettings(out chromaticAberrationLayer))
+                chromaticAberrationLayer = SettingValues.profile.AddSettings<ChromaticAberration>();
+            if (!SettingValues.profile.TryGetSettings(out grainLayer))
+                grainLayer = SettingValues.profile.AddSettings<Grain>();
+            if (!SettingValues.profile.TryGetSettings(out ambientOcclusionLayer))
+                ambientOcclusionLayer = SettingValues.profile.AddSettings<AmbientOcclusion>();
+            if (!SettingValues.profile.TryGetSettings(out autoExposureLayer))
+                autoExposureLayer = SettingValues.profile.AddSettings<AutoExposure>();
+            if (!SettingValues.profile.TryGetSettings(out bloomLayer))
+                bloomLayer = SettingValues.profile.AddSettings<Bloom>();
+            if (!SettingValues.profile.TryGetSettings(out colorGradingLayer))
+                colorGradingLayer = SettingValues.profile.AddSettings<ColorGrading>();
+            if (!SettingValues.profile.TryGetSettings(out depthOfFieldLayer))
+                depthOfFieldLayer = SettingValues.profile.AddSettings<DepthOfField>();
+            if (!SettingValues.profile.TryGetSettings(out screenSpaceReflectionsLayer))
+                screenSpaceReflectionsLayer = SettingValues.profile.AddSettings<ScreenSpaceReflections>();
+            if (!SettingValues.profile.TryGetSettings(out vignetteLayer))
+                vignetteLayer = SettingValues.profile.AddSettings<Vignette>();
+            depthOfFieldLayer.enabled.value = false; // Make people use Depth of Field Manually
+        }
+
+        internal void ResetVolume() {
+            if (SettingValues.defaultProfile != null) {
+                Volume.sharedProfile = SettingValues.defaultProfile;
+                Volume.profile = SettingValues.defaultProfile;
+            }
         }
 
         public void SaveParameters() {

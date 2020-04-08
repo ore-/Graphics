@@ -7,6 +7,7 @@ using KKAPI.Studio.SaveLoad;
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace AIGraphics
 {
@@ -73,6 +74,11 @@ namespace AIGraphics
         private void Awake()
         {
             StudioSaveLoadApi.RegisterExtraBehaviour<SceneController>(GUID);
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+        void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+            if (scene.name == "map_title" && PostProcessingSettings != null)
+                PostProcessingSettings.ResetVolume();
         }
 
         private IEnumerator Start()
