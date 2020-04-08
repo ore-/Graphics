@@ -99,12 +99,15 @@ namespace AIGraphics
             _skyboxManager.Parent = this;
             _skyboxManager.CubemapPath = ConfigCubeMapPath.Value;
             _skyboxManager.Logger = Logger;
+            DontDestroyOnLoad(_skyboxManager);
 
             _postProcessingManager = Instance.GetOrAddComponent<PostProcessingManager>();
             _postProcessingManager.LensDirtTexturesPath = ConfigLensDirtPath.Value;
-            
+            DontDestroyOnLoad(_postProcessingManager);
+
             _focusPuller = Instance.GetOrAddComponent<FocusPuller>();
             _focusPuller.init(this);
+            DontDestroyOnLoad(_focusPuller);
 
             _lightManager = new LightManager(this);
 
