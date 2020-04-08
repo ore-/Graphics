@@ -4,6 +4,12 @@ using UnityEngine.Rendering.PostProcessing;
 
 // These are for packing post processing parameters.
 namespace AIGraphics.Settings {
+    // Well I didn't want to do this but MessagePack actually creates new class so few things should be moved out.
+    public static class SettingValues {
+        public static PostProcessProfile profile;
+        public static PostProcessProfile defaultProfile = (PostProcessProfile)ScriptableObject.CreateInstance("PostProcessProfile");
+    }
+
     [MessagePackObject(keyAsPropertyName: true)]
     public struct FloatValue {
         public float value;

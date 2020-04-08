@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 using static KKAPI.Studio.StudioAPI;
 
+// TODO: Turn on Post Processing in main menu.
 // TODO: Messagepack clears out layer lists for a frame. Need to figure out to remove temporary solutions
 namespace AIGraphics.Settings {
     [MessagePackObject(keyAsPropertyName: true)]
@@ -32,132 +33,139 @@ namespace AIGraphics.Settings {
         internal List<string> LUTNames {
             get; set;
         }
-        internal string[] volumeNames;
         private PostProcessLayer _postProcessLayer;
-        internal PostProcessVolume[] postProcessVolumes;
-        internal List<AmbientOcclusion> ambientOcclusionLayers = new List<AmbientOcclusion> { };
-        internal List<AutoExposure> autoExposureLayers = new List<AutoExposure> { };
-        internal List<Bloom> bloomLayers = new List<Bloom> { };
-        internal List<ChromaticAberration> chromaticAberrationLayers = new List<ChromaticAberration> { };
-        internal List<ColorGrading> colorGradingLayers = new List<ColorGrading> { };
-        internal List<DepthOfField> depthOfFieldLayers = new List<DepthOfField> { };
-        internal List<Grain> grainLayers = new List<Grain> { };
-        internal List<ScreenSpaceReflections> screenSpaceReflectionsLayers = new List<ScreenSpaceReflections> { };
-        internal List<Vignette> vignetteLayers = new List<Vignette> { };
+        internal AmbientOcclusion ambientOcclusionLayer;
+        internal AutoExposure autoExposureLayer;
+        internal Bloom bloomLayer;
+        internal ChromaticAberration chromaticAberrationLayer;
+        internal ColorGrading colorGradingLayer;
+        internal DepthOfField depthOfFieldLayer;
+        internal Grain grainLayer;
+        internal ScreenSpaceReflections screenSpaceReflectionsLayer;
+        internal Vignette vignetteLayer;
         internal Camera initialCamera;
 
         public PostProcessingSettings() {
-            postProcessVolumes = GameObject.FindObjectsOfType<PostProcessVolume>();
-            volumeNames = postProcessVolumes.Select(volume => volume.name).ToArray();
+            SetupVolume();
         }
 
         public PostProcessingSettings(Camera camera) {
             initialCamera = camera;
             _postProcessLayer = camera.GetComponent<PostProcessLayer>();
-            postProcessVolumes = GameObject.FindObjectsOfType<PostProcessVolume>();
-            volumeNames = postProcessVolumes.Select(volume => volume.name).ToArray();
-            // Change it later
-            for (int i = 0; i < postProcessVolumes.Length; i++) {
-                Bloom bloomLayer = null;
-                AmbientOcclusion ambientOcclusionLayer = null;
-                AutoExposure autoExposureLayer = null;
-                ChromaticAberration chromaticAberrationLayer = null;
-                ColorGrading colorGradingLayer = null;
-                DepthOfField depthOfFieldLayer = null;
-                Grain grainLayer = null;
-                ScreenSpaceReflections screenSpaceReflectionsLayer = null;
-                Vignette vignetteLayer = null;
-
-                postProcessVolumes[i].profile.TryGetSettings(out autoExposureLayer);
-                postProcessVolumes[i].profile.TryGetSettings(out ambientOcclusionLayer);
-                postProcessVolumes[i].profile.TryGetSettings(out bloomLayer);
-                postProcessVolumes[i].profile.TryGetSettings(out chromaticAberrationLayer);
-                postProcessVolumes[i].profile.TryGetSettings(out colorGradingLayer);
-                postProcessVolumes[i].profile.TryGetSettings(out depthOfFieldLayer);
-                postProcessVolumes[i].profile.TryGetSettings(out grainLayer);
-                postProcessVolumes[i].profile.TryGetSettings(out screenSpaceReflectionsLayer);
-                postProcessVolumes[i].profile.TryGetSettings(out vignetteLayer);
-
-                bloomLayers.Add(bloomLayer);
-                ambientOcclusionLayers.Add(ambientOcclusionLayer);
-                depthOfFieldLayers.Add(depthOfFieldLayer);
-                chromaticAberrationLayers.Add(chromaticAberrationLayer);
-                colorGradingLayers.Add(colorGradingLayer);
-                vignetteLayers.Add(vignetteLayer);
-                screenSpaceReflectionsLayers.Add(screenSpaceReflectionsLayer);
-                autoExposureLayers.Add(autoExposureLayer);
-                grainLayers.Add(grainLayer);
-
-                LUTNames = GetLUTNames();
-            }
+            LUTNames = GetLUTNames();
+            SetupVolume();
         }
 
         internal PostProcessLayer PostProcessLayer {
-            get {
-                if (_postProcessLayer == null)
-                    return (initialCamera == null ? Camera.main : initialCamera).GetComponent<PostProcessLayer>();
-
-                return _postProcessLayer;
-            }
+            get => (_postProcessLayer == null) ? (initialCamera == null ? Camera.main : initialCamera).GetComponent<PostProcessLayer>() : _postProcessLayer;
         }
 
-        internal bool FindTargetVolume(out PostProcessVolume targetVolume) {
-            // Find active volume to save.
-            targetVolume = null;
+        internal PostProcessVolume _volume;
+        internal PostProcessVolume Volume {
+            get => AIGraphics.Instance.GetOrAddComponent<PostProcessVolume>();
+        }
 
-            foreach (var volume in postProcessVolumes) 
-                if (volume.enabled) {
-                    targetVolume = volume;
-                    return true;
+        internal PostProcessVolume SetupVolume() {
+            // Turn off everything, We're not going to use 
+            foreach (PostProcessVolume postProcessVolume in GameObject.FindObjectsOfType<PostProcessVolume>()) {
+                if (SettingValues.profile == null && (postProcessVolume.name == "PostProcessVolume3D" || postProcessVolume.name == "PostProcessVolume")) {
+                    SettingValues.profile = GameObject.Instantiate(postProcessVolume.profile);
+                    SettingValues.profile.name = "AIGraphics Post Processing Profile";
+                    InitializeProfiles();
                 }
 
-            return false;
+                postProcessVolume.weight = 0;
+                postProcessVolume.enabled = false;
+            }
+            if (SettingValues.profile == null) {
+                // Just in case
+                SettingValues.profile = (PostProcessProfile)ScriptableObject.CreateInstance("PostProcessProfile");
+                InitializeProfiles();
+            }
+
+            _volume = AIGraphics.Instance.GetOrAddComponent<PostProcessVolume>();
+            _volume.enabled = true;
+            _volume.isGlobal = true;
+            _volume.blendDistance = 0;
+            _volume.weight = 1;
+            _volume.priority = 1;
+            _volume.useGUILayout = true;
+            _volume.sharedProfile = SettingValues.profile;
+            _volume.profile = SettingValues.profile;
+            _volume.gameObject.layer = LayerMask.NameToLayer("PostProcessing");
+
+            return _volume;
+        }
+
+        internal void InitializeProfiles() {
+            if (!SettingValues.profile.TryGetSettings(out chromaticAberrationLayer))
+                chromaticAberrationLayer = SettingValues.profile.AddSettings<ChromaticAberration>();
+            if (!SettingValues.profile.TryGetSettings(out grainLayer))
+                grainLayer = SettingValues.profile.AddSettings<Grain>();
+            if (!SettingValues.profile.TryGetSettings(out ambientOcclusionLayer))
+                ambientOcclusionLayer = SettingValues.profile.AddSettings<AmbientOcclusion>();
+            if (!SettingValues.profile.TryGetSettings(out autoExposureLayer))
+                autoExposureLayer = SettingValues.profile.AddSettings<AutoExposure>();
+            if (!SettingValues.profile.TryGetSettings(out bloomLayer))
+                bloomLayer = SettingValues.profile.AddSettings<Bloom>();
+            if (!SettingValues.profile.TryGetSettings(out colorGradingLayer))
+                colorGradingLayer = SettingValues.profile.AddSettings<ColorGrading>();
+            if (!SettingValues.profile.TryGetSettings(out depthOfFieldLayer))
+                depthOfFieldLayer = SettingValues.profile.AddSettings<DepthOfField>();
+            if (!SettingValues.profile.TryGetSettings(out screenSpaceReflectionsLayer))
+                screenSpaceReflectionsLayer = SettingValues.profile.AddSettings<ScreenSpaceReflections>();
+            if (!SettingValues.profile.TryGetSettings(out vignetteLayer))
+                vignetteLayer = SettingValues.profile.AddSettings<Vignette>();
+            depthOfFieldLayer.enabled.value = false; // Make people use Depth of Field Manually
+        }
+
+        internal void ResetVolume() {
+            if (SettingValues.defaultProfile != null) {
+                Volume.sharedProfile = SettingValues.defaultProfile;
+                Volume.profile = SettingValues.defaultProfile;
+            }
         }
 
         public void SaveParameters() {
-            if (FindTargetVolume(out PostProcessVolume targetVolume)) {
-                if (targetVolume.profile.TryGetSettings(out AutoExposure autoExposureLayer))
-                    paramAutoExposure.Save(autoExposureLayer);
-                if (targetVolume.profile.TryGetSettings(out AmbientOcclusion ambientOcclusionLayer))
-                    paramAmbientOcclusion.Save(ambientOcclusionLayer);
-                if (targetVolume.profile.TryGetSettings(out Bloom bloomLayer))
-                    paramBloom.Save(bloomLayer);
-                if (targetVolume.profile.TryGetSettings(out DepthOfField depthOfFieldLayer))
-                    paramDepthOfField.Save(depthOfFieldLayer);
-                if (targetVolume.profile.TryGetSettings(out ChromaticAberration chromaticAberrationLayer))
-                    paramChromaticAberration.Save(chromaticAberrationLayer);
-                if (targetVolume.profile.TryGetSettings(out ColorGrading colorGradingLayer))
-                    paramColorGrading.Save(colorGradingLayer);
-                if (targetVolume.profile.TryGetSettings(out Grain grainLayer))
-                    paramGrainLayer.Save(grainLayer);
-                if (targetVolume.profile.TryGetSettings(out ScreenSpaceReflections screenSpaceReflectionsLayer))
-                    paramScreenSpaceReflection.Save(screenSpaceReflectionsLayer);
-                if (targetVolume.profile.TryGetSettings(out Vignette vignetteLayer))
-                    paramVignette.Save(vignetteLayer);
-            }
+            if (Volume.profile.TryGetSettings(out AutoExposure autoExposureLayer))
+                paramAutoExposure.Save(autoExposureLayer);
+            if (Volume.profile.TryGetSettings(out AmbientOcclusion ambientOcclusionLayer))
+                paramAmbientOcclusion.Save(ambientOcclusionLayer);
+            if (Volume.profile.TryGetSettings(out Bloom bloomLayer))
+                paramBloom.Save(bloomLayer);
+            if (Volume.profile.TryGetSettings(out DepthOfField depthOfFieldLayer))
+                paramDepthOfField.Save(depthOfFieldLayer);
+            if (Volume.profile.TryGetSettings(out ChromaticAberration chromaticAberrationLayer))
+                paramChromaticAberration.Save(chromaticAberrationLayer);
+            if (Volume.profile.TryGetSettings(out ColorGrading colorGradingLayer))
+                paramColorGrading.Save(colorGradingLayer);
+            if (Volume.profile.TryGetSettings(out Grain grainLayer))
+                paramGrainLayer.Save(grainLayer);
+            if (Volume.profile.TryGetSettings(out ScreenSpaceReflections screenSpaceReflectionsLayer))
+                paramScreenSpaceReflection.Save(screenSpaceReflectionsLayer);
+            if (Volume.profile.TryGetSettings(out Vignette vignetteLayer))
+                paramVignette.Save(vignetteLayer);
         }
 
         public void LoadParameters() {
-            if (FindTargetVolume(out PostProcessVolume targetVolume)) {
-                if (targetVolume.profile.TryGetSettings(out AutoExposure autoExposureLayer))
-                    paramAutoExposure.Load(autoExposureLayer);
-                if (targetVolume.profile.TryGetSettings(out AmbientOcclusion ambientOcclusionLayer))
-                    paramAmbientOcclusion.Load(ambientOcclusionLayer);
-                if (targetVolume.profile.TryGetSettings(out Bloom bloomLayer))
-                    paramBloom.Load(bloomLayer);
-                if (targetVolume.profile.TryGetSettings(out DepthOfField depthOfFieldLayer))
-                    paramDepthOfField.Load(depthOfFieldLayer);
-                if (targetVolume.profile.TryGetSettings(out ChromaticAberration chromaticAberrationLayer))
-                    paramChromaticAberration.Load(chromaticAberrationLayer);
-                if (targetVolume.profile.TryGetSettings(out ColorGrading colorGradingLayer))
-                    paramColorGrading.Load(colorGradingLayer);
-                if (targetVolume.profile.TryGetSettings(out Grain grainLayer))
-                    paramGrainLayer.Load(grainLayer);
-                if (targetVolume.profile.TryGetSettings(out ScreenSpaceReflections screenSpaceReflectionsLayer))
-                    paramScreenSpaceReflection.Load(screenSpaceReflectionsLayer);
-                if (targetVolume.profile.TryGetSettings(out Vignette vignetteLayer))
-                    paramVignette.Load(vignetteLayer);
-            }
+            if (Volume.profile.TryGetSettings(out AutoExposure autoExposureLayer))
+                paramAutoExposure.Load(autoExposureLayer);
+            if (Volume.profile.TryGetSettings(out AmbientOcclusion ambientOcclusionLayer))
+                paramAmbientOcclusion.Load(ambientOcclusionLayer);
+            if (Volume.profile.TryGetSettings(out Bloom bloomLayer))
+                paramBloom.Load(bloomLayer);
+            if (Volume.profile.TryGetSettings(out DepthOfField depthOfFieldLayer))
+                paramDepthOfField.Load(depthOfFieldLayer);
+            if (Volume.profile.TryGetSettings(out ChromaticAberration chromaticAberrationLayer))
+                paramChromaticAberration.Load(chromaticAberrationLayer);
+            if (Volume.profile.TryGetSettings(out ColorGrading colorGradingLayer))
+                paramColorGrading.Load(colorGradingLayer);
+            if (Volume.profile.TryGetSettings(out Grain grainLayer))
+                paramGrainLayer.Load(grainLayer);
+            if (Volume.profile.TryGetSettings(out ScreenSpaceReflections screenSpaceReflectionsLayer))
+                paramScreenSpaceReflection.Load(screenSpaceReflectionsLayer);
+            if (Volume.profile.TryGetSettings(out Vignette vignetteLayer))
+                paramVignette.Load(vignetteLayer);
         }
 
         internal Transform VolumeTriggerSetting {
@@ -210,10 +218,10 @@ namespace AIGraphics.Settings {
         }
 
         public float FocalDistance {
-            get => (depthOfFieldLayers.Count > 0) ? depthOfFieldLayers[0].focusDistance.value : 0f;
+            get => depthOfFieldLayer != null ? depthOfFieldLayer.focusDistance.value : 0f;
             set {
-                if (depthOfFieldLayers.Count > 0) 
-                    depthOfFieldLayers[0].focusDistance.value = value;
+                if (depthOfFieldLayer != null)
+                    depthOfFieldLayer.focusDistance.value = value;
             }
         }
 

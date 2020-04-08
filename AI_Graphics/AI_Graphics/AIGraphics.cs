@@ -76,6 +76,11 @@ namespace AIGraphics
         private void Awake()
         {
             StudioSaveLoadApi.RegisterExtraBehaviour<SceneController>(GUID);
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+        void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+            if (scene.name == "map_title" && PostProcessingSettings != null)
+                PostProcessingSettings.ResetVolume();
         }
 
         private IEnumerator Start()
@@ -104,12 +109,15 @@ namespace AIGraphics
             _skyboxManager.Parent = this;
             _skyboxManager.CubemapPath = ConfigCubeMapPath.Value;
             _skyboxManager.Logger = Logger;
+            DontDestroyOnLoad(_skyboxManager);
 
             _postProcessingManager = Instance.GetOrAddComponent<PostProcessingManager>();
             _postProcessingManager.LensDirtTexturesPath = ConfigLensDirtPath.Value;
-            
+            DontDestroyOnLoad(_postProcessingManager);
+
             _focusPuller = Instance.GetOrAddComponent<FocusPuller>();
             _focusPuller.init(this);
+            DontDestroyOnLoad(_focusPuller);
 
             _lightManager = new LightManager(this);
 
