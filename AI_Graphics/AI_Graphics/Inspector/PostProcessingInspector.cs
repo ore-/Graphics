@@ -141,10 +141,10 @@ namespace AIGraphics.Inspector {
                         settings.bloomLayer.color.overrideState, overrideState => settings.bloomLayer.color.overrideState = overrideState);
                     settings.bloomLayer.fastMode.value = Toggle("Fast Mode", settings.bloomLayer.fastMode.value);
 
-                    PostProcessingManager.currentDirtIndex = SelectionTexture("Lens Dirt", PostProcessingManager.currentDirtIndex, PostProcessingManager.LensDirtPreviews.ToArray(), Inspector.Width / 100,
+                    PostProcessingManager.lensDirtTexture.index = SelectionTexture("Lens Dirt", PostProcessingManager.lensDirtTexture.index, PostProcessingManager.lensDirtTexture.TexturePreviews.ToArray(), Inspector.Width / 100,
                         settings.bloomLayer.dirtTexture.overrideState, overrideState => settings.bloomLayer.dirtTexture.overrideState = overrideState, GUIStyles.Skin.box);
-                    if (-1 != PostProcessingManager.currentDirtIndex) {
-                        settings.bloomLayer.dirtTexture.value = PostProcessingManager.DirtTexture;
+                    if (-1 != PostProcessingManager.lensDirtTexture.index) {
+                        settings.bloomLayer.dirtTexture.value = PostProcessingManager.lensDirtTexture.Texture;
                     }
 
                     settings.bloomLayer.dirtIntensity.value = Text("Dirt Intensity", settings.bloomLayer.dirtIntensity.value, "N2",
@@ -171,6 +171,17 @@ namespace AIGraphics.Inspector {
                 settings.colorGradingLayer.active =
                 settings.colorGradingLayer.enabled.value = Toggle("Colour Grading", settings.colorGradingLayer.enabled.value, true);
                 if (settings.colorGradingLayer.enabled.value) {
+                    Slider("Lut Profile", PostProcessingManager.lutTexture.Index, -1, PostProcessingManager.lutTexture.TexturePaths.Count - 1, value => {
+                        PostProcessingManager.lutTexture.Index = value;
+                        if (PostProcessingManager.lutTexture.TryGetTexture(out Texture2D lutTexture) & lutTexture != null)
+                            settings.colorGradingLayer.ldrLut.value = lutTexture;
+                        else
+                            settings.colorGradingLayer.ldrLut.value = null;
+                    }, settings.colorGradingLayer.ldrLut.overrideState, overrideState => settings.colorGradingLayer.ldrLut.overrideState = overrideState);
+
+                    Slider("Lut Blend", settings.colorGradingLayer.ldrLutContribution.value, 0, 1, "N1", ldrLutContribution => settings.colorGradingLayer.ldrLutContribution.value = ldrLutContribution,
+                        settings.colorGradingLayer.ldrLutContribution.overrideState, overrideState => settings.colorGradingLayer.ldrLutContribution.overrideState = overrideState);
+
                     Selection("Mode", settings.colorGradingLayer.gradingMode.value, mode => settings.colorGradingLayer.gradingMode.value = mode);
                     if (GradingMode.External != settings.colorGradingLayer.gradingMode.value) {
                         Selection("Tonemapping", settings.colorGradingLayer.tonemapper.value, mode => settings.colorGradingLayer.tonemapper.value = mode);

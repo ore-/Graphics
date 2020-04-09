@@ -128,7 +128,7 @@ namespace AIGraphics.Settings {
                 this.color = new ColorValue(layer.color);
                 this.fastMode = new BoolValue(layer.fastMode);
                 this.dirtIntensity = new FloatValue(layer.dirtIntensity);
-                dirtTexture = PostProcessingManager.DirtTexturePath;
+                dirtTexture = PostProcessingManager.lensDirtTexture.lookupPath;
                 dirtState = layer.dirtTexture.overrideState;
                 // dirtTexture is getting saved when dirtTexture is being set from PostProcessingSettings.
                 // ref: PostProcessingSettings.cs:167
@@ -149,8 +149,9 @@ namespace AIGraphics.Settings {
                 this.dirtIntensity.Fill(layer.dirtIntensity);
 
                 layer.dirtTexture.overrideState = dirtState;
-                int textureIndex = PostProcessingManager.FindIndexByPath(dirtTexture);
-                layer.dirtTexture.value = (textureIndex > 0) ? PostProcessingManager.LensDirts[textureIndex] : null;
+
+                PostProcessingManager.lensDirtTexture.SetIndexByPath(dirtTexture);
+                layer.dirtTexture.value = PostProcessingManager.lensDirtTexture.Texture;
             }
         }
     }
@@ -225,8 +226,7 @@ namespace AIGraphics.Settings {
         public FloatValue postExposure;
         public FloatValue contrast;
         public FloatValue temperature;
-
-        public string ldrLutPath; // Formerly Texture
+        public IntValue ldrLutIndex;
         public string externalLutPath; // Formerly Texture.
 
         public void Save(UnityEngine.Rendering.PostProcessing.ColorGrading layer) {
@@ -261,8 +261,7 @@ namespace AIGraphics.Settings {
                 this.postExposure = new FloatValue(layer.postExposure);
                 this.contrast = new FloatValue(layer.contrast);
                 this.temperature = new FloatValue(layer.temperature);
-
-                //ldrLutPath = lutPath; // Formerly Texture
+                ldrLutIndex = new IntValue(PostProcessingManager.lutTexture.Index, layer.ldrLut.overrideState);
                 //externalLutPath = extLutPath; // Formerly Texture.
             }
         }
@@ -300,8 +299,12 @@ namespace AIGraphics.Settings {
                 this.contrast.Fill(layer.contrast);
                 this.temperature.Fill(layer.temperature);
 
-                // Load from certain directory.
-                //layer.ldrLutPath.value = ldrLutPath;
+                PostProcessingManager.lutTexture.Index = ldrLutIndex.value;
+                if (PostProcessingManager.lutTexture.TryGetTexture(out Texture2D texture))
+                    layer.ldrLut.value = texture;
+                else
+                    layer.ldrLut.value = null;
+                layer.ldrLut.overrideState = ldrLutIndex.overrideState;
                 //layer.externalLutPath.value = externalLutPath;
             }
         }
@@ -324,6 +327,7 @@ namespace AIGraphics.Settings {
                 kernelSize = new KernelSizeValue(layer.kernelSize);
             }
         }
+
         public void Load(UnityEngine.Rendering.PostProcessing.DepthOfField layer) {
             if (layer != null) {
                 enabled.Fill(layer.enabled);
