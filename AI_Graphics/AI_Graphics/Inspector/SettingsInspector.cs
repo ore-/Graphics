@@ -4,7 +4,7 @@ using static AIGraphics.Inspector.Util;
 
 namespace AIGraphics.Inspector
 {
-    internal static class SettingsInspector 
+    internal static class SettingsInspector
     {
         private const float FOVMin = 10f;
         private const float FOVMax = 120f;
@@ -26,7 +26,7 @@ namespace AIGraphics.Inspector
                 cameraSettings.DynamicResolution = Toggle("Allow DynamicResolution", cameraSettings.DynamicResolution);
                 GUILayout.Space(10);
                 GUILayout.Label("Rendering", GUIStyles.boldlabel);
-                GUILayout.Space(1);                
+                GUILayout.Space(1);
                 Label("Colour Space", QualitySettings.activeColorSpace.ToString());
                 Label("Quality Level", QualitySettings.names[QualitySettings.GetQualityLevel()]);
                 renderingSettings.PixelLightCount = Text("Pixel Light Count", renderingSettings.PixelLightCount);

@@ -19,7 +19,7 @@ namespace AIGraphics.Inspector
         private static Vector2 cubeMapScrollView;
         //private static int selectedCubeMapIdx = -1;
 
-        private static Vector2 probeSettingsScrollView;        
+        private static Vector2 probeSettingsScrollView;
         private static int selectedProbe = 0;
 
         internal static void Draw(LightingSettings lightingSettings, SkyboxManager skyboxManager, bool showAdvanced)
@@ -38,7 +38,11 @@ namespace AIGraphics.Inspector
                     cubeMapScrollView = GUILayout.BeginScrollView(cubeMapScrollView);
                     int selectedCubeMapIdx = Array.IndexOf(SkyboxManager.CubemapPaths.ToArray(), skyboxManager.CurrentCubeMap);
                     selectedCubeMapIdx = GUILayout.SelectionGrid(selectedCubeMapIdx, SkyboxManager.CubemapPreviewTextures.ToArray(), Inspector.Width / 150, GUIStyles.Skin.box);
-                    if (-1 != selectedCubeMapIdx) skyboxManager.CurrentCubeMap = SkyboxManager.CubemapPaths[selectedCubeMapIdx];
+                    if (-1 != selectedCubeMapIdx)
+                    {
+                        skyboxManager.CurrentCubeMap = SkyboxManager.CubemapPaths[selectedCubeMapIdx];
+                    }
+
                     GUILayout.EndScrollView();
                 }
                 GUILayout.Space(10);
@@ -53,8 +57,10 @@ namespace AIGraphics.Inspector
                 Selection("Source", lightingSettings.AmbientModeSetting, mode =>
                 {
                     lightingSettings.AmbientModeSetting = mode;
-                    if(mode != LightingSettings.AIAmbientMode.Skybox)
+                    if (mode != LightingSettings.AIAmbientMode.Skybox)
+                    {
                         skyboxManager.CurrentCubeMap = SkyboxManager.noCubemap;
+                    }
                 });
                 Slider("Intensity", lightingSettings.AmbientIntensity, LightSettings.IntensityMin, LightSettings.IntensityMax, "N1", intensity => { lightingSettings.AmbientIntensity = intensity; });
                 GUI.enabled = null != lightingSettings.SkyboxSetting;
@@ -68,7 +74,7 @@ namespace AIGraphics.Inspector
                 GUILayout.Space(10);
                 GUILayout.Label("Environment Reflections", GUIStyles.boldlabel);
                 GUILayout.Space(1);
-                Selection("Resolution", lightingSettings.ReflectionResolution, LightingSettings.ReflectionResolutions, resolution => lightingSettings.ReflectionResolution = resolution);                
+                Selection("Resolution", lightingSettings.ReflectionResolution, LightingSettings.ReflectionResolutions, resolution => lightingSettings.ReflectionResolution = resolution);
                 Slider("Intensity", lightingSettings.ReflectionIntensity, 0f, 1f, "N1", intensity => { lightingSettings.ReflectionIntensity = intensity; });
                 Slider("Bounces", lightingSettings.ReflectionBounces, 1, 5, bounces => { lightingSettings.ReflectionBounces = bounces; });
             }
@@ -113,7 +119,7 @@ namespace AIGraphics.Inspector
                     GUILayout.EndVertical();
                 }
             }
-            GUILayout.EndVertical();            
+            GUILayout.EndVertical();
             GUI.enabled = true;
         }
     }

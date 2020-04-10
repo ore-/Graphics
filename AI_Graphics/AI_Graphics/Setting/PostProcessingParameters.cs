@@ -1,14 +1,15 @@
 ﻿using MessagePack;
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
 
 // Haha
 // This is funny
 // TODO: Find Better Names and change the names with refactoring tools.
 // TODO: Is this the best way to do this?
-namespace AIGraphics.Settings {
+namespace AIGraphics.Settings
+{
     [MessagePackObject(keyAsPropertyName: true)]
-    public struct AutoExposureParams {
+    public struct AutoExposureParams
+    {
         public BoolValue enabled;
         public Vector2Value filtering; // vector2
         public FloatValue minLuminance;
@@ -17,8 +18,10 @@ namespace AIGraphics.Settings {
         public EyeAdaptationValue eyeAdaptation; // EyeAdaptationParameter
         public FloatValue speedUp;
         public FloatValue speedDown;
-        public void Save(UnityEngine.Rendering.PostProcessing.AutoExposure layer) {
-            if (layer != null) {
+        public void Save(UnityEngine.Rendering.PostProcessing.AutoExposure layer)
+        {
+            if (layer != null)
+            {
                 enabled = new BoolValue(layer.enabled);
                 filtering = new Vector2Value(layer.filtering);
                 minLuminance = new FloatValue(layer.minLuminance);
@@ -30,8 +33,10 @@ namespace AIGraphics.Settings {
             }
         }
 
-        public void Load(UnityEngine.Rendering.PostProcessing.AutoExposure layer) {
-            if (layer != null) {
+        public void Load(UnityEngine.Rendering.PostProcessing.AutoExposure layer)
+        {
+            if (layer != null)
+            {
                 enabled.Fill(layer.enabled);
                 layer.active = layer.enabled.value;
                 filtering.Fill(layer.filtering);
@@ -46,7 +51,8 @@ namespace AIGraphics.Settings {
     }
 
     [MessagePackObject(keyAsPropertyName: true)]
-    public struct AmbientOcclusionParams {
+    public struct AmbientOcclusionParams
+    {
         public BoolValue enabled;
         public AmbientOcclusionModeValue mode;
         public FloatValue intensity;
@@ -59,50 +65,56 @@ namespace AIGraphics.Settings {
         public FloatValue directLightingStrength;
         public FloatValue radius;
         public AmbientOcclusionQualityValue quality;
-        public void Save(UnityEngine.Rendering.PostProcessing.AmbientOcclusion layer) {
-            if (layer != null) {
-                this.enabled = new BoolValue(layer.enabled);
-                this.mode = new AmbientOcclusionModeValue(layer.mode);
-                this.intensity = new FloatValue(layer.intensity);
-                this.color = new ColorValue(layer.color);
-                this.ambientOnly = new BoolValue(layer.ambientOnly);
-                this.noiseFilterTolerance = new FloatValue(layer.noiseFilterTolerance);
-                this.blurTolerance = new FloatValue(layer.blurTolerance);
-                this.upsampleTolerance = new FloatValue(layer.upsampleTolerance);
-                this.thicknessModifier = new FloatValue(layer.thicknessModifier);
-                this.directLightingStrength = new FloatValue(layer.directLightingStrength);
-                this.radius = new FloatValue(layer.radius);
-                this.quality = new AmbientOcclusionQualityValue(layer.quality);
+        public void Save(UnityEngine.Rendering.PostProcessing.AmbientOcclusion layer)
+        {
+            if (layer != null)
+            {
+                enabled = new BoolValue(layer.enabled);
+                mode = new AmbientOcclusionModeValue(layer.mode);
+                intensity = new FloatValue(layer.intensity);
+                color = new ColorValue(layer.color);
+                ambientOnly = new BoolValue(layer.ambientOnly);
+                noiseFilterTolerance = new FloatValue(layer.noiseFilterTolerance);
+                blurTolerance = new FloatValue(layer.blurTolerance);
+                upsampleTolerance = new FloatValue(layer.upsampleTolerance);
+                thicknessModifier = new FloatValue(layer.thicknessModifier);
+                directLightingStrength = new FloatValue(layer.directLightingStrength);
+                radius = new FloatValue(layer.radius);
+                quality = new AmbientOcclusionQualityValue(layer.quality);
             }
         }
 
-        public void Load(UnityEngine.Rendering.PostProcessing.AmbientOcclusion layer) {
-            if (layer != null) {
-                this.enabled.Fill(layer.enabled);
+        public void Load(UnityEngine.Rendering.PostProcessing.AmbientOcclusion layer)
+        {
+            if (layer != null)
+            {
+                enabled.Fill(layer.enabled);
                 layer.active = layer.enabled.value;
-                this.mode.Fill(layer.mode);
-                this.intensity.Fill(layer.intensity);
-                this.color.Fill(layer.color);
-                this.ambientOnly.Fill(layer.ambientOnly);
-                this.noiseFilterTolerance.Fill(layer.noiseFilterTolerance);
-                this.blurTolerance.Fill(layer.blurTolerance);
-                this.upsampleTolerance.Fill(layer.upsampleTolerance);
-                this.thicknessModifier.Fill(layer.thicknessModifier);
-                this.directLightingStrength.Fill(layer.directLightingStrength);
-                this.radius.Fill(layer.radius);
-                this.quality.Fill(layer.quality);
+                mode.Fill(layer.mode);
+                intensity.Fill(layer.intensity);
+                color.Fill(layer.color);
+                ambientOnly.Fill(layer.ambientOnly);
+                noiseFilterTolerance.Fill(layer.noiseFilterTolerance);
+                blurTolerance.Fill(layer.blurTolerance);
+                upsampleTolerance.Fill(layer.upsampleTolerance);
+                thicknessModifier.Fill(layer.thicknessModifier);
+                directLightingStrength.Fill(layer.directLightingStrength);
+                radius.Fill(layer.radius);
+                quality.Fill(layer.quality);
             }
         }
     }
 
     [MessagePackObject(keyAsPropertyName: true)]
-    public struct AmplifyOcclusionParams {
+    public struct AmplifyOcclusionParams
+    {
         public bool enabled;
         // TODO: figure out how to work with it
     }
 
     [MessagePackObject(keyAsPropertyName: true)]
-    public struct BloomParams {
+    public struct BloomParams
+    {
         public BoolValue enabled;
         public FloatValue intensity;
         public FloatValue threshold;
@@ -116,37 +128,41 @@ namespace AIGraphics.Settings {
         public string dirtTexture;
         public bool dirtState;
 
-        public void Save(UnityEngine.Rendering.PostProcessing.Bloom layer) {
-            if (layer != null) {
-                this.enabled = new BoolValue(layer.enabled);
-                this.intensity = new FloatValue(layer.intensity);
-                this.threshold = new FloatValue(layer.threshold);
-                this.softKnee = new FloatValue(layer.softKnee);
-                this.clamp = new FloatValue(layer.clamp);
-                this.diffusion = new FloatValue(layer.diffusion);
-                this.anamorphicRatio = new FloatValue(layer.anamorphicRatio);
-                this.color = new ColorValue(layer.color);
-                this.fastMode = new BoolValue(layer.fastMode);
-                this.dirtIntensity = new FloatValue(layer.dirtIntensity);
+        public void Save(UnityEngine.Rendering.PostProcessing.Bloom layer)
+        {
+            if (layer != null)
+            {
+                enabled = new BoolValue(layer.enabled);
+                intensity = new FloatValue(layer.intensity);
+                threshold = new FloatValue(layer.threshold);
+                softKnee = new FloatValue(layer.softKnee);
+                clamp = new FloatValue(layer.clamp);
+                diffusion = new FloatValue(layer.diffusion);
+                anamorphicRatio = new FloatValue(layer.anamorphicRatio);
+                color = new ColorValue(layer.color);
+                fastMode = new BoolValue(layer.fastMode);
+                dirtIntensity = new FloatValue(layer.dirtIntensity);
                 dirtTexture = PostProcessingManager.lensDirtTexture.lookupPath;
                 dirtState = layer.dirtTexture.overrideState;
                 // dirtTexture is getting saved when dirtTexture is being set from PostProcessingSettings.
                 // ref: PostProcessingSettings.cs:167
             }
         }
-        public void Load(UnityEngine.Rendering.PostProcessing.Bloom layer) {
-            if (layer != null) {
-                this.enabled.Fill(layer.enabled);
+        public void Load(UnityEngine.Rendering.PostProcessing.Bloom layer)
+        {
+            if (layer != null)
+            {
+                enabled.Fill(layer.enabled);
                 layer.active = layer.enabled.value;
-                this.intensity.Fill(layer.intensity);
-                this.threshold.Fill(layer.threshold);
-                this.softKnee.Fill(layer.softKnee);
-                this.clamp.Fill(layer.clamp);
-                this.diffusion.Fill(layer.diffusion);
-                this.anamorphicRatio.Fill(layer.anamorphicRatio);
-                this.color.Fill(layer.color);
-                this.fastMode.Fill(layer.fastMode);
-                this.dirtIntensity.Fill(layer.dirtIntensity);
+                intensity.Fill(layer.intensity);
+                threshold.Fill(layer.threshold);
+                softKnee.Fill(layer.softKnee);
+                clamp.Fill(layer.clamp);
+                diffusion.Fill(layer.diffusion);
+                anamorphicRatio.Fill(layer.anamorphicRatio);
+                color.Fill(layer.color);
+                fastMode.Fill(layer.fastMode);
+                dirtIntensity.Fill(layer.dirtIntensity);
 
                 layer.dirtTexture.overrideState = dirtState;
 
@@ -157,14 +173,17 @@ namespace AIGraphics.Settings {
     }
 
     [MessagePackObject(keyAsPropertyName: true)]
-    public struct ChromaticAberrationParams {
+    public struct ChromaticAberrationParams
+    {
         public BoolValue enabled;
         public FloatValue intensity;
         public BoolValue fastMode;
 
         public string spectralLut;
-        public void Save(UnityEngine.Rendering.PostProcessing.ChromaticAberration layer, string spectralLutPath = "") {
-            if (layer != null) {
+        public void Save(UnityEngine.Rendering.PostProcessing.ChromaticAberration layer, string spectralLutPath = "")
+        {
+            if (layer != null)
+            {
                 enabled = new BoolValue(layer.enabled);
                 intensity = new FloatValue(layer.intensity);
                 fastMode = new BoolValue(layer.fastMode);
@@ -172,8 +191,10 @@ namespace AIGraphics.Settings {
                 //spectralLut = spectralLutPath;
             }
         }
-        public void Load(UnityEngine.Rendering.PostProcessing.ChromaticAberration layer) {
-            if (layer != null) {
+        public void Load(UnityEngine.Rendering.PostProcessing.ChromaticAberration layer)
+        {
+            if (layer != null)
+            {
                 enabled.Fill(layer.enabled);
                 layer.active = layer.enabled.value;
                 intensity.Fill(layer.intensity);
@@ -186,7 +207,8 @@ namespace AIGraphics.Settings {
     }
 
     [MessagePackObject(keyAsPropertyName: true)]
-    public struct ColorGradingParams {
+    public struct ColorGradingParams
+    {
         //internal SplineParameter redCurve; // Figure out messagepack parser later.
         //internal SplineParameter greenCurve; // Figure out messagepack parser later.
         //internal SplineParameter blueCurve; // Figure out messagepack parser later.
@@ -229,81 +251,90 @@ namespace AIGraphics.Settings {
         public IntValue ldrLutIndex;
         public string externalLutPath; // Formerly Texture.
 
-        public void Save(UnityEngine.Rendering.PostProcessing.ColorGrading layer) {
-            if (layer != null) {
-                this.enabled = new BoolValue(layer.enabled);
-                this.gradingMode = new GradingModeValue(layer.gradingMode);
-                this.mixerGreenOutGreenIn = new FloatValue(layer.mixerGreenOutGreenIn);
-                this.mixerGreenOutBlueIn = new FloatValue(layer.mixerGreenOutBlueIn);
-                this.mixerBlueOutRedIn = new FloatValue(layer.mixerBlueOutRedIn);
-                this.mixerBlueOutGreenIn = new FloatValue(layer.mixerBlueOutGreenIn);
-                this.mixerBlueOutBlueIn = new FloatValue(layer.mixerBlueOutBlueIn);
-                this.lift = new Vector4Value(layer.lift);
-                this.gamma = new Vector4Value(layer.gamma);
-                this.mixerGreenOutRedIn = new FloatValue(layer.mixerGreenOutRedIn);
-                this.gain = new Vector4Value(layer.gain);
-                this.mixerRedOutBlueIn = new FloatValue(layer.mixerRedOutBlueIn);
-                this.mixerRedOutGreenIn = new FloatValue(layer.mixerRedOutGreenIn);
-                this.toneCurveToeStrength = new FloatValue(layer.toneCurveToeStrength);
-                this.toneCurveToeLength = new FloatValue(layer.toneCurveToeLength);
-                this.toneCurveShoulderStrength = new FloatValue(layer.toneCurveShoulderStrength);
-                this.toneCurveShoulderLength = new FloatValue(layer.toneCurveShoulderLength);
-                this.toneCurveShoulderAngle = new FloatValue(layer.toneCurveShoulderAngle);
-                this.toneCurveGamma = new FloatValue(layer.toneCurveGamma);
-                this.mixerRedOutRedIn = new FloatValue(layer.mixerRedOutRedIn);
-                this.tonemapper = new TonemapperValue(layer.tonemapper);
-                this.ldrLutContribution = new FloatValue(layer.ldrLutContribution);
-                this.tint = new FloatValue(layer.tint);
-                this.colorFilter = new ColorValue(layer.colorFilter);
-                this.hueShift = new FloatValue(layer.hueShift);
-                this.saturation = new FloatValue(layer.saturation);
-                this.brightness = new FloatValue(layer.brightness);
-                this.postExposure = new FloatValue(layer.postExposure);
-                this.contrast = new FloatValue(layer.contrast);
-                this.temperature = new FloatValue(layer.temperature);
+        public void Save(UnityEngine.Rendering.PostProcessing.ColorGrading layer)
+        {
+            if (layer != null)
+            {
+                enabled = new BoolValue(layer.enabled);
+                gradingMode = new GradingModeValue(layer.gradingMode);
+                mixerGreenOutGreenIn = new FloatValue(layer.mixerGreenOutGreenIn);
+                mixerGreenOutBlueIn = new FloatValue(layer.mixerGreenOutBlueIn);
+                mixerBlueOutRedIn = new FloatValue(layer.mixerBlueOutRedIn);
+                mixerBlueOutGreenIn = new FloatValue(layer.mixerBlueOutGreenIn);
+                mixerBlueOutBlueIn = new FloatValue(layer.mixerBlueOutBlueIn);
+                lift = new Vector4Value(layer.lift);
+                gamma = new Vector4Value(layer.gamma);
+                mixerGreenOutRedIn = new FloatValue(layer.mixerGreenOutRedIn);
+                gain = new Vector4Value(layer.gain);
+                mixerRedOutBlueIn = new FloatValue(layer.mixerRedOutBlueIn);
+                mixerRedOutGreenIn = new FloatValue(layer.mixerRedOutGreenIn);
+                toneCurveToeStrength = new FloatValue(layer.toneCurveToeStrength);
+                toneCurveToeLength = new FloatValue(layer.toneCurveToeLength);
+                toneCurveShoulderStrength = new FloatValue(layer.toneCurveShoulderStrength);
+                toneCurveShoulderLength = new FloatValue(layer.toneCurveShoulderLength);
+                toneCurveShoulderAngle = new FloatValue(layer.toneCurveShoulderAngle);
+                toneCurveGamma = new FloatValue(layer.toneCurveGamma);
+                mixerRedOutRedIn = new FloatValue(layer.mixerRedOutRedIn);
+                tonemapper = new TonemapperValue(layer.tonemapper);
+                ldrLutContribution = new FloatValue(layer.ldrLutContribution);
+                tint = new FloatValue(layer.tint);
+                colorFilter = new ColorValue(layer.colorFilter);
+                hueShift = new FloatValue(layer.hueShift);
+                saturation = new FloatValue(layer.saturation);
+                brightness = new FloatValue(layer.brightness);
+                postExposure = new FloatValue(layer.postExposure);
+                contrast = new FloatValue(layer.contrast);
+                temperature = new FloatValue(layer.temperature);
                 ldrLutIndex = new IntValue(PostProcessingManager.lutTexture.Index, layer.ldrLut.overrideState);
                 //externalLutPath = extLutPath; // Formerly Texture.
             }
         }
-        public void Load(UnityEngine.Rendering.PostProcessing.ColorGrading layer) {
-            if (layer != null) {
-                this.enabled.Fill(layer.enabled);
+        public void Load(UnityEngine.Rendering.PostProcessing.ColorGrading layer)
+        {
+            if (layer != null)
+            {
+                enabled.Fill(layer.enabled);
                 layer.active = layer.enabled.value;
-                this.gradingMode.Fill(layer.gradingMode);
-                this.mixerGreenOutGreenIn.Fill(layer.mixerGreenOutGreenIn);
-                this.mixerGreenOutBlueIn.Fill(layer.mixerGreenOutBlueIn);
-                this.mixerBlueOutRedIn.Fill(layer.mixerBlueOutRedIn);
-                this.mixerBlueOutGreenIn.Fill(layer.mixerBlueOutGreenIn);
-                this.mixerBlueOutBlueIn.Fill(layer.mixerBlueOutBlueIn);
-                this.lift.Fill(layer.lift);
-                this.gamma.Fill(layer.gamma);
-                this.mixerGreenOutRedIn.Fill(layer.mixerGreenOutRedIn);
-                this.gain.Fill(layer.gain);
-                this.mixerRedOutBlueIn.Fill(layer.mixerRedOutBlueIn);
-                this.mixerRedOutGreenIn.Fill(layer.mixerRedOutGreenIn);
-                this.toneCurveToeStrength.Fill(layer.toneCurveToeStrength);
-                this.toneCurveToeLength.Fill(layer.toneCurveToeLength);
-                this.toneCurveShoulderStrength.Fill(layer.toneCurveShoulderStrength);
-                this.toneCurveShoulderLength.Fill(layer.toneCurveShoulderLength);
-                this.toneCurveShoulderAngle.Fill(layer.toneCurveShoulderAngle);
-                this.toneCurveGamma.Fill(layer.toneCurveGamma);
-                this.mixerRedOutRedIn.Fill(layer.mixerRedOutRedIn);
-                this.tonemapper.Fill(layer.tonemapper);
-                this.ldrLutContribution.Fill(layer.ldrLutContribution);
-                this.tint.Fill(layer.tint);
-                this.colorFilter.Fill(layer.colorFilter);
-                this.hueShift.Fill(layer.hueShift);
-                this.saturation.Fill(layer.saturation);
-                this.brightness.Fill(layer.brightness);
-                this.postExposure.Fill(layer.postExposure);
-                this.contrast.Fill(layer.contrast);
-                this.temperature.Fill(layer.temperature);
+                gradingMode.Fill(layer.gradingMode);
+                mixerGreenOutGreenIn.Fill(layer.mixerGreenOutGreenIn);
+                mixerGreenOutBlueIn.Fill(layer.mixerGreenOutBlueIn);
+                mixerBlueOutRedIn.Fill(layer.mixerBlueOutRedIn);
+                mixerBlueOutGreenIn.Fill(layer.mixerBlueOutGreenIn);
+                mixerBlueOutBlueIn.Fill(layer.mixerBlueOutBlueIn);
+                lift.Fill(layer.lift);
+                gamma.Fill(layer.gamma);
+                mixerGreenOutRedIn.Fill(layer.mixerGreenOutRedIn);
+                gain.Fill(layer.gain);
+                mixerRedOutBlueIn.Fill(layer.mixerRedOutBlueIn);
+                mixerRedOutGreenIn.Fill(layer.mixerRedOutGreenIn);
+                toneCurveToeStrength.Fill(layer.toneCurveToeStrength);
+                toneCurveToeLength.Fill(layer.toneCurveToeLength);
+                toneCurveShoulderStrength.Fill(layer.toneCurveShoulderStrength);
+                toneCurveShoulderLength.Fill(layer.toneCurveShoulderLength);
+                toneCurveShoulderAngle.Fill(layer.toneCurveShoulderAngle);
+                toneCurveGamma.Fill(layer.toneCurveGamma);
+                mixerRedOutRedIn.Fill(layer.mixerRedOutRedIn);
+                tonemapper.Fill(layer.tonemapper);
+                ldrLutContribution.Fill(layer.ldrLutContribution);
+                tint.Fill(layer.tint);
+                colorFilter.Fill(layer.colorFilter);
+                hueShift.Fill(layer.hueShift);
+                saturation.Fill(layer.saturation);
+                brightness.Fill(layer.brightness);
+                postExposure.Fill(layer.postExposure);
+                contrast.Fill(layer.contrast);
+                temperature.Fill(layer.temperature);
 
                 PostProcessingManager.lutTexture.Index = ldrLutIndex.value;
                 if (PostProcessingManager.lutTexture.TryGetTexture(out Texture2D texture))
+                {
                     layer.ldrLut.value = texture;
+                }
                 else
+                {
                     layer.ldrLut.value = null;
+                }
+
                 layer.ldrLut.overrideState = ldrLutIndex.overrideState;
                 //layer.externalLutPath.value = externalLutPath;
             }
@@ -311,15 +342,18 @@ namespace AIGraphics.Settings {
     }
 
     [MessagePackObject(keyAsPropertyName: true)]
-    public struct DepthOfFieldParams {
+    public struct DepthOfFieldParams
+    {
         public BoolValue enabled;
         public FloatValue focusDistance;
         public FloatValue aperture;
         public FloatValue focalLength;
         public KernelSizeValue kernelSize;
 
-        public void Save(UnityEngine.Rendering.PostProcessing.DepthOfField layer) {
-            if (layer != null) {
+        public void Save(UnityEngine.Rendering.PostProcessing.DepthOfField layer)
+        {
+            if (layer != null)
+            {
                 enabled = new BoolValue(layer.enabled);
                 focusDistance = new FloatValue(layer.focusDistance);
                 aperture = new FloatValue(layer.aperture);
@@ -328,8 +362,10 @@ namespace AIGraphics.Settings {
             }
         }
 
-        public void Load(UnityEngine.Rendering.PostProcessing.DepthOfField layer) {
-            if (layer != null) {
+        public void Load(UnityEngine.Rendering.PostProcessing.DepthOfField layer)
+        {
+            if (layer != null)
+            {
                 enabled.Fill(layer.enabled);
                 layer.active = layer.enabled.value;
                 focusDistance.Fill(layer.focusDistance);
@@ -341,15 +377,18 @@ namespace AIGraphics.Settings {
     }
 
     [MessagePackObject(keyAsPropertyName: true)]
-    public struct GrainLayerParams {
+    public struct GrainLayerParams
+    {
         public BoolValue enabled;
         public BoolValue colored;
         public FloatValue intensity;
         public FloatValue size;
         public FloatValue lumContrib;
 
-        public void Save(UnityEngine.Rendering.PostProcessing.Grain layer) {
-            if (layer != null) {
+        public void Save(UnityEngine.Rendering.PostProcessing.Grain layer)
+        {
+            if (layer != null)
+            {
                 enabled = new BoolValue(layer.enabled);
                 colored = new BoolValue(layer.colored);
                 intensity = new FloatValue(layer.intensity);
@@ -357,8 +396,10 @@ namespace AIGraphics.Settings {
                 lumContrib = new FloatValue(layer.lumContrib);
             }
         }
-        public void Load(UnityEngine.Rendering.PostProcessing.Grain layer) {
-            if (layer != null) {
+        public void Load(UnityEngine.Rendering.PostProcessing.Grain layer)
+        {
+            if (layer != null)
+            {
                 enabled.Fill(layer.enabled);
                 layer.active = layer.enabled.value;
                 colored.Fill(layer.colored);
@@ -370,7 +411,8 @@ namespace AIGraphics.Settings {
     }
 
     [MessagePackObject(keyAsPropertyName: true)]
-    public struct ScreenSpaceReflectionParams {
+    public struct ScreenSpaceReflectionParams
+    {
         public BoolValue enabled;
         public ScreenSpaceReflectionPresetValue preset;
         public IntValue maximumIterationCount;
@@ -380,8 +422,10 @@ namespace AIGraphics.Settings {
         public FloatValue distanceFade;
         public FloatValue vignette;
 
-        public void Save(UnityEngine.Rendering.PostProcessing.ScreenSpaceReflections layer) {
-            if (layer != null) {
+        public void Save(UnityEngine.Rendering.PostProcessing.ScreenSpaceReflections layer)
+        {
+            if (layer != null)
+            {
                 enabled = new BoolValue(layer.enabled);
                 preset = new ScreenSpaceReflectionPresetValue(layer.preset);
                 maximumIterationCount = new IntValue(layer.maximumIterationCount);
@@ -392,8 +436,10 @@ namespace AIGraphics.Settings {
                 vignette = new FloatValue(layer.vignette);
             }
         }
-        public void Load(UnityEngine.Rendering.PostProcessing.ScreenSpaceReflections layer) {
-            if (layer != null) {
+        public void Load(UnityEngine.Rendering.PostProcessing.ScreenSpaceReflections layer)
+        {
+            if (layer != null)
+            {
                 enabled.Fill(layer.enabled);
                 layer.active = layer.enabled.value;
                 preset.Fill(layer.preset);
@@ -408,7 +454,8 @@ namespace AIGraphics.Settings {
     }
 
     [MessagePackObject(keyAsPropertyName: true)]
-    public struct VignetteParams {
+    public struct VignetteParams
+    {
         public BoolValue enabled;
         public VignetteModeValue mode;
         public ColorValue color; //vector3
@@ -420,8 +467,10 @@ namespace AIGraphics.Settings {
         public FloatValue opacity;
         public string mask; //Mask Texture
 
-        public void Save(UnityEngine.Rendering.PostProcessing.Vignette layer, string maskPath = "") {
-            if (layer != null) {
+        public void Save(UnityEngine.Rendering.PostProcessing.Vignette layer, string maskPath = "")
+        {
+            if (layer != null)
+            {
                 enabled = new BoolValue(layer.enabled);
                 mode = new VignetteModeValue(layer.mode);
                 color = new ColorValue(layer.color);
@@ -436,8 +485,10 @@ namespace AIGraphics.Settings {
                 //mask = maskPath;
             }
         }
-        public void Load(UnityEngine.Rendering.PostProcessing.Vignette layer) {
-            if (layer != null) {
+        public void Load(UnityEngine.Rendering.PostProcessing.Vignette layer)
+        {
+            if (layer != null)
+            {
                 enabled.Fill(layer.enabled);
                 layer.active = layer.enabled.value;
                 mode.Fill(layer.mode);

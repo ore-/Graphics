@@ -2,11 +2,12 @@
 using MessagePack;
 using UnityEngine;
 using UnityEngine.Rendering;
-using static KKAPI.Studio.StudioAPI;
 
-namespace AIGraphics.Settings {
+namespace AIGraphics.Settings
+{
     [MessagePackObject(keyAsPropertyName: true)]
-    public class GlobalSettings {
+    public class GlobalSettings
+    {
         private int _pixelLightCount;
 
         public int PixelLightCount
@@ -24,7 +25,7 @@ namespace AIGraphics.Settings {
         public int AntiAliasing
         {
             get => QualitySettings.antiAliasing;
-            set => QualitySettings.antiAliasing = (int)value;
+            set => QualitySettings.antiAliasing = value;
         }
 
         public bool RealtimeReflectionProbes
@@ -80,7 +81,11 @@ namespace AIGraphics.Settings {
             get => GraphicsSettings.lightsUseColorTemperature;
             set
             {
-                if (value) LightsUseLinearIntensity = value;
+                if (value)
+                {
+                    LightsUseLinearIntensity = value;
+                }
+
                 GraphicsSettings.lightsUseColorTemperature = value;
             }
         }

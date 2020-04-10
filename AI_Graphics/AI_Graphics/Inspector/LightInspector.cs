@@ -1,11 +1,5 @@
 ﻿using AIGraphics.Settings;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Rendering;
 using static AIGraphics.Inspector.Util;
 
 namespace AIGraphics.Inspector
@@ -112,7 +106,10 @@ namespace AIGraphics.Inspector
                             {
                                 AlloyAreaLight alloyLight = null;
                                 if (lightManager.UseAlloyLight)
+                                {
                                     alloyLight = selectedLight.GetComponent<AlloyAreaLight>();
+                                }
+
                                 GUILayout.Label(selectedLight.name, GUIStyles.boldlabel);
                                 GUILayout.Space(10);
                                 GUILayout.BeginHorizontal();
@@ -122,7 +119,10 @@ namespace AIGraphics.Inspector
                                         GUILayout.Label("Colour", GUIStyles.boldlabel);
                                         SliderColor("Colour", selectedLight.color, c => selectedLight.color = c);
                                         if (renderingSettings.LightsUseColorTemperature)
+                                        {
                                             Slider("Temperature (K)", selectedLight.colorTemperature, 0f, 30000f, "N0", t => selectedLight.colorTemperature = t);
+                                        }
+
                                         GUILayout.Space(10);
                                         Slider("Intensity", selectedLight.intensity, 0f, 8f, "N2", i => selectedLight.intensity = i);
                                         Slider("Indirect Multiplier", selectedLight.bounceIntensity, 0f, 8f, "N0", bi => selectedLight.bounceIntensity = bi);
@@ -137,13 +137,13 @@ namespace AIGraphics.Inspector
                                         GUILayout.Space(10);
                                         if (showAdvanced)
                                         {
-                                            Selection("Render Mode", selectedLight.renderMode, mode => selectedLight.renderMode = mode);                                            
-                                            Label("Culling Mask", selectedLight.cullingMask.ToString());                                            
+                                            Selection("Render Mode", selectedLight.renderMode, mode => selectedLight.renderMode = mode);
+                                            Label("Culling Mask", selectedLight.cullingMask.ToString());
                                         }
 
                                         if (selectedLight.type == LightType.Directional)
                                         {
-                                            var rot = selectedLight.transform.eulerAngles;
+                                            Vector3 rot = selectedLight.transform.eulerAngles;
                                             rot.x = Mathf.DeltaAngle(0f, rot.x);
                                             if (rot.x > 180f)
                                             {
@@ -157,21 +157,27 @@ namespace AIGraphics.Inspector
                                             Slider("Vertical Rotation", rot.x, LightSettings.RotationXMin, LightSettings.RotationXMax, "N1", x => { rot.x = x; });
                                             Slider("Horizontal Rotation", rot.y, LightSettings.RotationYMin, LightSettings.RotationYMax, "N1", y => { rot.y = y; });
                                             if (rot != selectedLight.transform.eulerAngles)
+                                            {
                                                 selectedLight.transform.eulerAngles = rot;
+                                            }
                                         }
                                         else
                                         {
                                             Slider("Light Range", selectedLight.range, 0.1f, 100f, "N1", range => { selectedLight.range = range; });
                                             if (selectedLight.type == LightType.Spot)
+                                            {
                                                 Slider("Spot Angle", selectedLight.spotAngle, 1f, 179f, "N1", angle => { selectedLight.spotAngle = angle; });
+                                            }
                                         }
 
                                         if (lightManager.UseAlloyLight && alloyLight.HasSpecularHighlight && null != alloyLight)
-                                        {                                            
+                                        {
                                             Slider("Specular Highlight", alloyLight.Radius, 0f, 1f, "N2", i => alloyLight.Radius = i);
 
-                                            if (selectedLight.type == LightType.Point)                                                
+                                            if (selectedLight.type == LightType.Point)
+                                            {
                                                 Slider("Length", alloyLight.Length, 0f, 1f, "N2", i => alloyLight.Length = i);
+                                            }
                                         }
                                     }
                                     GUILayout.EndVertical();
@@ -206,7 +212,9 @@ namespace AIGraphics.Inspector
             GUILayout.BeginHorizontal();
             GUILayout.Space(5);
             if (GUILayout.Toggle(ReferenceEquals(l, selectedLight), l.name))//, GUIStyles.toolbarbutton))
+            {
                 selectedLight = l;
+            }
 
             GUILayout.FlexibleSpace();
             l.enabled = GUILayout.Toggle(l.enabled, l.enabled ? " ON" : "OFF");//, GUIStyles.toolbarbutton);

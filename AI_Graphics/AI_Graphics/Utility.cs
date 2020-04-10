@@ -46,7 +46,7 @@ namespace AIGraphics
 
         internal static void FlipTextureVertically(Texture2D original)
         {
-            var originalPixels = original.GetPixels();
+            Color[] originalPixels = original.GetPixels();
 
             Color[] newPixels = new Color[originalPixels.Length];
 

@@ -1,11 +1,9 @@
-﻿using AIGraphics;
-using MessagePack;
-using System.Linq;
-using System.Collections.Generic;
+﻿using MessagePack;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-namespace AIGraphics.Settings {
+namespace AIGraphics.Settings
+{
     [MessagePackObject(keyAsPropertyName: true)]
     public class LightingSettings
     {
@@ -27,21 +25,18 @@ namespace AIGraphics.Settings {
             set => RenderSettings.skybox = value;
         }
 
-        internal Light SunSetting
-        {
-            get => RenderSettings.sun;
-        }
+        internal Light SunSetting => RenderSettings.sun;
 
         public AIAmbientMode AmbientModeSetting
         {
-            get => (AIAmbientMode) RenderSettings.ambientMode;
+            get => (AIAmbientMode)RenderSettings.ambientMode;
             set
             {
                 if (value != AIAmbientMode.Skybox)
                 {
                     RenderSettings.ambientLight = Color.white;
                 }
-                RenderSettings.ambientMode = (AmbientMode) value;                
+                RenderSettings.ambientMode = (AmbientMode)value;
             }
         }
 
