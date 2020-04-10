@@ -1,17 +1,17 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace AIGraphics
 {
     internal class LightManager
     {
-        Light[] allLights;
+        private Light[] allLights;
         internal List<Light> DirectionalLights { get; private set; }
         internal List<Light> PointLights { get; private set; }
         internal List<Light> SpotLights { get; private set; }
         internal bool UseAlloyLight { get; set; }
 
-        private AIGraphics _parent;
+        private readonly AIGraphics _parent;
 
         internal LightManager(AIGraphics parent)
         {
@@ -46,8 +46,10 @@ namespace AIGraphics
                 {
                     DirectionalLights.Add(allLights[i]);
                 }
-                if( UseAlloyLight)
+                if (UseAlloyLight)
+                {
                     allLights[i].GetOrAddComponent<AlloyAreaLight>().UpdateBinding();
+                }
             }
         }
     }

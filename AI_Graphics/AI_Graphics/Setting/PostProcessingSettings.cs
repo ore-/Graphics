@@ -1,15 +1,15 @@
 ﻿using MessagePack;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
-using static KKAPI.Studio.StudioAPI;
 
 // TODO: Turn on Post Processing in main menu.
 // TODO: Messagepack clears out layer lists for a frame. Need to figure out to remove temporary solutions
-namespace AIGraphics.Settings {
+namespace AIGraphics.Settings
+{
     [MessagePackObject(keyAsPropertyName: true)]
-    public class PostProcessingSettings {
+    public class PostProcessingSettings
+    {
         // Parameters for Messagepack Save
         internal AmbientOcclusionParams paramAmbientOcclusion = new AmbientOcclusionParams();
         internal AutoExposureParams paramAutoExposure = new AutoExposureParams();
@@ -22,7 +22,8 @@ namespace AIGraphics.Settings {
         internal VignetteParams paramVignette = new VignetteParams();
         //internal AmplifyOcclusion paramAmplifyOcclusion; // not implemented yet
 
-        public enum Antialiasing {
+        public enum Antialiasing
+        {
             None = PostProcessLayer.Antialiasing.None,
             FXAA = PostProcessLayer.Antialiasing.FastApproximateAntialiasing,
             SMAA = PostProcessLayer.Antialiasing.SubpixelMorphologicalAntialiasing,
@@ -30,10 +31,11 @@ namespace AIGraphics.Settings {
         };
 
         private string selectedLUT;
-        internal List<string> LUTNames {
+        internal List<string> LUTNames
+        {
             get; set;
         }
-        private PostProcessLayer _postProcessLayer;
+        private readonly PostProcessLayer _postProcessLayer;
         internal AmbientOcclusion ambientOcclusionLayer;
         internal AutoExposure autoExposureLayer;
         internal Bloom bloomLayer;
@@ -45,30 +47,31 @@ namespace AIGraphics.Settings {
         internal Vignette vignetteLayer;
         internal Camera initialCamera;
 
-        public PostProcessingSettings() {
+        public PostProcessingSettings()
+        {
             SetupVolume();
         }
 
-        public PostProcessingSettings(Camera camera) {
+        public PostProcessingSettings(Camera camera)
+        {
             initialCamera = camera;
             _postProcessLayer = camera.GetComponent<PostProcessLayer>();
             LUTNames = GetLUTNames();
             SetupVolume();
         }
 
-        internal PostProcessLayer PostProcessLayer {
-            get => (_postProcessLayer == null) ? (initialCamera == null ? Camera.main : initialCamera).GetComponent<PostProcessLayer>() : _postProcessLayer;
-        }
+        internal PostProcessLayer PostProcessLayer => (_postProcessLayer == null) ? (initialCamera == null ? Camera.main : initialCamera).GetComponent<PostProcessLayer>() : _postProcessLayer;
 
         internal PostProcessVolume _volume;
-        internal PostProcessVolume Volume {
-            get => AIGraphics.Instance.GetOrAddComponent<PostProcessVolume>();
-        }
+        internal PostProcessVolume Volume => AIGraphics.Instance.GetOrAddComponent<PostProcessVolume>();
 
-        internal PostProcessVolume SetupVolume() {
+        internal PostProcessVolume SetupVolume()
+        {
             // Turn off everything, We're not going to use 
-            foreach (PostProcessVolume postProcessVolume in GameObject.FindObjectsOfType<PostProcessVolume>()) {
-                if (SettingValues.profile == null && (postProcessVolume.name == "PostProcessVolume3D" || postProcessVolume.name == "PostProcessVolume")) {
+            foreach (PostProcessVolume postProcessVolume in GameObject.FindObjectsOfType<PostProcessVolume>())
+            {
+                if (SettingValues.profile == null && (postProcessVolume.name == "PostProcessVolume3D" || postProcessVolume.name == "PostProcessVolume"))
+                {
                     SettingValues.profile = GameObject.Instantiate(postProcessVolume.profile);
                     SettingValues.profile.name = "AIGraphics Post Processing Profile";
                     InitializeProfiles();
@@ -77,7 +80,8 @@ namespace AIGraphics.Settings {
                 postProcessVolume.weight = 0;
                 postProcessVolume.enabled = false;
             }
-            if (SettingValues.profile == null) {
+            if (SettingValues.profile == null)
+            {
                 // Just in case
                 SettingValues.profile = (PostProcessProfile)ScriptableObject.CreateInstance("PostProcessProfile");
                 InitializeProfiles();
@@ -97,197 +101,277 @@ namespace AIGraphics.Settings {
             return _volume;
         }
 
-        internal void InitializeProfiles() {
+        internal void InitializeProfiles()
+        {
             if (!SettingValues.profile.TryGetSettings(out chromaticAberrationLayer))
+            {
                 chromaticAberrationLayer = SettingValues.profile.AddSettings<ChromaticAberration>();
+            }
+
             if (!SettingValues.profile.TryGetSettings(out grainLayer))
+            {
                 grainLayer = SettingValues.profile.AddSettings<Grain>();
+            }
+
             if (!SettingValues.profile.TryGetSettings(out ambientOcclusionLayer))
+            {
                 ambientOcclusionLayer = SettingValues.profile.AddSettings<AmbientOcclusion>();
+            }
+
             if (!SettingValues.profile.TryGetSettings(out autoExposureLayer))
+            {
                 autoExposureLayer = SettingValues.profile.AddSettings<AutoExposure>();
+            }
+
             if (!SettingValues.profile.TryGetSettings(out bloomLayer))
+            {
                 bloomLayer = SettingValues.profile.AddSettings<Bloom>();
+            }
+
             if (!SettingValues.profile.TryGetSettings(out colorGradingLayer))
+            {
                 colorGradingLayer = SettingValues.profile.AddSettings<ColorGrading>();
+            }
+
             if (!SettingValues.profile.TryGetSettings(out depthOfFieldLayer))
+            {
                 depthOfFieldLayer = SettingValues.profile.AddSettings<DepthOfField>();
+            }
+
             if (!SettingValues.profile.TryGetSettings(out screenSpaceReflectionsLayer))
+            {
                 screenSpaceReflectionsLayer = SettingValues.profile.AddSettings<ScreenSpaceReflections>();
+            }
+
             if (!SettingValues.profile.TryGetSettings(out vignetteLayer))
+            {
                 vignetteLayer = SettingValues.profile.AddSettings<Vignette>();
+            }
+
             depthOfFieldLayer.enabled.value = false; // Make people use Depth of Field Manually
         }
 
-        internal void ResetVolume() {
-            if (SettingValues.defaultProfile != null) {
+        internal void ResetVolume()
+        {
+            if (SettingValues.defaultProfile != null)
+            {
                 Volume.sharedProfile = SettingValues.defaultProfile;
                 Volume.profile = SettingValues.defaultProfile;
             }
         }
 
-        public void SaveParameters() {
+        public void SaveParameters()
+        {
             if (Volume.profile.TryGetSettings(out AutoExposure autoExposureLayer))
+            {
                 paramAutoExposure.Save(autoExposureLayer);
+            }
+
             if (Volume.profile.TryGetSettings(out AmbientOcclusion ambientOcclusionLayer))
+            {
                 paramAmbientOcclusion.Save(ambientOcclusionLayer);
+            }
+
             if (Volume.profile.TryGetSettings(out Bloom bloomLayer))
+            {
                 paramBloom.Save(bloomLayer);
+            }
+
             if (Volume.profile.TryGetSettings(out DepthOfField depthOfFieldLayer))
+            {
                 paramDepthOfField.Save(depthOfFieldLayer);
+            }
+
             if (Volume.profile.TryGetSettings(out ChromaticAberration chromaticAberrationLayer))
+            {
                 paramChromaticAberration.Save(chromaticAberrationLayer);
+            }
+
             if (Volume.profile.TryGetSettings(out ColorGrading colorGradingLayer))
+            {
                 paramColorGrading.Save(colorGradingLayer);
+            }
+
             if (Volume.profile.TryGetSettings(out Grain grainLayer))
+            {
                 paramGrainLayer.Save(grainLayer);
+            }
+
             if (Volume.profile.TryGetSettings(out ScreenSpaceReflections screenSpaceReflectionsLayer))
+            {
                 paramScreenSpaceReflection.Save(screenSpaceReflectionsLayer);
+            }
+
             if (Volume.profile.TryGetSettings(out Vignette vignetteLayer))
+            {
                 paramVignette.Save(vignetteLayer);
+            }
         }
 
-        public void LoadParameters() {
+        public void LoadParameters()
+        {
             if (Volume.profile.TryGetSettings(out AutoExposure autoExposureLayer))
+            {
                 paramAutoExposure.Load(autoExposureLayer);
+            }
+
             if (Volume.profile.TryGetSettings(out AmbientOcclusion ambientOcclusionLayer))
+            {
                 paramAmbientOcclusion.Load(ambientOcclusionLayer);
+            }
+
             if (Volume.profile.TryGetSettings(out Bloom bloomLayer))
+            {
                 paramBloom.Load(bloomLayer);
+            }
+
             if (Volume.profile.TryGetSettings(out DepthOfField depthOfFieldLayer))
+            {
                 paramDepthOfField.Load(depthOfFieldLayer);
+            }
+
             if (Volume.profile.TryGetSettings(out ChromaticAberration chromaticAberrationLayer))
+            {
                 paramChromaticAberration.Load(chromaticAberrationLayer);
+            }
+
             if (Volume.profile.TryGetSettings(out ColorGrading colorGradingLayer))
+            {
                 paramColorGrading.Load(colorGradingLayer);
+            }
+
             if (Volume.profile.TryGetSettings(out Grain grainLayer))
+            {
                 paramGrainLayer.Load(grainLayer);
+            }
+
             if (Volume.profile.TryGetSettings(out ScreenSpaceReflections screenSpaceReflectionsLayer))
+            {
                 paramScreenSpaceReflection.Load(screenSpaceReflectionsLayer);
+            }
+
             if (Volume.profile.TryGetSettings(out Vignette vignetteLayer))
+            {
                 paramVignette.Load(vignetteLayer);
+            }
         }
 
-        internal Transform VolumeTriggerSetting {
-            get => _postProcessLayer.volumeTrigger;
-        }
+        internal Transform VolumeTriggerSetting => _postProcessLayer.volumeTrigger;
 
-        public LayerMask VolumeLayerSetting {
-            //get => LayerMask.LayerToName(_postProcessLayer.volumeLayer.value);
-            get => PostProcessLayer.volumeLayer;
-        }
+        public LayerMask VolumeLayerSetting => PostProcessLayer.volumeLayer;
 
-        public float JitterSpread {
+        public float JitterSpread
+        {
             get => PostProcessLayer.temporalAntialiasing.jitterSpread;
             set => PostProcessLayer.temporalAntialiasing.jitterSpread = value;
         }
 
-        public float StationaryBlending {
+        public float StationaryBlending
+        {
             get => PostProcessLayer.temporalAntialiasing.stationaryBlending;
             set => PostProcessLayer.temporalAntialiasing.stationaryBlending = value;
         }
 
-        public float MotionBlending {
+        public float MotionBlending
+        {
             get => PostProcessLayer.temporalAntialiasing.motionBlending;
             set => PostProcessLayer.temporalAntialiasing.motionBlending = value;
         }
 
-        public float Sharpness {
+        public float Sharpness
+        {
             get => PostProcessLayer.temporalAntialiasing.sharpness;
             set => PostProcessLayer.temporalAntialiasing.sharpness = value;
         }
 
-        public bool FXAAMode {
+        public bool FXAAMode
+        {
             get => PostProcessLayer.fastApproximateAntialiasing.fastMode;
             set => PostProcessLayer.fastApproximateAntialiasing.fastMode = value;
         }
 
-        public bool FXAAAlpha {
+        public bool FXAAAlpha
+        {
             get => PostProcessLayer.fastApproximateAntialiasing.keepAlpha;
             set => PostProcessLayer.fastApproximateAntialiasing.keepAlpha = value;
         }
 
-        public SubpixelMorphologicalAntialiasing.Quality SMAAQuality {
+        public SubpixelMorphologicalAntialiasing.Quality SMAAQuality
+        {
             get => PostProcessLayer.subpixelMorphologicalAntialiasing.quality;
             set => PostProcessLayer.subpixelMorphologicalAntialiasing.quality = value;
         }
 
-        public Antialiasing AntialiasingMode {
+        public Antialiasing AntialiasingMode
+        {
             get => (Antialiasing)PostProcessLayer.antialiasingMode;
             set => PostProcessLayer.antialiasingMode = (PostProcessLayer.Antialiasing)value;
         }
 
-        public float FocalDistance {
+        public float FocalDistance
+        {
             get => depthOfFieldLayer != null ? depthOfFieldLayer.focusDistance.value : 0f;
-            set {
+            set
+            {
                 if (depthOfFieldLayer != null)
+                {
                     depthOfFieldLayer.focusDistance.value = value;
+                }
             }
         }
 
-        public string CurrentLUT {
+        public string CurrentLUT
+        {
             get => selectedLUT;
-            set {
-                if (null != value && value != selectedLUT) {
+            set
+            {
+                if (null != value && value != selectedLUT)
+                {
                     selectedLUT = value;
                 }
             }
         }
         public AmbientOcclusionParams AmbientOcclusion {
             get => paramAmbientOcclusion;
-            set {
-                paramAmbientOcclusion = value;
-            }
+            set => paramAmbientOcclusion = value;
         }
         public AutoExposureParams AutoExposure {
             get => paramAutoExposure;
-            set {
-                paramAutoExposure = value;
-            }
+            set => paramAutoExposure = value;
         }
-        public BloomParams Bloom {
+        public BloomParams Bloom
+        {
             get => paramBloom;
             set => paramBloom = value;
         }
 
         public ChromaticAberrationParams ChromaticAberration {
             get => paramChromaticAberration;
-            set {
-                paramChromaticAberration = value;
-            }
+            set => paramChromaticAberration = value;
         }
         public ColorGradingParams ColorGrading {
             get => paramColorGrading;
-            set {
-                paramColorGrading = value;
-            }
+            set => paramColorGrading = value;
         }
         public DepthOfFieldParams DepthOfField {
             get => paramDepthOfField;
-            set {
-                paramDepthOfField = value;
-            }
+            set => paramDepthOfField = value;
         }
         public GrainLayerParams GrainLayer {
             get => paramGrainLayer;
-            set {
-                paramGrainLayer = value;
-            }
+            set => paramGrainLayer = value;
         }
         public ScreenSpaceReflectionParams ScreenSpaceReflection {
             get => paramScreenSpaceReflection;
-            set {
-                paramScreenSpaceReflection = value;
-            }
+            set => paramScreenSpaceReflection = value;
         }
         public VignetteParams Vignette {
             get => paramVignette;
-            set {
-                paramVignette = value;
-            }
+            set => paramVignette = value;
         }
 
-        internal List<string> GetLUTNames() {
+        internal List<string> GetLUTNames()
+        {
             List<string> luts = new List<string> { };
             return luts;
         }

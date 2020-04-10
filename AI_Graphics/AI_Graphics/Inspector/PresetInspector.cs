@@ -1,7 +1,6 @@
 ﻿
 using System;
 using UnityEngine;
-using static AIGraphics.Inspector.Util;
 
 namespace AIGraphics.Inspector
 {
@@ -12,9 +11,7 @@ namespace AIGraphics.Inspector
         private static int _presetIndexOld = -1;
         private static int _presetIndexCurrent = -1;
 
-        private static bool ShouldUpdate {
-            get => _presetIndexCurrent != -1 && _presetIndexCurrent != _presetIndexOld;
-        }
+        private static bool ShouldUpdate => _presetIndexCurrent != -1 && _presetIndexCurrent != _presetIndexOld;
 
         private static Vector2 presetScrollView;
         internal static void Draw(PresetManager presetManager)
@@ -31,7 +28,8 @@ namespace AIGraphics.Inspector
                 presetScrollView = GUILayout.BeginScrollView(presetScrollView);
                 _presetIndexCurrent = Array.IndexOf(presetManager.PresetNames, presetManager.CurrentPreset);
                 _presetIndexCurrent = GUILayout.SelectionGrid(_presetIndexCurrent, presetManager.PresetNames, Inspector.Width / 150);
-                if (ShouldUpdate) {
+                if (ShouldUpdate)
+                {
                     presetManager.CurrentPreset = presetManager.PresetNames[_presetIndexCurrent];
                     _presetIndexOld = _presetIndexCurrent; // to prevent continous update;
                 }
@@ -43,15 +41,19 @@ namespace AIGraphics.Inspector
             _nameToSave = GUILayout.TextField(_nameToSave);
             bool isValidFileName = (0 != _nameToSave.Length && 256 >= _nameToSave.Length);
             bool isCue = (_nameCue == _nameToSave);
-            if (GUILayout.Button("Save", GUILayout.ExpandWidth(false)) && isValidFileName && !isCue) {
+            if (GUILayout.Button("Save", GUILayout.ExpandWidth(false)) && isValidFileName && !isCue)
+            {
                 presetManager.Save(_nameToSave);
                 presetManager.CurrentPreset = _nameToSave;
                 _presetIndexOld = Array.IndexOf(presetManager.PresetNames, presetManager.CurrentPreset);
             }
             GUILayout.EndHorizontal();
             GUILayout.Space(1);
-            if (!isCue && !isValidFileName )
+            if (!isCue && !isValidFileName)
+            {
                 GUILayout.Label("Please specify a valid file name.");
+            }
+
             GUILayout.EndVertical();
         }
     }

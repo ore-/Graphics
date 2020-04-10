@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace AIGraphics {
+namespace AIGraphics
+{
 
-    internal class PostProcessingManager : MonoBehaviour {
+    internal class PostProcessingManager : MonoBehaviour
+    {
         internal static Setting.TextureSetting lensDirtTexture = new Setting.TextureSetting();
         // hard coding ftw
         internal static Setting.InternalTextureSetting lutTexture = new Setting.InternalTextureSetting(
@@ -18,9 +20,11 @@ namespace AIGraphics {
             }
         );
 
-        internal string LensDirtTexturesPath {
+        internal string LensDirtTexturesPath
+        {
             get => lensDirtTexture.lookupPath;
-            set {
+            set
+            {
                 lensDirtTexture.lookupPath = value;
                 lensDirtTexture.LoadTextures(this);
             }

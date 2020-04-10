@@ -1,6 +1,8 @@
-﻿namespace AIGraphics.Settings {
+﻿namespace AIGraphics.Settings
+{
 
-    internal class LightSettings {
+    internal class LightSettings
+    {
         internal static float IntensityMin = 0f;
         internal static float IntensityMax = 8f;
         internal static float IntensityDefault = 1f;

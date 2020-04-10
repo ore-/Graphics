@@ -1,12 +1,12 @@
-﻿using UnityEngine;
-using UnityEngine.Rendering;
+﻿using AIGraphics.Settings;
 using MessagePack;
-using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-using AIGraphics.Settings;
-using static AIGraphics.Settings.CameraSettings;
 using System.IO;
+using System.Linq;
+using UnityEngine;
+using UnityEngine.Rendering;
+using static AIGraphics.Settings.CameraSettings;
 
 namespace AIGraphics
 {
@@ -29,9 +29,9 @@ namespace AIGraphics
 
     public class SkyboxManager : MonoBehaviour
     {
-        static readonly int _Exposure = Shader.PropertyToID("_Exposure");
-        static readonly int _Rotation = Shader.PropertyToID("_Rotation");
-        static readonly int _Tint = Shader.PropertyToID("_Tint");
+        private static readonly int _Exposure = Shader.PropertyToID("_Exposure");
+        private static readonly int _Rotation = Shader.PropertyToID("_Rotation");
+        private static readonly int _Tint = Shader.PropertyToID("_Tint");
 
         public SkyboxParams skyboxParams = new SkyboxParams(1f, 0f, new Color32(128, 128, 128, 128), "");
         public Material Skyboxbg { get; set; }
@@ -46,15 +46,15 @@ namespace AIGraphics
 
         private string cubemapPath;
         private FolderAssist CubemapFolder;
-        
+
         private ReflectionProbe _probe;
         private string isLoadingCubeMap = null; // to track currently used assetbundle path.
 
-        internal ReflectionProbe DefaultProbe{ get => _probe ? DefaultReflectionProbe() : _probe; }
+        internal ReflectionProbe DefaultProbe => _probe ? DefaultReflectionProbe() : _probe;
 
         internal AIGraphics Parent { get; set; }
-        internal Camera Camera { get => Parent.CameraSettings.MainCamera; }
-        
+        internal Camera Camera => Parent.CameraSettings.MainCamera;
+
         public bool Update { get; set; }
 
         internal BepInEx.Logging.ManualLogSource Logger { get; set; }
@@ -67,7 +67,7 @@ namespace AIGraphics
             Skybox sky = Camera.GetOrAddComponent<Skybox>();
             sky.enabled = true;
             sky.material = Skyboxbg;
-            Parent.CameraSettings.ClearFlag = AICameraClearFlags.Skybox;            
+            Parent.CameraSettings.ClearFlag = AICameraClearFlags.Skybox;
         }
         public void ApplySkyboxParams()
         {
@@ -85,14 +85,16 @@ namespace AIGraphics
             //MapSkybox = RenderSettings.skybox;
             MapSkybox = Parent.LightingSettings.SkyboxSetting;
         }
-        public void LoadSkyboxParams() {
+        public void LoadSkyboxParams()
+        {
             CurrentCubeMap = skyboxParams.selectedCubeMap;
             Exposure = skyboxParams.exposure;
             Tint = skyboxParams.tint;
             Rotation = skyboxParams.rotation;
         }
 
-        public void SaveSkyboxParams() {
+        public void SaveSkyboxParams()
+        {
             skyboxParams.exposure = Exposure;
             skyboxParams.tint = Tint;
             skyboxParams.rotation = Rotation;
@@ -104,7 +106,10 @@ namespace AIGraphics
             Parent.LightingSettings.SkyboxSetting = MapSkybox;
             Skybox sky = camera.GetComponent<Skybox>();
             if (null != sky)
+            {
                 Object.Destroy(sky);
+            }
+
             if (null == MapSkybox)
             {
                 //Parent.LightingSettings.AmbientModeSetting = LightingSettings.AIAmbientMode.Trilight;
@@ -143,9 +148,13 @@ namespace AIGraphics
             }
         }
 
-        public IEnumerator LoadCubemap(string filePath, Camera camera) {
+        public IEnumerator LoadCubemap(string filePath, Camera camera)
+        {
             if (filePath == "" || !File.Exists(filePath))
+            {
                 yield break;
+            }
+
             yield return new WaitUntil(() => isLoadingCubeMap == null); // Check if preview is loading the bundle.
             AssetBundleCreateRequest assetBundleCreateRequest = AssetBundle.LoadFromFileAsync(filePath);
             yield return assetBundleCreateRequest;
@@ -156,7 +165,11 @@ namespace AIGraphics
             AssetBundleRequest bundleRequestBG = assetBundleCreateRequest.assetBundle.LoadAssetAsync<Material>("skybox-bg");
             yield return bundleRequestBG;
             Skyboxbg = bundleRequestBG.asset as Material;
-            if (Skyboxbg == null) Skyboxbg = Skybox;
+            if (Skyboxbg == null)
+            {
+                Skyboxbg = Skybox;
+            }
+
             cubemapbundle.Unload(false);
             cubemapbundle = null;
             bundleRequestBG = null;
@@ -182,9 +195,13 @@ namespace AIGraphics
                     //switch off cubemapb
                     if (noCubemap == value)
                     {
-                        this.TurnOffCubeMap(Camera);
-                        if (KKAPI.GameMode.Maker == KKAPI.KoikatuAPI.GetCurrentGameMode()) ToggleCharaMakerBG(true);
-                        this.Update = true;
+                        TurnOffCubeMap(Camera);
+                        if (KKAPI.GameMode.Maker == KKAPI.KoikatuAPI.GetCurrentGameMode())
+                        {
+                            ToggleCharaMakerBG(true);
+                        }
+
+                        Update = true;
                     }
                     else
                     {
@@ -192,13 +209,17 @@ namespace AIGraphics
                         if (noCubemap == selectedCubeMap)
                         {
                             //TODO - need to save cubemap from Map when Map changes too!
-                            if (null != Parent.LightingSettings.SkyboxSetting && "skybox" != Parent.LightingSettings.SkyboxSetting.name )//CubeMapNames.IndexOf(RenderSettings.skybox.name))
+                            if (null != Parent.LightingSettings.SkyboxSetting && "skybox" != Parent.LightingSettings.SkyboxSetting.name)//CubeMapNames.IndexOf(RenderSettings.skybox.name))
                             {
                                 //save the skybox in scene/map
-                                this.SaveMapSkyBox();
+                                SaveMapSkyBox();
                             }
                         }
-                        if (KKAPI.GameMode.Maker == KKAPI.KoikatuAPI.GetCurrentGameMode()) ToggleCharaMakerBG(false);
+                        if (KKAPI.GameMode.Maker == KKAPI.KoikatuAPI.GetCurrentGameMode())
+                        {
+                            ToggleCharaMakerBG(false);
+                        }
+
                         StartCoroutine(LoadCubemap(value, Camera));
                     }
                     selectedCubeMap = value;
@@ -207,11 +228,12 @@ namespace AIGraphics
             }
         }
 
-        internal string CubemapPath {
+        internal string CubemapPath
+        {
             get => cubemapPath;
             set
             {
-                cubemapPath = value;                
+                cubemapPath = value;
                 LoadCubeMaps();
             }
         }
@@ -219,12 +241,14 @@ namespace AIGraphics
         private void LoadCubeMaps()
         {
             CubemapFolder = new FolderAssist();
-            CubemapFolder.CreateFolderInfo(CubemapPath, "*.cube", true, true);            
+            CubemapFolder.CreateFolderInfo(CubemapPath, "*.cube", true, true);
             List<string> paths = CubemapFolder.lstFile.Select(file => file.FullPath).ToList<string>();
             CubemapPaths = new List<string>();
             CubemapPreviewTextures = new List<Texture2D>();
             foreach (string path in paths)
+            {
                 StartCoroutine(LoadCubeMapPreview(path));
+            }
         }
 
         public IEnumerator LoadCubeMapPreview(string filePath)
@@ -235,8 +259,11 @@ namespace AIGraphics
             AssetBundle cubemapbundle = assetBundleCreateRequest?.assetBundle;
             AssetBundleRequest bundleRequest = assetBundleCreateRequest?.assetBundle?.LoadAssetAsync<Cubemap>("skybox");
             yield return bundleRequest;
-            if(null == bundleRequest || null == bundleRequest.asset)
+            if (null == bundleRequest || null == bundleRequest.asset)
+            {
                 yield break;
+            }
+
             Cubemap cubemap = bundleRequest.asset as Cubemap;
             Texture2D texture = new Texture2D(cubemap.width, cubemap.height);
             Color[] CubeMapColors = cubemap.GetPixels(CubemapFace.PositiveX);
@@ -304,15 +331,20 @@ namespace AIGraphics
                 }
             }
         }
-        
+
         internal static void ToggleCharaMakerBG(bool active)
         {
             CharaCustom.CharaCustom characustom = GameObject.FindObjectOfType<CharaCustom.CharaCustom>();
             if (null == characustom)
+            {
                 return;
+            }
+
             Transform bgt = characustom.GetComponentsInChildren<Transform>(true).FirstOrDefault(t => t.name == "p_ai_mi_createBG00_00");
             if (null != bgt)
+            {
                 bgt.gameObject.SetActive(active);
+            }
         }
 
         internal void Start()

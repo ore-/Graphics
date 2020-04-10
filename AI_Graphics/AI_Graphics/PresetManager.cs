@@ -1,21 +1,16 @@
-﻿using UnityEngine;
-using System.Linq;
-using System.Collections;
+﻿using ExtensibleSaveFormat;
 using System.Collections.Generic;
-using System.IO;
-using ADV.Commands.Object;
-using ADV.Commands.Base;
-using ExtensibleSaveFormat;
+using System.Linq;
 
 namespace AIGraphics
 {
-    internal class PresetManager 
+    internal class PresetManager
     {
-        private string _path;
+        private readonly string _path;
         private string _currentPresetName;
         private FolderAssist _presetFolder;
         private Dictionary<string, string> _presetNameToPath;
-        private AIGraphics _parent;
+        private readonly AIGraphics _parent;
 
         internal PresetManager(string presetPath, AIGraphics parent)
         {
@@ -35,11 +30,11 @@ namespace AIGraphics
         {
             return _presetNameToPath.TryGetValue(presetName, out string presetPath) ? presetPath : "";
         }
-        internal string[] PresetNames { get => _presetNameToPath.Keys.ToArray(); }
+        internal string[] PresetNames => _presetNameToPath.Keys.ToArray();
 
-        internal string CurrentPreset 
-        { 
-            get => _currentPresetName; 
+        internal string CurrentPreset
+        {
+            get => _currentPresetName;
             set
             {
                 Load(value);
@@ -73,7 +68,7 @@ namespace AIGraphics
 
         internal void Load(PluginData data)
         {
-            if (data != null && data.data.TryGetValue("bytes", out var val))
+            if (data != null && data.data.TryGetValue("bytes", out object val))
             {
                 byte[] presetData = (byte[])val;
                 if (!presetData.IsNullOrEmpty())

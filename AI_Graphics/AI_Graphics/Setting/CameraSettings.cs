@@ -3,9 +3,10 @@ using MessagePack;
 using UnityEngine;
 using static KKAPI.Studio.StudioAPI;
 
-namespace AIGraphics.Settings {
+namespace AIGraphics.Settings
+{
     [MessagePackObject(keyAsPropertyName: true)]
-    public class CameraSettings 
+    public class CameraSettings
     {
         private Camera _camera;
         private CameraClearFlags _clearFlags;
@@ -45,17 +46,21 @@ namespace AIGraphics.Settings {
 
         public AICameraClearFlags ClearFlag
         {
-            get => (AICameraClearFlags) MainCamera.clearFlags;
-            set => _clearFlags = MainCamera.clearFlags = (CameraClearFlags) value;
+            get => (AICameraClearFlags)MainCamera.clearFlags;
+            set => _clearFlags = MainCamera.clearFlags = (CameraClearFlags)value;
         }
 
         public AIRenderingPath RenderingPath
         {
-            get => (AIRenderingPath) MainCamera.renderingPath;
+            get => (AIRenderingPath)MainCamera.renderingPath;
             set
             {
-                if (AIRenderingPath.Forward != value) MSAA = false;
-                _renderingPath = MainCamera.renderingPath = (RenderingPath) value;
+                if (AIRenderingPath.Forward != value)
+                {
+                    MSAA = false;
+                }
+
+                _renderingPath = MainCamera.renderingPath = (RenderingPath)value;
             }
         }
 
@@ -78,8 +83,11 @@ namespace AIGraphics.Settings {
             {
                 //MSAA is Forward only
                 if (value && RenderingPath != AIRenderingPath.Forward)
+                {
                     return;
-                _msaa = MainCamera.allowMSAA = value;                
+                }
+
+                _msaa = MainCamera.allowMSAA = value;
             }
         }
 
@@ -93,7 +101,7 @@ namespace AIGraphics.Settings {
         {
             get
             {
-//                if (default(float) == _fov)
+                //                if (default(float) == _fov)
                 {
                     if (InsideStudio)
                     {
@@ -105,7 +113,7 @@ namespace AIGraphics.Settings {
                         return MainCamera.fieldOfView;
                     }
                 }
-//                return _fov;
+                //                return _fov;
             }
             set
             {
@@ -128,9 +136,9 @@ namespace AIGraphics.Settings {
 
         public float NearClipPlane
         {
-            get 
+            get
             {
-  //              if (default(float) == _nearClipPlane)
+                //              if (default(float) == _nearClipPlane)
                 {
                     if (InsideStudio)
                     {
@@ -142,7 +150,7 @@ namespace AIGraphics.Settings {
                         return MainCamera.nearClipPlane;
                     }
                 }
-//                return _nearClipPlane;
+                //                return _nearClipPlane;
             }
             set
             {
@@ -156,7 +164,7 @@ namespace AIGraphics.Settings {
 
                     CameraState cameraState = control.GetFieldValue<CameraState>("cameraState");
                     cameraState.Lens = lensSettings;
-                    control.SetFieldValue<CameraState>("cameraState", cameraState);                    
+                    control.SetFieldValue<CameraState>("cameraState", cameraState);
                 }
                 else
                 {
@@ -168,9 +176,9 @@ namespace AIGraphics.Settings {
 
         public float FarClipPlane
         {
-            get 
+            get
             {
-//                if (default(float) == _farClipPlane)
+                //                if (default(float) == _farClipPlane)
                 {
                     if (InsideStudio)
                     {
@@ -182,7 +190,7 @@ namespace AIGraphics.Settings {
                         return MainCamera.farClipPlane;
                     }
                 }
-//                return _farClipPlane;
+                //                return _farClipPlane;
             }
             set
             {
@@ -211,7 +219,7 @@ namespace AIGraphics.Settings {
             get
             {
                 if (null == _camera && 0 < Camera.allCameras.Length)
-                {   
+                {
                     //foreach (var cam in Camera.allCameras)
                     _camera = Camera.main;
                 }

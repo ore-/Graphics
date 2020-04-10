@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using static AIGraphics.Inspector.Util;
 
-namespace AIGraphics.Inspector {
+namespace AIGraphics.Inspector
+{
     internal class Inspector
     {
         private static Rect _windowRect;
-        private int _windowID = 0;
+        private readonly int _windowID = 0;
         private enum Tab { Lighting, Lights, PostProcessing, Presets, Settings };
         private Tab SelectedTab { get; set; }
         internal AIGraphics Parent { get; set; }
@@ -13,7 +14,7 @@ namespace AIGraphics.Inspector {
         internal Inspector(AIGraphics parent)
         {
             Parent = parent;
-            _windowRect = new Rect(StartOffsetX, StartOffsetY, Width, Height);            
+            _windowRect = new Rect(StartOffsetX, StartOffsetY, Width, Height);
         }
 
         internal static int Width
@@ -22,7 +23,7 @@ namespace AIGraphics.Inspector {
             set
             {
                 AIGraphics.ConfigWindowWidth.Value = value;
-                _windowRect.width = (float) value;
+                _windowRect.width = value;
             }
         }
 
@@ -32,7 +33,7 @@ namespace AIGraphics.Inspector {
             set
             {
                 AIGraphics.ConfigWindowHeight.Value = value;
-                _windowRect.height = (float)value;
+                _windowRect.height = value;
             }
         }
 
@@ -49,7 +50,7 @@ namespace AIGraphics.Inspector {
         }
 
         internal void DrawWindow()
-        {   
+        {
             _windowRect = GUILayout.Window(_windowID, _windowRect, WindowFunction, "");
             EatInputInRect(_windowRect);
             StartOffsetX = (int)_windowRect.x;
@@ -92,7 +93,9 @@ namespace AIGraphics.Inspector {
         private static void EatInputInRect(Rect eatRect)
         {
             if (eatRect.Contains(new Vector2(Input.mousePosition.x, Screen.height - Input.mousePosition.y)))
+            {
                 Input.ResetInputAxes();
+            }
         }
     }
 }

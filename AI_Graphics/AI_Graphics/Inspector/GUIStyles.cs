@@ -1,58 +1,54 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using KKAPI.Utilities;
+using System;
 using UnityEngine;
 using Object = UnityEngine.Object;
-using KKAPI.Utilities;
 
 namespace AIGraphics.Inspector
 {
     internal static class GUIStyles
     {
-        private static Texture2D _boxNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _winNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _winOnNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _btnNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _btnOnNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _btnActiveBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _btnOnActiveBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _btnFocusedBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _btnOnFocusedBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _sliderHNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _sliderVNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _sliderThumbNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _sliderThumbActiveBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _sliderThumbFocusedBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _scrollHNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _scrollHLNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _scrollHLActiveBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _scrollHRNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _scrollHRActiveBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _scrollVNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _scrollVUNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _scrollVUActiveBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _scrollVDNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _scrollVDActiveBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _scrollHTNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _scrollVTNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _toggleNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _toggleOnNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _toggleActiveBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _toggleOnActiveBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _toggleFocusedBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _toggleOnFocusedBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _textNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _textFocusedBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _toolbarbtnNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _toolbarbtnOnNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _toolbarbtnActiveBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-        private static Texture2D _toolbarbtnOnActiveBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _boxNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _winNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _winOnNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _btnNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _btnOnNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _btnActiveBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _btnOnActiveBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _btnFocusedBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _btnOnFocusedBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _sliderHNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _sliderVNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _sliderThumbNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _sliderThumbActiveBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _sliderThumbFocusedBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _scrollHNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _scrollHLNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _scrollHLActiveBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _scrollHRNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _scrollHRActiveBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _scrollVNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _scrollVUNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _scrollVUActiveBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _scrollVDNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _scrollVDActiveBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _scrollHTNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _scrollVTNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _toggleNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _toggleOnNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _toggleActiveBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _toggleOnActiveBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _toggleFocusedBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _toggleOnFocusedBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _textNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _textFocusedBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _toolbarbtnNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _toolbarbtnOnNormalBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _toolbarbtnActiveBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+        private static readonly Texture2D _toolbarbtnOnActiveBackground = new Texture2D(1, 1, TextureFormat.ARGB32, false);
 
         private static GUISkin _skin;
         private static int fontSize = 12;
-        private static string[] fonts = new string[] { "Lucida Grande", "Segoe UI", "Terminal" };
+        private static readonly string[] fonts = new string[] { "Lucida Grande", "Segoe UI", "Terminal" };
 
         public static GUIStyle toolbarbutton;
         public static GUIStyle boldlabel;
@@ -88,7 +84,10 @@ namespace AIGraphics.Inspector
                 fontSize = Math.Max(Math.Min(17, value), 12);
                 labelWidth = fontSize * 15f;
                 Font font = Font.CreateDynamicFontFromOSFont(fonts, fontSize);
-                if (_skin != null) _skin.font = font;
+                if (_skin != null)
+                {
+                    _skin.font = font;
+                }
             }
         }
 
@@ -102,13 +101,13 @@ namespace AIGraphics.Inspector
 
         private static GUISkin CreateSkin()
         {
-            var newSkin = Object.Instantiate(GUI.skin);
+            GUISkin newSkin = Object.Instantiate(GUI.skin);
             Object.DontDestroyOnLoad(newSkin);
             Font font = Font.CreateDynamicFontFromOSFont(fonts, fontSize);
             newSkin.font = font;
 
             // Load the custom skin from resources
-            var texData = ResourceUtils.GetEmbeddedResource("box.png");
+            byte[] texData = ResourceUtils.GetEmbeddedResource("box.png");
             LoadImage(_boxNormalBackground, texData);
             Object.DontDestroyOnLoad(_boxNormalBackground);
             newSkin.box.normal.background = _boxNormalBackground;
@@ -523,7 +522,7 @@ namespace AIGraphics.Inspector
             Object.DontDestroyOnLoad(_scrollVUActiveBackground);
             newSkin.verticalScrollbarUpButton.normal.background = _scrollVUNormalBackground;
             newSkin.verticalScrollbarUpButton.normal.textColor = Color.black;
-            newSkin.verticalScrollbarUpButton.active.background = _scrollVUActiveBackground;            
+            newSkin.verticalScrollbarUpButton.active.background = _scrollVUActiveBackground;
             newSkin.verticalScrollbarUpButton.border = new RectOffset(0, 0, 0, 0);
             newSkin.verticalScrollbarUpButton.margin = new RectOffset(0, 0, 0, 0);
             newSkin.verticalScrollbarUpButton.padding = new RectOffset(0, 0, 0, 0);
@@ -569,8 +568,10 @@ namespace AIGraphics.Inspector
             newSkin.verticalScrollbarDownButton.stretchWidth = true;
             newSkin.verticalScrollbarDownButton.stretchHeight = false;
 
-            boldlabel = new GUIStyle();
-            boldlabel.name = "boldlabel";
+            boldlabel = new GUIStyle
+            {
+                name = "boldlabel"
+            };
             boldlabel.normal.textColor = newSkin.label.normal.textColor;
             boldlabel.border = newSkin.label.border;
             boldlabel.margin = new RectOffset(4, 4, 6, 4); //newSkin.label.margin;
@@ -590,8 +591,10 @@ namespace AIGraphics.Inspector
             boldlabel.stretchWidth = true;
             boldlabel.stretchHeight = false;
 
-            toolbarbutton = new GUIStyle();
-            toolbarbutton.name = "toolbarbutton";
+            toolbarbutton = new GUIStyle
+            {
+                name = "toolbarbutton"
+            };
             texData = ResourceUtils.GetEmbeddedResource("toolbar button.png");
             LoadImage(_toolbarbtnNormalBackground, texData);
             Object.DontDestroyOnLoad(_toolbarbtnNormalBackground);

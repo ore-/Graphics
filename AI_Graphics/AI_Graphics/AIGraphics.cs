@@ -11,7 +11,7 @@ using UnityEngine.SceneManagement;
 
 namespace AIGraphics
 {
-    [BepInIncompatibility("dhhai4mod")]    
+    [BepInIncompatibility("dhhai4mod")]
     [BepInPlugin(GUID, PluginName, Version)]
     [BepInDependency(KoikatuAPI.GUID, KoikatuAPI.VersionConst)]
     public class AIGraphics : BaseUnityPlugin
@@ -49,13 +49,16 @@ namespace AIGraphics
         internal CameraSettings CameraSettings { get; private set; }
         internal LightingSettings LightingSettings { get; private set; }
         internal PostProcessingSettings PostProcessingSettings { get; private set; }
-        
+
         public static AIGraphics Instance { get; private set; }
 
         public AIGraphics()
         {
             if (Instance != null)
+            {
                 throw new InvalidOperationException("Can only create one instance of AIGraphics");
+            }
+
             Instance = this;
 
             ConfigPresetPath = Config.Bind("Config", "Preset Location", Application.dataPath + "/../presets/", new ConfigDescription("Where presets are stored"));
@@ -78,9 +81,13 @@ namespace AIGraphics
             StudioSaveLoadApi.RegisterExtraBehaviour<SceneController>(GUID);
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
-        void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
             if (scene.name == "map_title" && PostProcessingSettings != null)
+            {
                 PostProcessingSettings.ResetVolume();
+            }
         }
 
         private IEnumerator Start()
@@ -105,7 +112,7 @@ namespace AIGraphics
             LightingSettings = new LightingSettings();
             PostProcessingSettings = new PostProcessingSettings(CameraSettings.MainCamera);
 
-            _skyboxManager = Instance.GetOrAddComponent<SkyboxManager>();            
+            _skyboxManager = Instance.GetOrAddComponent<SkyboxManager>();
             _skyboxManager.Parent = this;
             _skyboxManager.CubemapPath = ConfigCubeMapPath.Value;
             _skyboxManager.Logger = Logger;
@@ -122,22 +129,23 @@ namespace AIGraphics
             _lightManager = new LightManager(this);
 
             _presetManager = new PresetManager(ConfigPresetPath.Value, this);
-            
+
             _inspector = new Inspector.Inspector(this);
 
             // It takes some time to fully loaded in studio to save/load stuffs.
-            yield return new WaitUntil(() => {
+            yield return new WaitUntil(() =>
+            {
                 return (KoikatuAPI.GetCurrentGameMode() == GameMode.Studio) ? KKAPI.Studio.StudioAPI.InsideStudio && _skyboxManager != null : true;
             });
 
             _isLoaded = true;
         }
 
-        internal SkyboxManager SkyboxManager { get => _skyboxManager; }
-        internal PostProcessingManager PostProcessingManager { get => _postProcessingManager; }
-        internal LightManager LightManager { get => _lightManager; }
-        internal FocusPuller FocusPuller { get => _focusPuller; }
-        internal PresetManager PresetManager { get => _presetManager; }
+        internal SkyboxManager SkyboxManager => _skyboxManager;
+        internal PostProcessingManager PostProcessingManager => _postProcessingManager;
+        internal LightManager LightManager => _lightManager;
+        internal FocusPuller FocusPuller => _focusPuller;
+        internal PresetManager PresetManager => _presetManager;
 
         internal void OnGUI()
         {
@@ -146,7 +154,7 @@ namespace AIGraphics
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
 
-                var originalSkin = GUI.skin;
+                GUISkin originalSkin = GUI.skin;
                 GUI.skin = GUIStyles.Skin;
                 _inspector.DrawWindow();
                 GUI.skin = originalSkin;
@@ -155,10 +163,15 @@ namespace AIGraphics
 
         internal void Update()
         {
-            if (!_isLoaded) return;
+            if (!_isLoaded)
+            {
+                return;
+            }
 
-            if ( Input.GetKeyDown(ShowHotkey))
+            if (Input.GetKeyDown(ShowHotkey))
+            {
                 Show = !Show;
+            }
 
             if (Show)
             {
@@ -195,7 +208,10 @@ namespace AIGraphics
                     }
                     else
                     {
-                        if (KKAPI.KoikatuAPI.GetCurrentGameMode() == KKAPI.GameMode.MainGame) Time.timeScale = _previousTimeScale;
+                        if (KKAPI.KoikatuAPI.GetCurrentGameMode() == KKAPI.GameMode.MainGame)
+                        {
+                            Time.timeScale = _previousTimeScale;
+                        }
 
                         if (!_previousCursorVisible || _previousCursorLockState != CursorLockMode.None)
                         {
