@@ -320,17 +320,6 @@ namespace AIGraphics.Settings
             }
         }
 
-        public string CurrentLUT
-        {
-            get => selectedLUT;
-            set
-            {
-                if (null != value && value != selectedLUT)
-                {
-                    selectedLUT = value;
-                }
-            }
-        }
         public AmbientOcclusionParams AmbientOcclusion {
             get => paramAmbientOcclusion;
             set => paramAmbientOcclusion = value;
