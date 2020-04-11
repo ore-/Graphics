@@ -20,6 +20,7 @@ namespace AIGraphics.Settings
         internal GrainLayerParams paramGrainLayer = new GrainLayerParams();
         internal ScreenSpaceReflectionParams paramScreenSpaceReflection = new ScreenSpaceReflectionParams();
         internal VignetteParams paramVignette = new VignetteParams();
+        internal AmplifyOcclusionParams paramAmplifyOcclusion = new AmplifyOcclusionParams();
         //internal AmplifyOcclusion paramAmplifyOcclusion; // not implemented yet
 
         public enum Antialiasing
@@ -41,6 +42,17 @@ namespace AIGraphics.Settings
         internal ScreenSpaceReflections screenSpaceReflectionsLayer;
         internal Vignette vignetteLayer;
         internal Camera initialCamera;
+        internal AmplifyOcclusionEffect amplifyOcclusionComponent;
+        [IgnoreMember]
+        public AmplifyOcclusionEffect AmplifyOcclusionComponent
+        {
+            get
+            {
+                if (initialCamera == null && Camera.main != null)
+                    amplifyOcclusionComponent = Camera.main.GetComponent<AmplifyOcclusionEffect>();
+                return amplifyOcclusionComponent;
+            }
+        }
 
         public PostProcessingSettings()
         {
@@ -92,9 +104,11 @@ namespace AIGraphics.Settings
             _volume.profile = SettingValues.profile;
             _volume.gameObject.layer = LayerMask.NameToLayer("PostProcessing");
 
+            if (initialCamera != null)
+                amplifyOcclusionComponent = initialCamera.GetComponent<AmplifyOcclusionEffect>();
+
             return _volume;
         }
-
         internal void InitializeProfiles()
         {
             if (!SettingValues.profile.TryGetSettings(out chromaticAberrationLayer))
@@ -200,6 +214,11 @@ namespace AIGraphics.Settings
             {
                 paramVignette.Save(vignetteLayer);
             }
+
+            if (AmplifyOcclusionComponent != null)
+            {
+                paramAmplifyOcclusion.Save(AmplifyOcclusionComponent);
+            }
         }
 
         public void LoadParameters()
@@ -247,6 +266,11 @@ namespace AIGraphics.Settings
             if (Volume.profile.TryGetSettings(out Vignette vignetteLayer))
             {
                 paramVignette.Load(vignetteLayer);
+            }
+
+            if (AmplifyOcclusionComponent != null)
+            {
+                paramAmplifyOcclusion.Load(AmplifyOcclusionComponent);
             }
         }
 
@@ -327,7 +351,6 @@ namespace AIGraphics.Settings
             get => paramBloom;
             set => paramBloom = value;
         }
-
         public ChromaticAberrationParams ChromaticAberration {
             get => paramChromaticAberration;
             set => paramChromaticAberration = value;
@@ -351,6 +374,11 @@ namespace AIGraphics.Settings
         public VignetteParams Vignette {
             get => paramVignette;
             set => paramVignette = value;
+        }
+        public AmplifyOcclusionParams AmplifyOcclusion
+        {
+            get => paramAmplifyOcclusion;
+            set => paramAmplifyOcclusion = value;
         }
     }
 }

@@ -105,6 +105,59 @@ namespace AIGraphics.Inspector
                 GUILayout.EndVertical();
             }
 
+            if (settings.AmplifyOcclusionComponent != null)
+            {
+                GUILayout.Space(1);
+                GUILayout.BeginVertical(GUIStyles.Skin.box);
+
+                settings.AmplifyOcclusionComponent.enabled = Toggle("Amplify Ambient Occlusion", settings.AmplifyOcclusionComponent.enabled, true);
+                if (settings.AmplifyOcclusionComponent.enabled)
+                {
+                    settings.AmplifyOcclusionComponent.CacheAware = Toggle("Cache Aware", settings.AmplifyOcclusionComponent.CacheAware);
+                    settings.AmplifyOcclusionComponent.Downsample = Toggle("Downsample", settings.AmplifyOcclusionComponent.Downsample);
+
+                    Selection("Apply Method", settings.AmplifyOcclusionComponent.ApplyMethod, mode => settings.AmplifyOcclusionComponent.ApplyMethod = mode);
+                    Selection("PerPixel Normals", settings.AmplifyOcclusionComponent.PerPixelNormals, mode => settings.AmplifyOcclusionComponent.PerPixelNormals = mode);
+                    Selection("Sample Count", settings.AmplifyOcclusionComponent.SampleCount, mode => settings.AmplifyOcclusionComponent.SampleCount = mode);
+
+                    Slider("Bias", settings.AmplifyOcclusionComponent.Bias, 0f, 0.99f, "N2", bias => settings.AmplifyOcclusionComponent.Bias = bias);
+                    Slider("Intensity", settings.AmplifyOcclusionComponent.Intensity, 0f, 4f, "N2", intensity => settings.AmplifyOcclusionComponent.Intensity = intensity);
+                    Slider("Power Exponent", settings.AmplifyOcclusionComponent.PowerExponent, 0f, 16f, "N2", powerExponent => settings.AmplifyOcclusionComponent.PowerExponent = powerExponent);
+                    Slider("Radius", settings.AmplifyOcclusionComponent.Radius, 0f, 32f, "N2", radius => settings.AmplifyOcclusionComponent.Radius = radius);
+                    Slider("Thickness", settings.AmplifyOcclusionComponent.Thickness, 0f, 1f, "N2", thickness => settings.AmplifyOcclusionComponent.Thickness = thickness);
+                    SliderColor("Tint", settings.AmplifyOcclusionComponent.Tint, colour => settings.AmplifyOcclusionComponent.Tint = colour);
+
+                    settings.AmplifyOcclusionComponent.BlurEnabled = Toggle("Blur Enabled", settings.AmplifyOcclusionComponent.BlurEnabled);
+                    if (settings.AmplifyOcclusionComponent.BlurEnabled)
+                    {
+                        Slider("Blur Sharpness", settings.AmplifyOcclusionComponent.BlurSharpness, 0f, 20f, "N2", blurSharpness => settings.AmplifyOcclusionComponent.BlurSharpness = blurSharpness);
+                        Slider("Blur Passes", settings.AmplifyOcclusionComponent.BlurPasses, 1, 4, blurPasses => settings.AmplifyOcclusionComponent.BlurPasses = blurPasses);
+                        Slider("Blur Radius", settings.AmplifyOcclusionComponent.BlurRadius, 1, 4, blurRadius => settings.AmplifyOcclusionComponent.BlurRadius = blurRadius);
+                    }
+
+                    settings.AmplifyOcclusionComponent.FilterEnabled = Toggle("Filter Enabled", settings.AmplifyOcclusionComponent.FilterEnabled);
+                    if (settings.amplifyOcclusionComponent.FilterEnabled)
+                    {
+                        Slider("Filter Blending", settings.AmplifyOcclusionComponent.FilterBlending, 0f, 1f, "N2", filterBlending => settings.AmplifyOcclusionComponent.FilterBlending = filterBlending);
+                        Slider("Filter Response", settings.AmplifyOcclusionComponent.FilterResponse, 0f, 1f, "N2", filterResponse => settings.AmplifyOcclusionComponent.FilterResponse = filterResponse);
+                    }
+
+                    settings.AmplifyOcclusionComponent.FadeEnabled = Toggle("Fade Enabled", settings.AmplifyOcclusionComponent.FadeEnabled);
+                    if (settings.AmplifyOcclusionComponent.FadeEnabled)
+                    {
+                        Slider("Fade Length", settings.AmplifyOcclusionComponent.FadeLength, 0f, 100f, "N2", fadeLength => settings.AmplifyOcclusionComponent.FadeLength = fadeLength);
+                        Slider("Fade Start", settings.AmplifyOcclusionComponent.FadeStart, 0f, 100f, "N2", fadeStart => settings.AmplifyOcclusionComponent.FadeStart = fadeStart);
+                        Slider("Fade To Intensity", settings.AmplifyOcclusionComponent.FadeToIntensity, 0f, 1f, "N2", fadeToIntensity => settings.AmplifyOcclusionComponent.FadeToIntensity = fadeToIntensity);
+                        Slider("Fade To Power Exponent", settings.AmplifyOcclusionComponent.FadeToPowerExponent, 0f, 16f, "N2", fadeToPowerExponent => settings.AmplifyOcclusionComponent.FadeToPowerExponent = fadeToPowerExponent);
+                        Slider("Fade To Radius", settings.AmplifyOcclusionComponent.FadeToRadius, 0f, 32f, "N2", fadeToRadius => settings.AmplifyOcclusionComponent.FadeToRadius = fadeToRadius);
+                        Slider("Fade To Thickness", settings.AmplifyOcclusionComponent.FadeToThickness, 0f, 1f, "N2", fadeToThickness => settings.AmplifyOcclusionComponent.FadeToThickness = fadeToThickness);
+                        SliderColor("Fade To Tint", settings.AmplifyOcclusionComponent.FadeToTint, colour => settings.AmplifyOcclusionComponent.FadeToTint = colour);
+                    }
+                }
+
+                GUILayout.EndVertical();
+            }
+
             if (settings.autoExposureLayer != null)
             {
                 GUILayout.Space(1);
