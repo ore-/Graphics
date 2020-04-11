@@ -11,6 +11,8 @@ namespace AIGraphics.Textures
 
         internal override IEnumerator LoadPreview(string path)
         {
+            if (!File.Exists(path)) yield break;
+
             byte[] textureByte = File.ReadAllBytes(path);
             yield return textureByte;
             if (null == textureByte)
@@ -30,6 +32,8 @@ namespace AIGraphics.Textures
         }
         internal override IEnumerator LoadTexture(string path, Action<Texture> onChanged = null)
         {
+            if (!File.Exists(path)) yield break;
+
             byte[] textureByte = File.ReadAllBytes(path);
             yield return textureByte;
             if (null == textureByte)
