@@ -288,13 +288,13 @@ namespace AIGraphics.Inspector
             if (bold)
             {
                 GUILayout.Label(label, GUIStyles.boldlabel, GUILayout.ExpandWidth(false));
+                GUILayout.Label("", GUILayout.Width(GUIStyles.labelWidth - GUIStyles.boldlabel.CalcSize(new GUIContent(label)).x));
             }
             else
             {
                 GUILayout.Label(label, GUILayout.ExpandWidth(false));
+                GUILayout.Label("", GUILayout.Width(GUIStyles.labelWidth - GUI.skin.label.CalcSize(new GUIContent(label)).x));
             }
-
-            GUILayout.Label("", GUILayout.Width(GUIStyles.labelWidth - GUI.skin.label.CalcSize(new GUIContent(label)).x));
             toggle = GUILayout.Toggle(toggle, "");
             GUILayout.EndHorizontal();
             return toggle;

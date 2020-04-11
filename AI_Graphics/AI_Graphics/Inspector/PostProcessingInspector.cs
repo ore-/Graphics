@@ -214,14 +214,12 @@ namespace AIGraphics.Inspector
                     SliderColor("Colour", settings.bloomLayer.color.value, colour => { settings.bloomLayer.color.value = colour; }, settings.bloomLayer.color.overrideState,
                         settings.bloomLayer.color.overrideState, overrideState => settings.bloomLayer.color.overrideState = overrideState);
                     settings.bloomLayer.fastMode.value = Toggle("Fast Mode", settings.bloomLayer.fastMode.value);
-
-                    PostProcessingManager.lensDirtTexture.index = SelectionTexture("Lens Dirt", PostProcessingManager.lensDirtTexture.index, PostProcessingManager.lensDirtTexture.TexturePreviews.ToArray(), Inspector.Width / 100,
+                    int lensDirtIndex = SelectionTexture("Lens Dirt", postprocessingManager.CurrentLensDirtTextureIndex, postprocessingManager.LensDirtPreviews, Inspector.Width / 100,
                         settings.bloomLayer.dirtTexture.overrideState, overrideState => settings.bloomLayer.dirtTexture.overrideState = overrideState, GUIStyles.Skin.box);
-                    if (-1 != PostProcessingManager.lensDirtTexture.index)
+                    if (-1 != lensDirtIndex && lensDirtIndex != postprocessingManager.CurrentLensDirtTextureIndex)
                     {
-                        settings.bloomLayer.dirtTexture.value = PostProcessingManager.lensDirtTexture.Texture;
+                        postprocessingManager.LoadLensDirtTexture(lensDirtIndex, dirtTexture => settings.bloomLayer.dirtTexture.value = dirtTexture);
                     }
-
                     settings.bloomLayer.dirtIntensity.value = Text("Dirt Intensity", settings.bloomLayer.dirtIntensity.value, "N2",
                         settings.bloomLayer.dirtIntensity.overrideState, overrideState => settings.bloomLayer.dirtIntensity.overrideState = overrideState);
                 }
@@ -250,26 +248,21 @@ namespace AIGraphics.Inspector
                 settings.colorGradingLayer.enabled.value = Toggle("Colour Grading", settings.colorGradingLayer.enabled.value, true);
                 if (settings.colorGradingLayer.enabled.value)
                 {
-                    Slider("Lut Profile", PostProcessingManager.lutTexture.Index, -1, PostProcessingManager.lutTexture.TexturePaths.Count - 1, value =>
+                    Selection("Mode", (PostProcessingSettings.GradingMode)settings.colorGradingLayer.gradingMode.value, mode => settings.colorGradingLayer.gradingMode.value = (UnityEngine.Rendering.PostProcessing.GradingMode)mode);
+                    if (GradingMode.External != settings.colorGradingLayer.gradingMode.value)
                     {
-                        PostProcessingManager.lutTexture.Index = value;
-                        if (PostProcessingManager.lutTexture.TryGetTexture(out Texture2D lutTexture) & lutTexture != null)
+                        if (GradingMode.LowDefinitionRange == settings.colorGradingLayer.gradingMode.value)
                         {
-                            settings.colorGradingLayer.ldrLut.value = lutTexture;
+                            Selection("LUT", postprocessingManager.CurrentLUTName, postprocessingManager.LUTNames,
+                                lut => { if (lut != postprocessingManager.CurrentLUTName) { settings.colorGradingLayer.ldrLut.value = postprocessingManager.LoadLUT(lut); } }, Inspector.Width / 150,
+                                settings.colorGradingLayer.ldrLut.overrideState, overrideState => settings.colorGradingLayer.ldrLut.overrideState = overrideState);
+                            Slider("LUT Blend", settings.colorGradingLayer.ldrLutContribution.value, 0, 1, "N3", ldrLutContribution => settings.colorGradingLayer.ldrLutContribution.value = ldrLutContribution,
+                                settings.colorGradingLayer.ldrLutContribution.overrideState, overrideState => settings.colorGradingLayer.ldrLutContribution.overrideState = overrideState);
                         }
                         else
                         {
-                            settings.colorGradingLayer.ldrLut.value = null;
+                            Selection("Tonemapping", settings.colorGradingLayer.tonemapper.value, mode => settings.colorGradingLayer.tonemapper.value = mode);
                         }
-                    }, settings.colorGradingLayer.ldrLut.overrideState, overrideState => settings.colorGradingLayer.ldrLut.overrideState = overrideState);
-
-                    Slider("Lut Blend", settings.colorGradingLayer.ldrLutContribution.value, 0, 1, "N1", ldrLutContribution => settings.colorGradingLayer.ldrLutContribution.value = ldrLutContribution,
-                        settings.colorGradingLayer.ldrLutContribution.overrideState, overrideState => settings.colorGradingLayer.ldrLutContribution.overrideState = overrideState);
-
-                    Selection("Mode", settings.colorGradingLayer.gradingMode.value, mode => settings.colorGradingLayer.gradingMode.value = mode);
-                    if (GradingMode.External != settings.colorGradingLayer.gradingMode.value)
-                    {
-                        Selection("Tonemapping", settings.colorGradingLayer.tonemapper.value, mode => settings.colorGradingLayer.tonemapper.value = mode);
                         GUILayout.Space(1);
                         GUILayout.Label("White Balance");
                         Slider("Temperature", settings.colorGradingLayer.temperature.value, -100, 100, "N1", temperature => settings.colorGradingLayer.temperature.value = temperature,
@@ -283,11 +276,15 @@ namespace AIGraphics.Inspector
                             settings.colorGradingLayer.postExposure.value = Text("Post-exposure (EV)", settings.colorGradingLayer.postExposure.value, "N2",
                                 settings.colorGradingLayer.postExposure.overrideState, overrideState => settings.colorGradingLayer.postExposure.overrideState = overrideState);
                         }
-
                         Slider("Hue Shift", settings.colorGradingLayer.hueShift.value, -180, 180, "N1", hueShift => settings.colorGradingLayer.hueShift.value = hueShift,
                             settings.colorGradingLayer.hueShift.overrideState, overrideState => settings.colorGradingLayer.hueShift.overrideState = overrideState);
                         Slider("Saturation", settings.colorGradingLayer.saturation.value, -100, 100, "N1", saturation => settings.colorGradingLayer.saturation.value = saturation,
                             settings.colorGradingLayer.saturation.overrideState, overrideState => settings.colorGradingLayer.saturation.overrideState = overrideState);
+                        if (GradingMode.LowDefinitionRange == settings.colorGradingLayer.gradingMode.value)
+                        {
+                            Slider("Brightness", settings.colorGradingLayer.brightness.value, -100, 100, "N1", brightness => settings.colorGradingLayer.brightness.value = brightness,
+                                settings.colorGradingLayer.brightness.overrideState, overrideState => settings.colorGradingLayer.brightness.overrideState = overrideState);
+                        }
                         Slider("Contrast", settings.colorGradingLayer.contrast.value, -100, 100, "N1", contrast => settings.colorGradingLayer.contrast.value = contrast,
                             settings.colorGradingLayer.contrast.overrideState, overrideState => settings.colorGradingLayer.contrast.overrideState = overrideState);
                         SliderColor("Lift", settings.colorGradingLayer.lift.value, colour => settings.colorGradingLayer.lift.value = colour, false,
@@ -322,6 +319,25 @@ namespace AIGraphics.Inspector
                         settings.depthOfFieldLayer.focalLength.overrideState, overrideState => settings.depthOfFieldLayer.focalLength.overrideState = overrideState);
                     Selection("Max Blur Size", settings.depthOfFieldLayer.kernelSize.value, kernelSize => settings.depthOfFieldLayer.kernelSize.value = kernelSize, -1,
                         settings.depthOfFieldLayer.kernelSize.overrideState, overrideState => settings.depthOfFieldLayer.kernelSize.overrideState = overrideState);
+                }
+                GUILayout.EndVertical();
+            }
+
+            if (settings.grainLayer != null)
+            {
+                GUILayout.Space(1);
+                GUILayout.BeginVertical(GUIStyles.Skin.box);
+                settings.grainLayer.active =
+                settings.grainLayer.enabled.value = Toggle("Grain", settings.grainLayer.enabled.value, true);
+                if (settings.grainLayer.enabled.value)
+                {
+                    settings.grainLayer.colored.overrideState = Toggle("Colored", settings.grainLayer.colored.overrideState);
+                    Slider("Intensity", settings.grainLayer.intensity.value, 0f, 20f, "N2", intensity => settings.grainLayer.intensity.value = intensity,
+                        settings.grainLayer.intensity.overrideState, overrideState => settings.grainLayer.intensity.overrideState = overrideState);
+                    Slider("Size", settings.grainLayer.size.value, 0f, 10f, "N0", focalLength => settings.grainLayer.size.value = focalLength,
+                        settings.grainLayer.size.overrideState, overrideState => settings.grainLayer.size.overrideState = overrideState);
+                    Slider("Luminance Contribution", settings.grainLayer.lumContrib.value, 0f, 22f, "N1", lumContrib => settings.grainLayer.lumContrib.value = lumContrib,
+                        settings.grainLayer.lumContrib.overrideState, overrideState => settings.grainLayer.lumContrib.overrideState = overrideState);
                 }
                 GUILayout.EndVertical();
             }
@@ -365,25 +381,6 @@ namespace AIGraphics.Inspector
                     Slider("Roundness", settings.vignetteLayer.roundness.value, 0f, 1f, "N3", vignette => settings.vignetteLayer.roundness.value = vignette,
                         settings.vignetteLayer.roundness.overrideState, overrideState => settings.vignetteLayer.roundness.overrideState = overrideState);
                     settings.vignetteLayer.rounded.value = Toggle("Rounded", settings.vignetteLayer.rounded, settings.vignetteLayer.rounded.overrideState);
-                }
-                GUILayout.EndVertical();
-            }
-
-            if (settings.grainLayer != null)
-            {
-                GUILayout.Space(1);
-                GUILayout.BeginVertical(GUIStyles.Skin.box);
-                settings.grainLayer.active =
-                settings.grainLayer.enabled.value = Toggle("Grain", settings.grainLayer.enabled.value, true);
-                if (settings.grainLayer.enabled.value)
-                {
-                    settings.grainLayer.colored.overrideState = Toggle("Colored", settings.grainLayer.colored.overrideState);
-                    Slider("Intensity", settings.grainLayer.intensity.value, 0f, 20f, "N2", intensity => settings.grainLayer.intensity.value = intensity,
-                        settings.grainLayer.intensity.overrideState, overrideState => settings.grainLayer.intensity.overrideState = overrideState);
-                    Slider("Size", settings.grainLayer.size.value, 0f, 10f, "N0", focalLength => settings.grainLayer.size.value = focalLength,
-                        settings.grainLayer.size.overrideState, overrideState => settings.grainLayer.size.overrideState = overrideState);
-                    Slider("Luminance Contribution", settings.grainLayer.lumContrib.value, 0f, 22f, "N1", lumContrib => settings.grainLayer.lumContrib.value = lumContrib,
-                        settings.grainLayer.lumContrib.overrideState, overrideState => settings.grainLayer.lumContrib.overrideState = overrideState);
                 }
                 GUILayout.EndVertical();
             }

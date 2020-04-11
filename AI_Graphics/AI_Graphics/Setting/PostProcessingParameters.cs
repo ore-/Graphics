@@ -1,6 +1,4 @@
 ﻿using MessagePack;
-using UnityEngine;
-using static AmplifyOcclusionBase;
 
 // Haha
 // This is funny
@@ -110,99 +108,7 @@ namespace AIGraphics.Settings
     public struct AmplifyOcclusionParams
     {
         public bool enabled;
-        public int ApplyMethod;
-        public float FilterResponse;
-        public float FilterBlending;
-        public bool FilterEnabled;
-        public float BlurSharpness;
-        public int BlurPasses;
-        public int BlurRadius;
-        public bool BlurEnabled;
-        public float FadeToThickness;
-        public float FadeToPowerExponent;
-        public float FadeToRadius;
-        public Color FadeToTint;
-        public float FadeLength;
-        public float FadeToIntensity;
-        public bool FadeEnabled;
-        public bool CacheAware;
-        public bool Downsample;
-        public float Thickness;
-        public float Bias;
-        public float PowerExponent;
-        public float Radius;
-        public Color Tint;
-        public float Intensity;
-        public int PerPixelNormals;
-        public int SampleCount;
-        public float FadeStart;
-
-        public void Save(AmplifyOcclusionEffect component)
-        {
-            if (component != null)
-            {
-                this.enabled = component.enabled;
-                this.ApplyMethod = (int) component.ApplyMethod;
-                this.FilterResponse = component.FilterResponse;
-                this.FilterBlending = component.FilterBlending;
-                this.FilterEnabled = component.FilterEnabled;
-                this.BlurSharpness = component.BlurSharpness;
-                this.BlurPasses = component.BlurPasses;
-                this.BlurRadius = component.BlurRadius;
-                this.BlurEnabled = component.BlurEnabled;
-                this.FadeToThickness = component.FadeToThickness;
-                this.FadeToPowerExponent = component.FadeToPowerExponent;
-                this.FadeToRadius = component.FadeToRadius;
-                this.FadeToTint = component.FadeToTint;
-                this.FadeLength = component.FadeLength;
-                this.FadeToIntensity = component.FadeToIntensity;
-                this.FadeEnabled = component.FadeEnabled;
-                this.CacheAware = component.CacheAware;
-                this.Downsample = component.Downsample;
-                this.Thickness = component.Thickness;
-                this.Bias = component.Bias;
-                this.PowerExponent = component.PowerExponent;
-                this.Radius = component.Radius;
-                this.Tint = component.Tint;
-                this.Intensity = component.Intensity;
-                this.PerPixelNormals = (int) component.PerPixelNormals;
-                this.SampleCount = (int) component.SampleCount;
-                this.FadeStart = component.FadeStart;
-            }
-        }
-        public void Load(AmplifyOcclusionEffect component)
-        {
-            if (component != null)
-            {
-                component.enabled = this.enabled;
-                component.ApplyMethod = (ApplicationMethod) this.ApplyMethod;
-                component.FilterResponse = this.FilterResponse;
-                component.FilterBlending = this.FilterBlending;
-                component.FilterEnabled = this.FilterEnabled;
-                component.BlurSharpness = this.BlurSharpness;
-                component.BlurPasses = this.BlurPasses;
-                component.BlurRadius = this.BlurRadius;
-                component.BlurEnabled = this.BlurEnabled;
-                component.FadeToThickness = this.FadeToThickness;
-                component.FadeToPowerExponent = this.FadeToPowerExponent;
-                component.FadeToRadius = this.FadeToRadius;
-                component.FadeToTint = this.FadeToTint;
-                component.FadeLength = this.FadeLength;
-                component.FadeToIntensity = this.FadeToIntensity;
-                component.FadeEnabled = this.FadeEnabled;
-                component.CacheAware = this.CacheAware;
-                component.Downsample = this.Downsample;
-                component.Thickness = this.Thickness;
-                component.Bias = this.Bias;
-                component.PowerExponent = this.PowerExponent;
-                component.Radius = this.Radius;
-                component.Tint = this.Tint;
-                component.Intensity = this.Intensity;
-                component.PerPixelNormals = (PerPixelNormalSource) this.PerPixelNormals;
-                component.SampleCount = (SampleCountLevel) this.SampleCount;
-                component.FadeStart = this.FadeStart;
-            }
-        }
+        // TODO: figure out how to work with it
     }
 
     [MessagePackObject(keyAsPropertyName: true)]
@@ -235,10 +141,8 @@ namespace AIGraphics.Settings
                 color = new ColorValue(layer.color);
                 fastMode = new BoolValue(layer.fastMode);
                 dirtIntensity = new FloatValue(layer.dirtIntensity);
-                dirtTexture = PostProcessingManager.lensDirtTexture.lookupPath;
+                dirtTexture = AIGraphics.Instance.PostProcessingManager.CurrentLensDirtTexturePath;
                 dirtState = layer.dirtTexture.overrideState;
-                // dirtTexture is getting saved when dirtTexture is being set from PostProcessingSettings.
-                // ref: PostProcessingSettings.cs:167
             }
         }
         public void Load(UnityEngine.Rendering.PostProcessing.Bloom layer)
@@ -256,11 +160,8 @@ namespace AIGraphics.Settings
                 color.Fill(layer.color);
                 fastMode.Fill(layer.fastMode);
                 dirtIntensity.Fill(layer.dirtIntensity);
-
                 layer.dirtTexture.overrideState = dirtState;
-
-                PostProcessingManager.lensDirtTexture.SetIndexByPath(dirtTexture);
-                layer.dirtTexture.value = PostProcessingManager.lensDirtTexture.Texture;
+                AIGraphics.Instance.PostProcessingManager.LoadLensDirtTexture(dirtTexture, dirtTexture => layer.dirtTexture.value = dirtTexture);
             }
         }
     }
@@ -377,9 +278,8 @@ namespace AIGraphics.Settings
                 brightness = new FloatValue(layer.brightness);
                 postExposure = new FloatValue(layer.postExposure);
                 contrast = new FloatValue(layer.contrast);
-                temperature = new FloatValue(layer.temperature);
-                ldrLutIndex = new IntValue(PostProcessingManager.lutTexture.Index, layer.ldrLut.overrideState);
-                //externalLutPath = extLutPath; // Formerly Texture.
+                temperature = new FloatValue(layer.temperature);                
+                ldrLutIndex = new IntValue(AIGraphics.Instance.PostProcessingManager.CurrentLUTIndex, layer.ldrLut.overrideState);
             }
         }
         public void Load(UnityEngine.Rendering.PostProcessing.ColorGrading layer)
@@ -417,19 +317,8 @@ namespace AIGraphics.Settings
                 postExposure.Fill(layer.postExposure);
                 contrast.Fill(layer.contrast);
                 temperature.Fill(layer.temperature);
-
-                PostProcessingManager.lutTexture.Index = ldrLutIndex.value;
-                if (PostProcessingManager.lutTexture.TryGetTexture(out Texture2D texture))
-                {
-                    layer.ldrLut.value = texture;
-                }
-                else
-                {
-                    layer.ldrLut.value = null;
-                }
-
+                layer.ldrLut.value = AIGraphics.Instance.PostProcessingManager.LoadLUT(ldrLutIndex.value);
                 layer.ldrLut.overrideState = ldrLutIndex.overrideState;
-                //layer.externalLutPath.value = externalLutPath;
             }
         }
     }
@@ -598,5 +487,4 @@ namespace AIGraphics.Settings
             }
         }
     }
-
 }

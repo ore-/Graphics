@@ -1,4 +1,5 @@
 ﻿using AIGraphics.Settings;
+using AIGraphics.Textures;
 using System;
 using System.Linq;
 using UnityEngine;
@@ -29,18 +30,17 @@ namespace AIGraphics.Inspector
                 GUILayout.Label("Environment Skybox", GUIStyles.boldlabel);
                 GUILayout.Space(1);
                 //inactivate controls if no cubemap
-                if (SkyboxManager.CubemapPaths.IsNullOrEmpty())
+                if (skyboxManager.TexturePaths.IsNullOrEmpty())
                 {
                     GUILayout.Label("No custom cubemaps found");
                 }
                 else
                 {
                     cubeMapScrollView = GUILayout.BeginScrollView(cubeMapScrollView);
-                    int selectedCubeMapIdx = Array.IndexOf(SkyboxManager.CubemapPaths.ToArray(), skyboxManager.CurrentCubeMap);
-                    selectedCubeMapIdx = GUILayout.SelectionGrid(selectedCubeMapIdx, SkyboxManager.CubemapPreviewTextures.ToArray(), Inspector.Width / 150, GUIStyles.Skin.box);
+                    int selectedCubeMapIdx = GUILayout.SelectionGrid(skyboxManager.CurrentTextureIndex, skyboxManager.Previews.ToArray(), Inspector.Width / 150, GUIStyles.Skin.box);
                     if (-1 != selectedCubeMapIdx)
                     {
-                        skyboxManager.CurrentCubeMap = SkyboxManager.CubemapPaths[selectedCubeMapIdx];
+                        skyboxManager.CurrentTexturePath = skyboxManager.TexturePaths[selectedCubeMapIdx];
                     }
 
                     GUILayout.EndScrollView();
@@ -58,8 +58,8 @@ namespace AIGraphics.Inspector
                 {
                     lightingSettings.AmbientModeSetting = mode;
                     if (mode != LightingSettings.AIAmbientMode.Skybox)
-                    {
-                        skyboxManager.CurrentCubeMap = SkyboxManager.noCubemap;
+                    {   
+                        skyboxManager.CurrentTexturePath = SkyboxManager.noCubemap; 
                     }
                 });
                 Slider("Intensity", lightingSettings.AmbientIntensity, LightSettings.IntensityMin, LightSettings.IntensityMax, "N1", intensity => { lightingSettings.AmbientIntensity = intensity; });

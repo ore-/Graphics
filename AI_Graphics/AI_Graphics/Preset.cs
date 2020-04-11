@@ -1,4 +1,5 @@
 ﻿using AIGraphics.Settings;
+using AIGraphics.Textures;
 using MessagePack;
 using System.IO;
 using UnityEngine;
@@ -64,14 +65,9 @@ namespace AIGraphics
             string targetPath = Path.Combine(path, name + ".preset");
             if (File.Exists(targetPath))
             {
-                //try {
                 byte[] bytes = File.ReadAllBytes(targetPath);
                 Load(bytes);
                 return true;
-                //} catch {
-                //    Debug.Log(string.Format("Failed to load preset file '{0}'", name + ".preset"));
-                //    return false;
-                //}
             }
             else
             {
