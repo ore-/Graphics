@@ -12,13 +12,14 @@ namespace AIGraphics
         private ExternalTextureManager _lensDirtManager;
         private InternalTextureManager _lutManager;
         private readonly string _lutAssetPath = "studio/lut/00.unity3d";
-        private readonly List<string> _lutTexturePaths = new List<string>() {
-                "Lut_Aliens", "Lut_Art", "Lut_Bright", "Lut_Cold", "Lut_Comic", "Lut_DarkGreyish", "Lut_Deep",
-                "Lut_Default", "Lut_Desert", "Lut_Dull", "Lut_Fog", "Lut_Greyish", "Lut_InvertMono", "Lut_Invert",
-                "Lut_LimitBlue", "Lut_LimitGreen", "Lut_LimitRed", "Lut_MonoBlue", "Lut_Monochrome", "Lut_MonoGreen",
-                "Lut_MonoRed", "Lut_OldPoster1", "Lut_OldPoster2", "Lut_Pale", "Lut_Posterize", "Lut_RobotSalvation",
-                "Lut_Sarmo", "Lut_Sepia", "Lut_Soft", "Lut_Strong", "Lut_TimeDay", "Lut_TimeNight", "Lut_TimeSundown",
-                "Lut_Vibrance_D", "Lut_Warm"
+        private readonly List<string> _lutTexturePaths = new List<string>()
+        {
+                "Lut_Default", "Lut_TimeDay", "Lut_TimeSundown", "Lut_TimeNight", "Lut_Warm", "Lut_Cold",
+                "Lut_Dull", "Lut_Pale", "Lut_Soft", "Lut_Strong", "Lut_Deep", "Lut_Bright", "Lut_Sepia", "Lut_Monochrome",
+                "Lut_MonoRed", "Lut_MonoBlue", "Lut_MonoGreen", "Lut_LimitRed", "Lut_LimitBlue", "Lut_LimitGreen",
+                "Lut_InvertMono", "Lut_Invert", "Lut_Sarmo", "Lut_Posterize",
+                "Lut_OldPoster1", "Lut_OldPoster2", "Lut_RobotSalvation", "Lut_Greyish", "Lut_DarkGreyish",
+                "Lut_Art", "Lut_Comic", "Lut_Aliens", "Lut_Fog", "Lut_Desert", "Lut_Vibrance_D"
         };
 
         internal string LensDirtTexturesPath
