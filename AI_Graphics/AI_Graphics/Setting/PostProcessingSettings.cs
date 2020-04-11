@@ -389,11 +389,10 @@ namespace AIGraphics.Settings
             get => paramVignette;
             set => paramVignette = value;
         }
-
-        internal List<string> GetLUTNames()
+        public AmplifyOcclusionParams AmplifyOcclusion
         {
-            List<string> luts = new List<string> { };
-            return luts;
+            get => paramAmplifyOcclusion;
+            set => paramAmplifyOcclusion = value;
         }
     }
 }

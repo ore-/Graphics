@@ -1,5 +1,6 @@
 ﻿using MessagePack;
-
+using UnityEngine;
+using static AmplifyOcclusionBase;
 // Haha
 // This is funny
 // TODO: Find Better Names and change the names with refactoring tools.
@@ -108,7 +109,99 @@ namespace AIGraphics.Settings
     public struct AmplifyOcclusionParams
     {
         public bool enabled;
-        // TODO: figure out how to work with it
+        public int ApplyMethod;
+        public float FilterResponse;
+        public float FilterBlending;
+        public bool FilterEnabled;
+        public float BlurSharpness;
+        public int BlurPasses;
+        public int BlurRadius;
+        public bool BlurEnabled;
+        public float FadeToThickness;
+        public float FadeToPowerExponent;
+        public float FadeToRadius;
+        public Color FadeToTint;
+        public float FadeLength;
+        public float FadeToIntensity;
+        public bool FadeEnabled;
+        public bool CacheAware;
+        public bool Downsample;
+        public float Thickness;
+        public float Bias;
+        public float PowerExponent;
+        public float Radius;
+        public Color Tint;
+        public float Intensity;
+        public int PerPixelNormals;
+        public int SampleCount;
+        public float FadeStart;
+
+        public void Save(AmplifyOcclusionEffect component)
+        {
+            if (component != null)
+            {
+                this.enabled = component.enabled;
+                this.ApplyMethod = (int)component.ApplyMethod;
+                this.FilterResponse = component.FilterResponse;
+                this.FilterBlending = component.FilterBlending;
+                this.FilterEnabled = component.FilterEnabled;
+                this.BlurSharpness = component.BlurSharpness;
+                this.BlurPasses = component.BlurPasses;
+                this.BlurRadius = component.BlurRadius;
+                this.BlurEnabled = component.BlurEnabled;
+                this.FadeToThickness = component.FadeToThickness;
+                this.FadeToPowerExponent = component.FadeToPowerExponent;
+                this.FadeToRadius = component.FadeToRadius;
+                this.FadeToTint = component.FadeToTint;
+                this.FadeLength = component.FadeLength;
+                this.FadeToIntensity = component.FadeToIntensity;
+                this.FadeEnabled = component.FadeEnabled;
+                this.CacheAware = component.CacheAware;
+                this.Downsample = component.Downsample;
+                this.Thickness = component.Thickness;
+                this.Bias = component.Bias;
+                this.PowerExponent = component.PowerExponent;
+                this.Radius = component.Radius;
+                this.Tint = component.Tint;
+                this.Intensity = component.Intensity;
+                this.PerPixelNormals = (int)component.PerPixelNormals;
+                this.SampleCount = (int)component.SampleCount;
+                this.FadeStart = component.FadeStart;
+            }
+        }
+        public void Load(AmplifyOcclusionEffect component)
+        {
+            if (component != null)
+            {
+                component.enabled = this.enabled;
+                component.ApplyMethod = (ApplicationMethod)this.ApplyMethod;
+                component.FilterResponse = this.FilterResponse;
+                component.FilterBlending = this.FilterBlending;
+                component.FilterEnabled = this.FilterEnabled;
+                component.BlurSharpness = this.BlurSharpness;
+                component.BlurPasses = this.BlurPasses;
+                component.BlurRadius = this.BlurRadius;
+                component.BlurEnabled = this.BlurEnabled;
+                component.FadeToThickness = this.FadeToThickness;
+                component.FadeToPowerExponent = this.FadeToPowerExponent;
+                component.FadeToRadius = this.FadeToRadius;
+                component.FadeToTint = this.FadeToTint;
+                component.FadeLength = this.FadeLength;
+                component.FadeToIntensity = this.FadeToIntensity;
+                component.FadeEnabled = this.FadeEnabled;
+                component.CacheAware = this.CacheAware;
+                component.Downsample = this.Downsample;
+                component.Thickness = this.Thickness;
+                component.Bias = this.Bias;
+                component.PowerExponent = this.PowerExponent;
+                component.Radius = this.Radius;
+                component.Tint = this.Tint;
+                component.Intensity = this.Intensity;
+                component.PerPixelNormals = (PerPixelNormalSource)this.PerPixelNormals;
+                component.SampleCount = (SampleCountLevel)this.SampleCount;
+                component.FadeStart = this.FadeStart;
+            }
+        }
     }
 
     [MessagePackObject(keyAsPropertyName: true)]
