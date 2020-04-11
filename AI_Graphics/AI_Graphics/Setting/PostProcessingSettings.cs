@@ -30,11 +30,6 @@ namespace AIGraphics.Settings
             TAA = PostProcessLayer.Antialiasing.TemporalAntialiasing
         };
 
-        private string selectedLUT;
-        internal List<string> LUTNames
-        {
-            get; set;
-        }
         private readonly PostProcessLayer _postProcessLayer;
         internal AmbientOcclusion ambientOcclusionLayer;
         internal AutoExposure autoExposureLayer;
@@ -56,7 +51,6 @@ namespace AIGraphics.Settings
         {
             initialCamera = camera;
             _postProcessLayer = camera.GetComponent<PostProcessLayer>();
-            LUTNames = GetLUTNames();
             SetupVolume();
         }
 
@@ -357,12 +351,6 @@ namespace AIGraphics.Settings
         public VignetteParams Vignette {
             get => paramVignette;
             set => paramVignette = value;
-        }
-
-        internal List<string> GetLUTNames()
-        {
-            List<string> luts = new List<string> { };
-            return luts;
         }
     }
 }
