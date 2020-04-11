@@ -1,5 +1,4 @@
 ﻿using MessagePack;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 
@@ -30,6 +29,12 @@ namespace AIGraphics.Settings
             SMAA = PostProcessLayer.Antialiasing.SubpixelMorphologicalAntialiasing,
             TAA = PostProcessLayer.Antialiasing.TemporalAntialiasing
         };
+
+        public enum GradingMode
+        {
+            LDR = UnityEngine.Rendering.PostProcessing.GradingMode.LowDefinitionRange,
+            HDR = UnityEngine.Rendering.PostProcessing.GradingMode.HighDefinitionRange
+        }
 
         private readonly PostProcessLayer _postProcessLayer;
         internal AmbientOcclusion ambientOcclusionLayer;
@@ -338,11 +343,13 @@ namespace AIGraphics.Settings
             }
         }
 
-        public AmbientOcclusionParams AmbientOcclusion {
+        public AmbientOcclusionParams AmbientOcclusion
+        {
             get => paramAmbientOcclusion;
             set => paramAmbientOcclusion = value;
         }
-        public AutoExposureParams AutoExposure {
+        public AutoExposureParams AutoExposure
+        {
             get => paramAutoExposure;
             set => paramAutoExposure = value;
         }
@@ -351,27 +358,34 @@ namespace AIGraphics.Settings
             get => paramBloom;
             set => paramBloom = value;
         }
-        public ChromaticAberrationParams ChromaticAberration {
+
+        public ChromaticAberrationParams ChromaticAberration
+        {
             get => paramChromaticAberration;
             set => paramChromaticAberration = value;
         }
-        public ColorGradingParams ColorGrading {
+        public ColorGradingParams ColorGrading
+        {
             get => paramColorGrading;
             set => paramColorGrading = value;
         }
-        public DepthOfFieldParams DepthOfField {
+        public DepthOfFieldParams DepthOfField
+        {
             get => paramDepthOfField;
             set => paramDepthOfField = value;
         }
-        public GrainLayerParams GrainLayer {
+        public GrainLayerParams GrainLayer
+        {
             get => paramGrainLayer;
             set => paramGrainLayer = value;
         }
-        public ScreenSpaceReflectionParams ScreenSpaceReflection {
+        public ScreenSpaceReflectionParams ScreenSpaceReflection
+        {
             get => paramScreenSpaceReflection;
             set => paramScreenSpaceReflection = value;
         }
-        public VignetteParams Vignette {
+        public VignetteParams Vignette
+        {
             get => paramVignette;
             set => paramVignette = value;
         }

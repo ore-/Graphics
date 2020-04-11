@@ -1,5 +1,6 @@
 ﻿using AIGraphics.Inspector;
 using AIGraphics.Settings;
+using AIGraphics.Textures;
 using BepInEx;
 using BepInEx.Configuration;
 using KKAPI;
@@ -114,11 +115,12 @@ namespace AIGraphics
 
             _skyboxManager = Instance.GetOrAddComponent<SkyboxManager>();
             _skyboxManager.Parent = this;
-            _skyboxManager.CubemapPath = ConfigCubeMapPath.Value;
+            _skyboxManager.AssetPath = ConfigCubeMapPath.Value;
             _skyboxManager.Logger = Logger;
             DontDestroyOnLoad(_skyboxManager);
 
             _postProcessingManager = Instance.GetOrAddComponent<PostProcessingManager>();
+            _postProcessingManager.Parent = this;
             _postProcessingManager.LensDirtTexturesPath = ConfigLensDirtPath.Value;
             DontDestroyOnLoad(_postProcessingManager);
 

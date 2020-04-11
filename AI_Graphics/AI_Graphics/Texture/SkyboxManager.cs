@@ -1,14 +1,14 @@
 ﻿using AIGraphics.Settings;
 using MessagePack;
+using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
 using static AIGraphics.Settings.CameraSettings;
 
-namespace AIGraphics
+namespace AIGraphics.Textures
 {
     [MessagePackObject(true)]
     public struct SkyboxParams
@@ -27,7 +27,7 @@ namespace AIGraphics
         }
     };
 
-    public class SkyboxManager : MonoBehaviour
+    internal class SkyboxManager : TextureManager
     {
         private static readonly int _Exposure = Shader.PropertyToID("_Exposure");
         private static readonly int _Rotation = Shader.PropertyToID("_Rotation");
@@ -38,17 +38,10 @@ namespace AIGraphics
         public Material Skybox { get; set; }
         public Material MapSkybox { get; set; }
 
-        internal static List<string> CubemapPaths { get; set; }
-        internal static List<Texture2D> CubemapPreviewTextures { get; set; }
-
         internal static string noCubemap = "No skybox";
         private string selectedCubeMap = noCubemap;
 
-        private string cubemapPath;
-        private FolderAssist CubemapFolder;
-
         private ReflectionProbe _probe;
-        private string isLoadingCubeMap = null; // to track currently used assetbundle path.
 
         internal ReflectionProbe DefaultProbe => _probe ? DefaultReflectionProbe() : _probe;
 
@@ -87,7 +80,7 @@ namespace AIGraphics
         }
         public void LoadSkyboxParams()
         {
-            CurrentCubeMap = skyboxParams.selectedCubeMap;
+            CurrentTexturePath = skyboxParams.selectedCubeMap;
             Exposure = skyboxParams.exposure;
             Tint = skyboxParams.tint;
             Rotation = skyboxParams.rotation;
@@ -98,7 +91,7 @@ namespace AIGraphics
             skyboxParams.exposure = Exposure;
             skyboxParams.tint = Tint;
             skyboxParams.rotation = Rotation;
-            skyboxParams.selectedCubeMap = CurrentCubeMap;
+            skyboxParams.selectedCubeMap = CurrentTexturePath;
         }
         public void TurnOffCubeMap(Camera camera)
         {
@@ -107,7 +100,7 @@ namespace AIGraphics
             Skybox sky = camera.GetComponent<Skybox>();
             if (null != sky)
             {
-                Object.Destroy(sky);
+                Destroy(sky);
             }
 
             if (null == MapSkybox)
@@ -148,14 +141,13 @@ namespace AIGraphics
             }
         }
 
-        public IEnumerator LoadCubemap(string filePath, Camera camera)
+        internal override IEnumerator LoadTexture(string filePath, Action<Texture> _)
         {
             if (filePath == "" || !File.Exists(filePath))
             {
                 yield break;
             }
-
-            yield return new WaitUntil(() => isLoadingCubeMap == null); // Check if preview is loading the bundle.
+            yield return new WaitUntil(() => HasAssetsLoaded); // Check if preview is loading the bundle.
             AssetBundleCreateRequest assetBundleCreateRequest = AssetBundle.LoadFromFileAsync(filePath);
             yield return assetBundleCreateRequest;
             AssetBundle cubemapbundle = assetBundleCreateRequest.assetBundle;
@@ -180,11 +172,10 @@ namespace AIGraphics
             ApplySkyboxParams();
             Update = true;
             Resources.UnloadUnusedAssets();
-
-            yield break;
         }
 
-        internal string CurrentCubeMap
+        //internal string CurrentCubeMap
+        internal override string CurrentTexturePath
         {
             get => selectedCubeMap;
             set
@@ -219,8 +210,7 @@ namespace AIGraphics
                         {
                             ToggleCharaMakerBG(false);
                         }
-
-                        StartCoroutine(LoadCubemap(value, Camera));
+                        StartCoroutine(LoadTexture(value, null));
                     }
                     selectedCubeMap = value;
                     skyboxParams.selectedCubeMap = value;
@@ -228,32 +218,11 @@ namespace AIGraphics
             }
         }
 
-        internal string CubemapPath
-        {
-            get => cubemapPath;
-            set
-            {
-                cubemapPath = value;
-                LoadCubeMaps();
-            }
-        }
+        internal override string SearchPattern { get => "*.cube"; set => throw new System.NotImplementedException(); }
+        internal override Texture CurrentTexture { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
-        private void LoadCubeMaps()
+        internal override IEnumerator LoadPreview(string filePath)
         {
-            CubemapFolder = new FolderAssist();
-            CubemapFolder.CreateFolderInfo(CubemapPath, "*.cube", true, true);
-            List<string> paths = CubemapFolder.lstFile.Select(file => file.FullPath).ToList<string>();
-            CubemapPaths = new List<string>();
-            CubemapPreviewTextures = new List<Texture2D>();
-            foreach (string path in paths)
-            {
-                StartCoroutine(LoadCubeMapPreview(path));
-            }
-        }
-
-        public IEnumerator LoadCubeMapPreview(string filePath)
-        {
-            isLoadingCubeMap = filePath;
             AssetBundleCreateRequest assetBundleCreateRequest = AssetBundle.LoadFromFileAsync(filePath);
             yield return assetBundleCreateRequest;
             AssetBundle cubemapbundle = assetBundleCreateRequest?.assetBundle;
@@ -261,30 +230,29 @@ namespace AIGraphics
             yield return bundleRequest;
             if (null == bundleRequest || null == bundleRequest.asset)
             {
+                _assetsToLoad--;
                 yield break;
             }
-
             Cubemap cubemap = bundleRequest.asset as Cubemap;
             Texture2D texture = new Texture2D(cubemap.width, cubemap.height);
             Color[] CubeMapColors = cubemap.GetPixels(CubemapFace.PositiveX);
             texture.SetPixels(CubeMapColors);
             Util.ResizeTexture(texture, 128, 128);
-            CubemapPreviewTextures.Add(texture);
-            CubemapPaths.Add(filePath);
+            Previews.Add(texture);
+            TexturePaths.Add(filePath);
             cubemapbundle.Unload(false);
             cubemapbundle = null;
             bundleRequest = null;
             assetBundleCreateRequest = null;
             CubeMapColors = null;
             texture = null;
-            isLoadingCubeMap = null;
-            yield break;
+            _assetsToLoad--;
         }
 
         internal ReflectionProbe DefaultReflectionProbe()
         {
             _probe = this.GetOrAddComponent<ReflectionProbe>();
-            _probe.name = "Default Reflection Probe";
+            //_probe.name = "Default Reflection Probe";
             _probe.mode = ReflectionProbeMode.Realtime;
             _probe.boxProjection = false;
             _probe.intensity = 1f;

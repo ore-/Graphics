@@ -1,7 +1,6 @@
 ﻿using MessagePack;
 using UnityEngine;
 using static AmplifyOcclusionBase;
-
 // Haha
 // This is funny
 // TODO: Find Better Names and change the names with refactoring tools.
@@ -142,7 +141,7 @@ namespace AIGraphics.Settings
             if (component != null)
             {
                 this.enabled = component.enabled;
-                this.ApplyMethod = (int) component.ApplyMethod;
+                this.ApplyMethod = (int)component.ApplyMethod;
                 this.FilterResponse = component.FilterResponse;
                 this.FilterBlending = component.FilterBlending;
                 this.FilterEnabled = component.FilterEnabled;
@@ -165,8 +164,8 @@ namespace AIGraphics.Settings
                 this.Radius = component.Radius;
                 this.Tint = component.Tint;
                 this.Intensity = component.Intensity;
-                this.PerPixelNormals = (int) component.PerPixelNormals;
-                this.SampleCount = (int) component.SampleCount;
+                this.PerPixelNormals = (int)component.PerPixelNormals;
+                this.SampleCount = (int)component.SampleCount;
                 this.FadeStart = component.FadeStart;
             }
         }
@@ -175,7 +174,7 @@ namespace AIGraphics.Settings
             if (component != null)
             {
                 component.enabled = this.enabled;
-                component.ApplyMethod = (ApplicationMethod) this.ApplyMethod;
+                component.ApplyMethod = (ApplicationMethod)this.ApplyMethod;
                 component.FilterResponse = this.FilterResponse;
                 component.FilterBlending = this.FilterBlending;
                 component.FilterEnabled = this.FilterEnabled;
@@ -198,8 +197,8 @@ namespace AIGraphics.Settings
                 component.Radius = this.Radius;
                 component.Tint = this.Tint;
                 component.Intensity = this.Intensity;
-                component.PerPixelNormals = (PerPixelNormalSource) this.PerPixelNormals;
-                component.SampleCount = (SampleCountLevel) this.SampleCount;
+                component.PerPixelNormals = (PerPixelNormalSource)this.PerPixelNormals;
+                component.SampleCount = (SampleCountLevel)this.SampleCount;
                 component.FadeStart = this.FadeStart;
             }
         }
@@ -235,10 +234,8 @@ namespace AIGraphics.Settings
                 color = new ColorValue(layer.color);
                 fastMode = new BoolValue(layer.fastMode);
                 dirtIntensity = new FloatValue(layer.dirtIntensity);
-                dirtTexture = PostProcessingManager.lensDirtTexture.lookupPath;
+                dirtTexture = AIGraphics.Instance.PostProcessingManager.CurrentLensDirtTexturePath;
                 dirtState = layer.dirtTexture.overrideState;
-                // dirtTexture is getting saved when dirtTexture is being set from PostProcessingSettings.
-                // ref: PostProcessingSettings.cs:167
             }
         }
         public void Load(UnityEngine.Rendering.PostProcessing.Bloom layer)
@@ -256,11 +253,8 @@ namespace AIGraphics.Settings
                 color.Fill(layer.color);
                 fastMode.Fill(layer.fastMode);
                 dirtIntensity.Fill(layer.dirtIntensity);
-
                 layer.dirtTexture.overrideState = dirtState;
-
-                PostProcessingManager.lensDirtTexture.SetIndexByPath(dirtTexture);
-                layer.dirtTexture.value = PostProcessingManager.lensDirtTexture.Texture;
+                AIGraphics.Instance.PostProcessingManager.LoadLensDirtTexture(dirtTexture, dirtTexture => layer.dirtTexture.value = dirtTexture);
             }
         }
     }
@@ -377,9 +371,8 @@ namespace AIGraphics.Settings
                 brightness = new FloatValue(layer.brightness);
                 postExposure = new FloatValue(layer.postExposure);
                 contrast = new FloatValue(layer.contrast);
-                temperature = new FloatValue(layer.temperature);
-                ldrLutIndex = new IntValue(PostProcessingManager.lutTexture.Index, layer.ldrLut.overrideState);
-                //externalLutPath = extLutPath; // Formerly Texture.
+                temperature = new FloatValue(layer.temperature);                
+                ldrLutIndex = new IntValue(AIGraphics.Instance.PostProcessingManager.CurrentLUTIndex, layer.ldrLut.overrideState);
             }
         }
         public void Load(UnityEngine.Rendering.PostProcessing.ColorGrading layer)
@@ -417,19 +410,8 @@ namespace AIGraphics.Settings
                 postExposure.Fill(layer.postExposure);
                 contrast.Fill(layer.contrast);
                 temperature.Fill(layer.temperature);
-
-                PostProcessingManager.lutTexture.Index = ldrLutIndex.value;
-                if (PostProcessingManager.lutTexture.TryGetTexture(out Texture2D texture))
-                {
-                    layer.ldrLut.value = texture;
-                }
-                else
-                {
-                    layer.ldrLut.value = null;
-                }
-
+                layer.ldrLut.value = AIGraphics.Instance.PostProcessingManager.LoadLUT(ldrLutIndex.value);
                 layer.ldrLut.overrideState = ldrLutIndex.overrideState;
-                //layer.externalLutPath.value = externalLutPath;
             }
         }
     }
@@ -598,5 +580,4 @@ namespace AIGraphics.Settings
             }
         }
     }
-
 }
