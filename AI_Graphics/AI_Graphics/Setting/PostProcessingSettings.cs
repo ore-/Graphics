@@ -20,6 +20,7 @@ namespace AIGraphics.Settings
         internal GrainLayerParams paramGrainLayer = new GrainLayerParams();
         internal ScreenSpaceReflectionParams paramScreenSpaceReflection = new ScreenSpaceReflectionParams();
         internal VignetteParams paramVignette = new VignetteParams();
+        internal AmplifyOcclusionParams paramAmplifyOcclusion = new AmplifyOcclusionParams();
         //internal AmplifyOcclusion paramAmplifyOcclusion; // not implemented yet
 
         public enum Antialiasing
@@ -30,11 +31,6 @@ namespace AIGraphics.Settings
             TAA = PostProcessLayer.Antialiasing.TemporalAntialiasing
         };
 
-        private string selectedLUT;
-        internal List<string> LUTNames
-        {
-            get; set;
-        }
         private readonly PostProcessLayer _postProcessLayer;
         internal AmbientOcclusion ambientOcclusionLayer;
         internal AutoExposure autoExposureLayer;
@@ -46,6 +42,17 @@ namespace AIGraphics.Settings
         internal ScreenSpaceReflections screenSpaceReflectionsLayer;
         internal Vignette vignetteLayer;
         internal Camera initialCamera;
+        internal AmplifyOcclusionEffect amplifyOcclusionComponent;
+        [IgnoreMember]
+        public AmplifyOcclusionEffect AmplifyOcclusionComponent
+        {
+            get
+            {
+                if (initialCamera == null && Camera.main != null)
+                    amplifyOcclusionComponent = Camera.main.GetComponent<AmplifyOcclusionEffect>();
+                return amplifyOcclusionComponent;
+            }
+        }
 
         public PostProcessingSettings()
         {
@@ -56,7 +63,6 @@ namespace AIGraphics.Settings
         {
             initialCamera = camera;
             _postProcessLayer = camera.GetComponent<PostProcessLayer>();
-            LUTNames = GetLUTNames();
             SetupVolume();
         }
 
@@ -98,9 +104,11 @@ namespace AIGraphics.Settings
             _volume.profile = SettingValues.profile;
             _volume.gameObject.layer = LayerMask.NameToLayer("PostProcessing");
 
+            if (initialCamera != null)
+                amplifyOcclusionComponent = initialCamera.GetComponent<AmplifyOcclusionEffect>();
+
             return _volume;
         }
-
         internal void InitializeProfiles()
         {
             if (!SettingValues.profile.TryGetSettings(out chromaticAberrationLayer))
@@ -206,6 +214,11 @@ namespace AIGraphics.Settings
             {
                 paramVignette.Save(vignetteLayer);
             }
+
+            if (AmplifyOcclusionComponent != null)
+            {
+                paramAmplifyOcclusion.Save(AmplifyOcclusionComponent);
+            }
         }
 
         public void LoadParameters()
@@ -253,6 +266,11 @@ namespace AIGraphics.Settings
             if (Volume.profile.TryGetSettings(out Vignette vignetteLayer))
             {
                 paramVignette.Load(vignetteLayer);
+            }
+
+            if (AmplifyOcclusionComponent != null)
+            {
+                paramAmplifyOcclusion.Load(AmplifyOcclusionComponent);
             }
         }
 
@@ -320,17 +338,6 @@ namespace AIGraphics.Settings
             }
         }
 
-        public string CurrentLUT
-        {
-            get => selectedLUT;
-            set
-            {
-                if (null != value && value != selectedLUT)
-                {
-                    selectedLUT = value;
-                }
-            }
-        }
         public AmbientOcclusionParams AmbientOcclusion {
             get => paramAmbientOcclusion;
             set => paramAmbientOcclusion = value;
@@ -344,7 +351,6 @@ namespace AIGraphics.Settings
             get => paramBloom;
             set => paramBloom = value;
         }
-
         public ChromaticAberrationParams ChromaticAberration {
             get => paramChromaticAberration;
             set => paramChromaticAberration = value;
@@ -369,11 +375,10 @@ namespace AIGraphics.Settings
             get => paramVignette;
             set => paramVignette = value;
         }
-
-        internal List<string> GetLUTNames()
+        public AmplifyOcclusionParams AmplifyOcclusion
         {
-            List<string> luts = new List<string> { };
-            return luts;
+            get => paramAmplifyOcclusion;
+            set => paramAmplifyOcclusion = value;
         }
     }
 }
