@@ -180,8 +180,18 @@ namespace AIGraphics.Textures
             get => selectedCubeMap;
             set
             {
+                if (null == value)
+                {
+                    return;
+                }
+
+                if (value.All(char.IsWhiteSpace))
+                {
+                    value = noCubemap;
+                }
+
                 //if cubemap is changed
-                if (null != value && value != selectedCubeMap)
+                if (value != selectedCubeMap)
                 {
                     //switch off cubemapb
                     if (noCubemap == value)
