@@ -15,11 +15,12 @@ namespace AIGraphics
     [BepInIncompatibility("dhhai4mod")]
     [BepInPlugin(GUID, PluginName, Version)]
     [BepInDependency(KoikatuAPI.GUID, KoikatuAPI.VersionConst)]
+    [BepInDependency(ExtensibleSaveFormat.ExtendedSave.GUID)]
     public class AIGraphics : BaseUnityPlugin
     {
         public const string GUID = "ore.ai.graphics";
         public const string PluginName = "AI Graphics";
-        public const string Version = "0.1.0";
+        public const string Version = "0.2.0";
 
         public KeyCode ShowHotkey { get; set; } = KeyCode.F5;
         public static ConfigEntry<string> ConfigCubeMapPath { get; private set; }
@@ -88,24 +89,31 @@ namespace AIGraphics
             if (scene.name == "map_title" && PostProcessingSettings != null)
             {
                 PostProcessingSettings.ResetVolume();
-            } else if (scene.name == "CharaCustom")
+            }
+            else
             {
-                StartCoroutine(UpdateMakerLight());
+                StartCoroutine(InitializeLight(scene));
             }
         }
 
-        private IEnumerator UpdateMakerLight()
+        private IEnumerator InitializeLight(Scene scene)
         {
             yield return new WaitUntil(() => _lightManager != null);
 
-            GameObject lights = GameObject.Find("CharaCustom/CustomControl/CharaCamera/Main Camera/Lights Custom");
-            if (lights != null)
+            if (KKAPI.GameMode.Maker == KKAPI.KoikatuAPI.GetCurrentGameMode() && scene.name == "CharaCustom")
             {
-                Transform backLight = lights.transform.Find("Directional Light Back");
-                if (backLight != null)
+                GameObject lights = GameObject.Find("CharaCustom/CustomControl/CharaCamera/Main Camera/Lights Custom");
+                if (lights != null)
                 {
-                    Light light = backLight.GetComponent<Light>();
-                    if (light != null) light.enabled = false;
+                    Transform backLight = lights.transform.Find("Directional Light Back");
+                    if (backLight != null)
+                    {
+                        Light light = backLight.GetComponent<Light>();
+                        if (light != null)
+                        {
+                            light.enabled = false;
+                        }
+                    }
                 }
             }
 
@@ -145,12 +153,11 @@ namespace AIGraphics
             _postProcessingManager.LensDirtTexturesPath = ConfigLensDirtPath.Value;
             DontDestroyOnLoad(_postProcessingManager);
 
+            _lightManager = new LightManager(this);
+
             _focusPuller = Instance.GetOrAddComponent<FocusPuller>();
             _focusPuller.init(this);
             DontDestroyOnLoad(_focusPuller);
-
-            _lightManager = new LightManager(this);
-
             _presetManager = new PresetManager(ConfigPresetPath.Value, this);
 
             _inspector = new Inspector.Inspector(this);

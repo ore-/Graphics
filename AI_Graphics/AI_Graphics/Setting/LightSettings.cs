@@ -1,6 +1,5 @@
 ﻿namespace AIGraphics.Settings
 {
-
     internal class LightSettings
     {
         internal static float IntensityMin = 0f;
@@ -10,5 +9,12 @@
         internal static float RotationXMax = 90f;
         internal static float RotationYMin = -179.9f;
         internal static float RotationYMax = 180f;
+
+        internal enum LightType
+        {
+            Directional,
+            Point,
+            Spot
+        }
     }
 }

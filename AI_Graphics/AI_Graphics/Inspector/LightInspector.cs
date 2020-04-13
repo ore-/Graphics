@@ -9,21 +9,7 @@ namespace AIGraphics.Inspector
         private static Vector2 lightScrollView;
         private static Vector2 inspectorScrollView;
         private static Light selectedLight;
-        /*
-        private const float lightsTabOffsetX = 12f;
-        private const float lightsTabOffsetY = 50f;
-        private const float lightsTabWidth = 200f;
-        private const float lightsTabHeight = 1024f;
-        private const float inspectorOffsetY = 50f;
-        private const float inspectorTabWidth = 200f;
-        private const float spaceMargin = 20f;        
-        private static Dictionary<Light, float> intensities = new Dictionary<Light, float>();
-        private static Dictionary<Light, string> textIntensities = new Dictionary<Light, string>();
-        private static Dictionary<Light, float> bounces = new Dictionary<Light, float>();
-        private static Dictionary<Light, string> textBounces = new Dictionary<Light, string>();
-        private static Dictionary<Light, float> temperature = new Dictionary<Light, float>();
-        private static Dictionary<Light, string> textTemperature = new Dictionary<Light, string>();
-        */
+
         internal static void Draw(GlobalSettings renderingSettings, LightManager lightManager, bool showAdvanced)
         {
             GUILayout.BeginVertical(GUIStyles.Skin.box);
@@ -39,58 +25,15 @@ namespace AIGraphics.Inspector
                     lightScrollView = GUILayout.BeginScrollView(lightScrollView);
                     GUILayout.BeginVertical(GUIStyles.Skin.box, GUILayout.Width(200), GUILayout.MaxWidth(250));
                     {
-                        GUILayout.BeginHorizontal();
-                        {
-                            GUILayout.Label("Directional Lights", GUIStyles.boldlabel);
-                            GUILayout.FlexibleSpace();
-                            if (KKAPI.GameMode.Studio == KKAPI.KoikatuAPI.GetCurrentGameMode())
-                            {
-                                if (GUILayout.Button("+"))//, GUIStyles.toolbarbutton))
-                                {
-                                    Singleton<Studio.Studio>.Instance.AddLight(0);
-                                    lightManager.Light();
-                                }
-                            }
-                        }
-                        GUILayout.EndHorizontal();
+                        LightGroup(lightManager, "Directional Lights", LightSettings.LightType.Directional);
                         GUILayout.Space(5);
                         lightManager.DirectionalLights.ForEach(l => LightOverviewModule(lightManager, l));
-
                         GUILayout.Space(10);
-
-                        GUILayout.BeginHorizontal();
-                        {
-                            GUILayout.Label("Point Lights", GUIStyles.boldlabel);
-                            GUILayout.FlexibleSpace();
-                            if (KKAPI.GameMode.Studio == KKAPI.KoikatuAPI.GetCurrentGameMode())
-                            {
-                                if (GUILayout.Button("+"))//, GUIStyles.toolbarbutton))
-                                {
-                                    Singleton<Studio.Studio>.Instance.AddLight(1);
-                                    lightManager.Light();
-                                }
-                            }
-                        }
-                        GUILayout.EndHorizontal();
+                        LightGroup(lightManager, "Point Lights", LightSettings.LightType.Point);
                         GUILayout.Space(5);
                         lightManager.PointLights.ForEach(l => LightOverviewModule(lightManager, l));
-
                         GUILayout.Space(10);
-
-                        GUILayout.BeginHorizontal();
-                        {
-                            GUILayout.Label("Spot Lights", GUIStyles.boldlabel);
-                            GUILayout.FlexibleSpace();
-                            if (KKAPI.GameMode.Studio == KKAPI.KoikatuAPI.GetCurrentGameMode())
-                            {
-                                if (GUILayout.Button("+"))//, GUIStyles.toolbarbutton))
-                                {
-                                    Singleton<Studio.Studio>.Instance.AddLight(2);
-                                    lightManager.Light();
-                                }
-                            }
-                        }
-                        GUILayout.EndHorizontal();
+                        LightGroup(lightManager, "Spot Lights", LightSettings.LightType.Spot);
                         GUILayout.Space(5);
                         lightManager.SpotLights.ForEach(l => LightOverviewModule(lightManager, l));
                     }
@@ -200,6 +143,24 @@ namespace AIGraphics.Inspector
                 GUILayout.EndHorizontal();
             }
             GUILayout.EndVertical();
+        }
+
+        private static void LightGroup(LightManager lightManager, string typeName, LightSettings.LightType type)
+        {
+            GUILayout.BeginHorizontal();
+            {
+                GUILayout.Label(typeName, GUIStyles.boldlabel);
+                GUILayout.FlexibleSpace();
+                if (KKAPI.GameMode.Studio == KKAPI.KoikatuAPI.GetCurrentGameMode())
+                {
+                    if (GUILayout.Button("+"))
+                    {
+                        Singleton<Studio.Studio>.Instance.AddLight((int)type);
+                        lightManager.Light();
+                    }
+                }
+            }
+            GUILayout.EndHorizontal();
         }
 
         private static void LightOverviewModule(LightManager lightManager, Light l)
