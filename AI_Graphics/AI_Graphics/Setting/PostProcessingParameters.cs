@@ -424,11 +424,16 @@ namespace AIGraphics.Settings
         public FloatValue aperture;
         public FloatValue focalLength;
         public KernelSizeValue kernelSize;
+        // Focus Puller
+        public bool focusPuller;
 
         public void Save(UnityEngine.Rendering.PostProcessing.DepthOfField layer)
         {
             if (layer != null)
             {
+                if (AIGraphics.Instance.FocusPuller != null)
+                    focusPuller = AIGraphics.Instance.FocusPuller.enabled;
+
                 enabled = new BoolValue(layer.enabled);
                 focusDistance = new FloatValue(layer.focusDistance);
                 aperture = new FloatValue(layer.aperture);
@@ -441,6 +446,9 @@ namespace AIGraphics.Settings
         {
             if (layer != null)
             {
+                if (AIGraphics.Instance.FocusPuller != null)
+                    AIGraphics.Instance.FocusPuller.enabled = this.focusPuller;
+
                 enabled.Fill(layer.enabled);
                 layer.active = layer.enabled.value;
                 focusDistance.Fill(layer.focusDistance);
