@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace AIGraphics
 {
@@ -10,9 +12,7 @@ namespace AIGraphics
         internal List<Light> PointLights { get; private set; }
         internal List<Light> SpotLights { get; private set; }
         internal bool UseAlloyLight { get; set; }
-
-        private readonly AIGraphics _parent;
-
+        private AIGraphics _parent;
         internal LightManager(AIGraphics parent)
         {
             _parent = parent;
