@@ -88,6 +88,20 @@ namespace AIGraphics
             if (scene.name == "map_title" && PostProcessingSettings != null)
             {
                 PostProcessingSettings.ResetVolume();
+            } else if (scene.name == "CharaCustom")
+            {
+                Debug.Log("Removing Bullshit Lightings.");
+                GameObject lights = GameObject.Find("CharaCustom/CustomControl/CharaCamera/Main Camera/Lights Custom");
+                if (lights != null)
+                {
+                    Transform backLight = lights.transform.Find("Directional Light Back");
+                    if (backLight != null)
+                    {
+                        // Disable Backlight By Default.
+                        Light light = backLight.GetComponent<Light>();
+                        if (light != null) light.enabled = false; 
+                    }
+                }
             }
         }
 
