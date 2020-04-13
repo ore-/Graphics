@@ -88,7 +88,28 @@ namespace AIGraphics
             if (scene.name == "map_title" && PostProcessingSettings != null)
             {
                 PostProcessingSettings.ResetVolume();
+            } else if (scene.name == "CharaCustom")
+            {
+                StartCoroutine(UpdateMakerLight());
             }
+        }
+
+        private IEnumerator UpdateMakerLight()
+        {
+            yield return new WaitUntil(() => _lightManager != null);
+
+            GameObject lights = GameObject.Find("CharaCustom/CustomControl/CharaCamera/Main Camera/Lights Custom");
+            if (lights != null)
+            {
+                Transform backLight = lights.transform.Find("Directional Light Back");
+                if (backLight != null)
+                {
+                    Light light = backLight.GetComponent<Light>();
+                    if (light != null) light.enabled = false;
+                }
+            }
+
+            LightManager.Light();
         }
 
         private IEnumerator Start()
