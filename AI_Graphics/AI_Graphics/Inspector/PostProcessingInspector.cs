@@ -234,8 +234,9 @@ namespace AIGraphics.Inspector
                 settings.chromaticAberrationLayer.enabled.value = Toggle("Chromatic Aberration", settings.chromaticAberrationLayer.enabled.value, true);
                 if (settings.chromaticAberrationLayer.enabled.value)
                 {
-                    Slider("Intensity", settings.chromaticAberrationLayer.intensity.value, 0.1f, 20f, "N2", intensity => settings.chromaticAberrationLayer.intensity.value = intensity,
+                    Slider("Intensity", settings.chromaticAberrationLayer.intensity.value, 0f, 5f, "N3", intensity => settings.chromaticAberrationLayer.intensity.value = intensity,
                         settings.chromaticAberrationLayer.intensity.overrideState, overrideState => settings.chromaticAberrationLayer.intensity.overrideState = overrideState);
+                    settings.chromaticAberrationLayer.fastMode.value = Toggle("Fast Mode", settings.chromaticAberrationLayer.fastMode.value);
                 }
                 GUILayout.EndVertical();
             }
