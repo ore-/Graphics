@@ -9,6 +9,7 @@ namespace AIGraphics.Inspector
         private static Vector2 lightScrollView;
         private static Vector2 inspectorScrollView;
         private static Light selectedLight;
+        private static int customLightIndex = 0;
 
         internal static void Draw(GlobalSettings renderingSettings, LightManager lightManager, bool showAdvanced)
         {
@@ -156,6 +157,17 @@ namespace AIGraphics.Inspector
                     if (GUILayout.Button("+"))
                     {
                         Singleton<Studio.Studio>.Instance.AddLight((int)type);
+                        lightManager.Light();
+                    }
+                }
+                else if (KKAPI.GameMode.Maker == KKAPI.KoikatuAPI.GetCurrentGameMode() & typeName == "Directional Lights") //add custom directional lights in maker
+                {
+                    if (GUILayout.Button("+"))
+                    {
+                        customLightIndex += 1;
+                        GameObject lightGameObject = new GameObject("Directional Light " + customLightIndex);
+                        Light lightComp = lightGameObject.AddComponent<Light>();
+                        lightGameObject.GetComponent<Light>().type = LightType.Directional;
                         lightManager.Light();
                     }
                 }
