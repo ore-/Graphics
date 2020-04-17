@@ -588,4 +588,32 @@ namespace AIGraphics.Settings
             }
         }
     }
+
+    [MessagePackObject(keyAsPropertyName: true)]
+    public struct MotionBlurParams
+    {
+        public BoolValue enabled;
+        public FloatValue shutterAngle;
+        public IntValue sampleCount;
+
+        public void Save(UnityEngine.Rendering.PostProcessing.MotionBlur layer)
+        {
+            if (layer != null)
+            {
+                enabled = new BoolValue(layer.enabled);
+                shutterAngle = new FloatValue(layer.shutterAngle);
+                sampleCount = new IntValue(layer.sampleCount);
+            }
+        }
+        public void Load(UnityEngine.Rendering.PostProcessing.MotionBlur layer)
+        {
+            if (layer != null)
+            {
+                enabled.Fill(layer.enabled);
+                layer.active = layer.enabled.value;
+                shutterAngle.Fill(layer.shutterAngle);
+                sampleCount.Fill(layer.sampleCount);
+            }
+        }
+    }
 }

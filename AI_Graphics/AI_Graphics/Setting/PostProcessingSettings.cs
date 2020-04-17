@@ -19,6 +19,7 @@ namespace AIGraphics.Settings
         internal GrainLayerParams paramGrainLayer = new GrainLayerParams();
         internal ScreenSpaceReflectionParams paramScreenSpaceReflection = new ScreenSpaceReflectionParams();
         internal VignetteParams paramVignette = new VignetteParams();
+        internal MotionBlurParams paramMotionBlur = new MotionBlurParams();
         internal AmplifyOcclusionParams paramAmplifyOcclusion = new AmplifyOcclusionParams();
         //internal AmplifyOcclusion paramAmplifyOcclusion; // not implemented yet
 
@@ -47,6 +48,7 @@ namespace AIGraphics.Settings
         internal ScreenSpaceReflections screenSpaceReflectionsLayer;
         internal Vignette vignetteLayer;
         internal Camera initialCamera;
+        internal MotionBlur motionBlurLayer;
         internal AmplifyOcclusionEffect amplifyOcclusionComponent;
         [IgnoreMember]
         public AmplifyOcclusionEffect AmplifyOcclusionComponent
@@ -161,6 +163,12 @@ namespace AIGraphics.Settings
                 vignetteLayer = SettingValues.profile.AddSettings<Vignette>();
             }
 
+            if (!SettingValues.profile.TryGetSettings(out motionBlurLayer))
+            {
+                motionBlurLayer = SettingValues.profile.AddSettings<MotionBlur>();
+                motionBlurLayer.enabled.value = false;
+            }
+
             depthOfFieldLayer.enabled.value = false; // Make people use Depth of Field Manually
         }
 
@@ -220,6 +228,11 @@ namespace AIGraphics.Settings
                 paramVignette.Save(vignetteLayer);
             }
 
+            if (Volume.profile.TryGetSettings(out MotionBlur motionBlurLayer))
+            {
+                paramMotionBlur.Save(motionBlurLayer);
+            }
+
             if (AmplifyOcclusionComponent != null)
             {
                 paramAmplifyOcclusion.Save(AmplifyOcclusionComponent);
@@ -271,6 +284,11 @@ namespace AIGraphics.Settings
             if (Volume.profile.TryGetSettings(out Vignette vignetteLayer))
             {
                 paramVignette.Load(vignetteLayer);
+            }
+
+            if (Volume.profile.TryGetSettings(out MotionBlur motionBlurLayer))
+            {
+                paramMotionBlur.Load(motionBlurLayer);
             }
 
             if (AmplifyOcclusionComponent != null)
@@ -388,6 +406,11 @@ namespace AIGraphics.Settings
         {
             get => paramVignette;
             set => paramVignette = value;
+        }
+        public MotionBlurParams MotionBlur
+        {
+            get => paramMotionBlur;
+            set => paramMotionBlur = value;
         }
         public AmplifyOcclusionParams AmplifyOcclusion
         {

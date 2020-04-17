@@ -385,6 +385,22 @@ namespace AIGraphics.Inspector
                 }
                 GUILayout.EndVertical();
             }
+
+            if (settings.motionBlurLayer != null)
+            {
+                GUILayout.Space(1);
+                GUILayout.BeginVertical(GUIStyles.Skin.box);
+                settings.motionBlurLayer.active =
+                settings.motionBlurLayer.enabled.value = Toggle("Motion Blur", settings.motionBlurLayer.enabled.value, true);
+                if (settings.motionBlurLayer.enabled.value)
+                {
+                    Slider("Shutter Angle", settings.motionBlurLayer.shutterAngle.value, 0f, 360f, "N2", intensity => settings.motionBlurLayer.shutterAngle.value = intensity,
+                        settings.motionBlurLayer.shutterAngle.overrideState, overrideState => settings.motionBlurLayer.shutterAngle.overrideState = overrideState);
+                    Slider("Sample Count", settings.motionBlurLayer.sampleCount.value, 4, 32, intensity => settings.motionBlurLayer.sampleCount.value = intensity,
+                        settings.motionBlurLayer.sampleCount.overrideState, overrideState => settings.motionBlurLayer.sampleCount.overrideState = overrideState);
+                }
+                GUILayout.EndVertical();
+            }
         }
     }
 }
