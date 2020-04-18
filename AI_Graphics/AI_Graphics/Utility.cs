@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using UnityEngine;
 
 namespace AIGraphics
 {
@@ -63,6 +67,54 @@ namespace AIGraphics
 
             original.SetPixels(newPixels);
             original.Apply();
+        }
+
+        internal static List<string> GetFiles(string path, string fileSearchPattern = "*", string dirSearchPattern = "*", SearchOption searchOption = SearchOption.AllDirectories)
+        {
+            List<string> files = GetFiles(path, fileSearchPattern);
+
+            if (searchOption == SearchOption.TopDirectoryOnly)
+            {
+                return files;
+            }
+
+            List<string> directories = new List<string>(GetDirectories(path, dirSearchPattern));
+
+            for (int i = 0; i < directories.Count; i++)
+            {
+                directories.AddRange(GetDirectories(directories[i], dirSearchPattern));
+            }
+
+            for (int i = 0; i < directories.Count; i++)
+            {
+                files.AddRange(GetFiles(directories[i], fileSearchPattern));
+            }
+
+            return files;
+        }
+
+        private static List<string> GetDirectories(string path, string searchPattern)
+        {
+            try
+            {
+                return Directory.GetDirectories(path, searchPattern).ToList();
+            }
+            catch (Exception)
+            {
+                return new List<string>();
+            }
+        }
+
+        private static List<string> GetFiles(string path, string searchPattern)
+        {
+            try
+            {
+                return Directory.GetFiles(path, searchPattern).ToList();
+            }
+            catch (Exception)
+            {
+                return new List<string>();
+            }
         }
     }
 }

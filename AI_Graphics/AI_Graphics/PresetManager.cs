@@ -1,5 +1,6 @@
 ﻿using ExtensibleSaveFormat;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace AIGraphics
@@ -8,7 +9,6 @@ namespace AIGraphics
     {
         private readonly string _path;
         private string _currentPresetName;
-        private FolderAssist _presetFolder;
         private Dictionary<string, string> _presetNameToPath;
         private readonly AIGraphics _parent;
 
@@ -21,9 +21,7 @@ namespace AIGraphics
 
         private void LoadPresets()
         {
-            _presetFolder = new FolderAssist();
-            _presetFolder.CreateFolderInfo(_path, "*.preset", true, true);
-            _presetNameToPath = _presetFolder.lstFile.ToDictionary(entry => entry.FileName, entry => entry.FullPath);
+            _presetNameToPath = Util.GetFiles(_path, "*.preset").ToDictionary(entry => Path.GetFileNameWithoutExtension(entry), entry => entry);
         }
 
         internal string PresetPath(string presetName)

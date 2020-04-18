@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using UniRx;
 using UnityEngine;
 
 namespace AIGraphics.Textures
@@ -13,7 +11,6 @@ namespace AIGraphics.Textures
         internal bool HasAssetsLoaded => 0 == _assetsToLoad;
         internal List<Texture> Previews { get; set; }
         internal Texture[] PreviewArray { get; set; }
-        internal FolderAssist AssetFolder { get; set; }
         internal abstract string SearchPattern { get; set; }
         internal virtual List<string> TexturePaths { get; set; }
         internal virtual Texture CurrentTexture { get; set; }
@@ -40,10 +37,8 @@ namespace AIGraphics.Textures
         internal virtual System.Collections.IEnumerator LoadAssets()
         {
             CurrentTexturePath = "";
-            AssetFolder = new FolderAssist();
-            AssetFolder.CreateFolderInfo(AssetPath, SearchPattern, true, true);
+            List<string> paths = Util.GetFiles(AssetPath, SearchPattern);
             //populate TexturePaths in each preview load to ensure index is consistent between TexturePaths and Previews
-            List<string> paths = AssetFolder.lstFile.Select(file => file.FullPath).ToList<string>();
             TexturePaths = new List<string>();
             Previews = new List<Texture>();
             _assetsToLoad = paths.Count;
