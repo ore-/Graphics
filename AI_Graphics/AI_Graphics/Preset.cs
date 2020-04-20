@@ -56,14 +56,9 @@ namespace AIGraphics
                 File.WriteAllBytes(targetPath, bytes);
             }
         }
-        public bool Load(string name = "default", string path = "")
+        public bool Load(string name = "default")
         {
-            if (path == "")
-            {
-                path = AIGraphics.ConfigPresetPath.Value; // Runtime Config Preset Path.
-            }
-
-            string targetPath = Path.Combine(path, name + ".preset");
+            string targetPath = AIGraphics.Instance.PresetManager.PresetPath(name);
             if (File.Exists(targetPath))
             {
                 try
