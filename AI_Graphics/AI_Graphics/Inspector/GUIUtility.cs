@@ -134,14 +134,7 @@ namespace AIGraphics.Inspector
             }
 
             GUI.color = new Color(value.r, value.g, value.b, 1f);
-
-            GUILayout.Box(colourIndicator);
-
-            GUI.color = Color.black;
-            GUILayout.Box(colourIndicator);
-            GUI.color = new Color(value.r, value.g, value.b, value.a);
-            GUI.Box(GUILayoutUtility.GetLastRect(), colourIndicator);
-            
+            GUILayout.Label(colourIndicator);
             GUI.color = Color.white;
             GUILayout.EndHorizontal();
             GUILayout.BeginVertical();
