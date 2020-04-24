@@ -123,6 +123,63 @@ namespace AIGraphics.Inspector
             }
         }
 
+        internal static void SliderTrackball(string label, Color value, Action<Color> onChanged = null, bool useColorDisplayColor32 = false, bool enable = true, Action<bool> onChangedEnable = null)
+        {
+            GUILayout.BeginHorizontal();
+            int spacing = 0;
+            EnableToggle(label, ref spacing, ref enable, onChangedEnable);
+            if (!enable)
+            {
+                GUI.enabled = false;
+            }
+
+            GUI.color = new Color(value.r, value.g, value.b, 1f);
+
+            GUILayout.Box(colourIndicator);
+
+            GUI.color = Color.black;
+            GUILayout.Box(colourIndicator);
+            GUI.color = new Color(value.r, value.g, value.b, value.a);
+            GUI.Box(GUILayoutUtility.GetLastRect(), colourIndicator);
+            
+            GUI.color = Color.white;
+            GUILayout.EndHorizontal();
+            GUILayout.BeginVertical();
+            if (useColorDisplayColor32)
+            {
+                Color color = value;
+                color.r = SliderColor("Red", color.r, spacing);
+                color.g = SliderColor("Green", color.g, spacing);
+                color.b = SliderColor("Blue", color.b, spacing);
+                color.a = SliderColorFloat("Value", color.a, -5f, 5f, spacing);
+                Color newValue = color;
+                if (onChanged != null && value != newValue)
+                {
+                    onChanged(newValue);
+                }
+            }
+            else
+            {
+                Color32 color = value;
+                color.r = SliderColor("Red", color.r, spacing);
+                color.g = SliderColor("Green", color.g, spacing);
+                color.b = SliderColor("Blue", color.b, spacing);
+                // This value needs to be a float even when using a Color32 since the value is out of the 0, 1 (or 0-255) range
+                float alpha = SliderColorFloat("Value", value.a, -5f, 5f, spacing);
+                Color newValue = color;
+                newValue.a = alpha;
+                if (onChanged != null && value != newValue)
+                {
+                    onChanged(newValue);
+                }
+            }
+            GUILayout.EndVertical();
+            if (!enable)
+            {
+                GUI.enabled = true;
+            }
+        }
+
         internal static float SliderColor(string label, float value, int spacing)
         {
             GUILayout.BeginHorizontal();
@@ -164,6 +221,30 @@ namespace AIGraphics.Inspector
             if (newValueString != valueString)
             {
                 if (byte.TryParse(newValueString, out byte parseResult))
+                {
+                    newValue = parseResult;
+                }
+            }
+            return newValue;
+        }
+
+        internal static float SliderColorFloat(string label, float value, float minValue, float maxValue, int spacing)
+        {
+            GUILayout.BeginHorizontal();
+            if (0 != spacing)
+            {
+                GUILayout.Label("", GUILayout.Width(spacing));
+            }
+
+            GUILayout.Label(label, GUILayout.ExpandWidth(false));
+            GUILayout.Label("", GUILayout.Width(GUIStyles.labelWidth - GUI.skin.label.CalcSize(new GUIContent(label)).x - spacing));
+            float newValue = GUILayout.HorizontalSlider(value, minValue, maxValue);
+            string valueString = value.ToString();
+            string newValueString = GUILayout.TextField(newValue.ToString(), GUILayout.Width(40), GUILayout.ExpandWidth(false));
+            GUILayout.EndHorizontal();
+            if (newValueString != valueString)
+            {
+                if (float.TryParse(newValueString, out float parseResult))
                 {
                     newValue = parseResult;
                 }
