@@ -54,13 +54,13 @@ namespace AIGraphics.Inspector
                                     alloyLight = selectedLight.GetComponent<AlloyAreaLight>();
                                 }
 
-                                GUILayout.Label(selectedLight.name, GUIStyles.boldlabel);
+                                Label(selectedLight.name, "", true);
                                 GUILayout.Space(10);
                                 GUILayout.BeginHorizontal();
                                 {
                                     GUILayout.BeginVertical();
-                                    {
-                                        GUILayout.Label("Colour", GUIStyles.boldlabel);
+                                    {                                        
+                                        Label("Colour", "", true);
                                         SliderColor("Colour", selectedLight.color, c => selectedLight.color = c);
                                         if (renderingSettings.LightsUseColorTemperature)
                                         {
@@ -70,8 +70,8 @@ namespace AIGraphics.Inspector
                                         GUILayout.Space(10);
                                         Slider("Intensity", selectedLight.intensity, 0f, 8f, "N2", i => selectedLight.intensity = i);
                                         Slider("Indirect Multiplier", selectedLight.bounceIntensity, 0f, 8f, "N0", bi => selectedLight.bounceIntensity = bi);
-                                        GUILayout.Space(10);
-                                        GUILayout.Label("Shadows", GUIStyles.boldlabel);
+                                        GUILayout.Space(10);                                        
+                                        Label("Shadows", "", true);
                                         Selection("Shadow Type", selectedLight.shadows, type => selectedLight.shadows = type);
                                         Slider("Strength", selectedLight.shadowStrength, 0f, 1f, "N2", strength => selectedLight.shadowStrength = strength);
                                         Selection("Resolution", selectedLight.shadowResolution, resolution => selectedLight.shadowResolution = resolution, 2);
@@ -150,7 +150,7 @@ namespace AIGraphics.Inspector
         {
             GUILayout.BeginHorizontal();
             {
-                GUILayout.Label(typeName, GUIStyles.boldlabel);
+                Label(typeName, "", true);
                 GUILayout.FlexibleSpace();
                 if (KKAPI.GameMode.Studio == KKAPI.KoikatuAPI.GetCurrentGameMode())
                 {

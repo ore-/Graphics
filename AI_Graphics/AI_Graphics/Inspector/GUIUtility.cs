@@ -130,7 +130,7 @@ namespace AIGraphics.Inspector
             {
                 GUILayout.Label("", GUILayout.Width(spacing));
             }
-
+            label = LocalizationManager.HasLocalization() ? LocalizationManager.Localized(label) : label;
             GUILayout.Label(label, GUILayout.ExpandWidth(false));
             GUILayout.Label("", GUILayout.Width(GUIStyles.labelWidth - GUI.skin.label.CalcSize(new GUIContent(label)).x - spacing));
             float newValue = GUILayout.HorizontalSlider(value, 0, 1);
@@ -154,7 +154,7 @@ namespace AIGraphics.Inspector
             {
                 GUILayout.Label("", GUILayout.Width(spacing));
             }
-
+            label = LocalizationManager.HasLocalization() ? LocalizationManager.Localized(label) : label;
             GUILayout.Label(label, GUILayout.ExpandWidth(false));
             GUILayout.Label("", GUILayout.Width(GUIStyles.labelWidth - GUI.skin.label.CalcSize(new GUIContent(label)).x - spacing));
             byte newValue = (byte)GUILayout.HorizontalSlider(value, 0, 255);
@@ -182,13 +182,14 @@ namespace AIGraphics.Inspector
             }
 
             string[] selectionString = selection.Select(entry => entry.ToString()).ToArray();
+            string[] localizedSelection = LocalizationManager.HasLocalization() ? selectionString.Select(text => LocalizationManager.Localized(text)).ToArray() : selectionString;
             int currentIndex = Array.IndexOf(selection, selected);
             if (-1 == columns)
             {
                 columns = selection.Length;
             }
 
-            int selectedIndex = GUILayout.SelectionGrid(currentIndex, selectionString, columns);
+            int selectedIndex = GUILayout.SelectionGrid(currentIndex, localizedSelection, columns);
             if (!enable)
             {
                 GUI.enabled = true;
@@ -216,13 +217,15 @@ namespace AIGraphics.Inspector
             }
 
             string[] selection = Enum.GetNames(typeof(TEnum));
+            string[] localizedSelection = LocalizationManager.HasLocalization() ? selection.Select(text => LocalizationManager.Localized(text)).ToArray() : selection;
+
             int currentIndex = Array.IndexOf(selection, selected.ToString());
             if (-1 == columns)
             {
                 columns = selection.Length;
             }
 
-            int selectedIndex = GUILayout.SelectionGrid(currentIndex, selection, columns);
+            int selectedIndex = GUILayout.SelectionGrid(currentIndex, localizedSelection, columns);
             GUILayout.EndHorizontal();
             if (selectedIndex == currentIndex)
             {
@@ -269,8 +272,9 @@ namespace AIGraphics.Inspector
         {
             GUILayout.BeginHorizontal();
             string[] selection = Enum.GetNames(typeof(TEnum));
+            string[] localizedSelection = LocalizationManager.HasLocalization() ? selection.Select(text => LocalizationManager.Localized(text)).ToArray() : selection;
             int currentIndex = Array.IndexOf(selection, selected.ToString());
-            int selectedIndex = GUILayout.Toolbar(currentIndex, selection, GUIStyles.toolbarbutton);
+            int selectedIndex = GUILayout.Toolbar(currentIndex, localizedSelection, GUIStyles.toolbarbutton);
             GUILayout.EndHorizontal();
             if (selectedIndex == currentIndex)
             {
@@ -284,6 +288,7 @@ namespace AIGraphics.Inspector
 
         internal static bool Toggle(string label, bool toggle, bool bold = false)
         {
+            label = LocalizationManager.HasLocalization() ? LocalizationManager.Localized(label) : label;
             GUILayout.BeginHorizontal();
             if (bold)
             {
@@ -300,10 +305,18 @@ namespace AIGraphics.Inspector
             return toggle;
         }
 
-        internal static void Label(string label, string text)
+        internal static void Label(string label, string text, bool bold = false)
         {
+            label = LocalizationManager.HasLocalization() ? LocalizationManager.Localized(label) : label;
             GUILayout.BeginHorizontal();
-            GUILayout.Label(label, GUILayout.ExpandWidth(false));
+            if (bold)
+            {
+                GUILayout.Label(label, GUIStyles.boldlabel, GUILayout.ExpandWidth(false));
+            }
+            else
+            {
+                GUILayout.Label(label, GUILayout.ExpandWidth(false));
+            }
             GUILayout.Label("", GUILayout.Width(GUIStyles.labelWidth - GUI.skin.label.CalcSize(new GUIContent(label)).x));
             GUILayout.Label(text);
             GUILayout.EndHorizontal();
@@ -352,6 +365,7 @@ namespace AIGraphics.Inspector
         internal static Vector3 Dimension(string label, Vector3 size, Action<Vector3> onChanged = null)
         {
             GUILayout.BeginHorizontal();
+            label = LocalizationManager.HasLocalization() ? LocalizationManager.Localized(label) : label;
             GUILayout.Label(label, GUILayout.ExpandWidth(false));
             GUILayout.Label("", GUILayout.Width(GUIStyles.labelWidth - GUI.skin.label.CalcSize(new GUIContent(label)).x));
             GUILayout.Label("X", GUILayout.ExpandWidth(false));
@@ -378,6 +392,7 @@ namespace AIGraphics.Inspector
                 spacing = enableSpacing;
                 newEnable = GUILayout.Toggle(enable, "", GUILayout.ExpandWidth(false));
             }
+            label = LocalizationManager.HasLocalization() ? LocalizationManager.Localized(label) : label;
             GUILayout.Label(label, GUILayout.ExpandWidth(false));
             GUILayout.Label("", GUILayout.Width(GUIStyles.labelWidth - GUI.skin.label.CalcSize(new GUIContent(label)).x - spacing));
             if (onChangedEnable != null && newEnable != enable)

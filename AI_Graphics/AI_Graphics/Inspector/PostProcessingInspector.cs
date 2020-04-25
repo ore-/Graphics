@@ -13,19 +13,18 @@ namespace AIGraphics.Inspector
         internal static void Draw(PostProcessingSettings postProcessingSettings, PostProcessingManager postprocessingManager, FocusPuller focusPuller, bool showAdvanced)
         {
             GUILayout.BeginVertical(GUIStyles.Skin.box);
-
             {
-                GUILayout.Label("Post Process Layer", GUIStyles.boldlabel);
+                Label("Post Process Layer", "", true);
                 GUILayout.Space(1);
                 if (showAdvanced)
                 {
-                    GUILayout.Label("Volume blending", GUIStyles.boldlabel);
+                    Label("Volume blending", "", true);
                     GUILayout.Space(1);
                     Label("Trigger", postProcessingSettings.VolumeTriggerSetting?.name);
                     Label("Layer", LayerMask.LayerToName(Mathf.RoundToInt(Mathf.Log(postProcessingSettings.VolumeLayerSetting.value, 2))));
                     GUILayout.Space(10);
-                }
-                GUILayout.Label("Anti-aliasing", GUIStyles.boldlabel);
+                }                
+                Label("Anti-aliasing", "", true);
                 Selection("Mode", postProcessingSettings.AntialiasingMode, mode => postProcessingSettings.AntialiasingMode = mode);
                 if (PostProcessingSettings.Antialiasing.SMAA == postProcessingSettings.AntialiasingMode)
                 {
@@ -55,8 +54,7 @@ namespace AIGraphics.Inspector
                 {
                     volumeLabel = "Post Process Volumes";
                 }
-
-                GUILayout.Label(volumeLabel, GUIStyles.boldlabel);
+                Label(volumeLabel, "", true);
                 postScrollView = GUILayout.BeginScrollView(postScrollView);
                 PostProcessVolumeSettings(postProcessingSettings, postprocessingManager, focusPuller, showAdvanced);
                 GUILayout.EndScrollView();
