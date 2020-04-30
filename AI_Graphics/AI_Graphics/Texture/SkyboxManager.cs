@@ -270,9 +270,9 @@ namespace AIGraphics.Textures
             _probe.resolution = 512;
             _probe.backgroundColor = Color.white;
             _probe.hdr = true;
-            _probe.cullingMask = 1 | ~Camera.cullingMask;
             _probe.clearFlags = ReflectionProbeClearFlags.Skybox;
-            _probe.size = new Vector3(10, 10, 10);
+            _probe.cullingMask = Camera.cullingMask;
+            _probe.size = new Vector3(100, 100, 100);
             _probe.nearClipPlane = 1;
             _probe.transform.position = new Vector3(0, 0, 0);
             _probe.refreshMode = ReflectionProbeRefreshMode.EveryFrame;

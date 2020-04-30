@@ -85,7 +85,7 @@ namespace AIGraphics.Inspector
                     PresetInspector.Draw(Parent.PresetManager);
                     break;
                 case Tab.Settings:
-                    SettingsInspector.Draw(Parent.CameraSettings, Parent.Settings, Parent);
+                    SettingsInspector.Draw(Parent.CameraSettings, Parent.Settings, Parent.Settings.ShowAdvancedSettings);
                     break;
             }
         }

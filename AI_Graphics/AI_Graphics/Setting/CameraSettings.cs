@@ -50,6 +50,16 @@ namespace AIGraphics.Settings
             set => _clearFlags = MainCamera.clearFlags = (CameraClearFlags)value;
         }
 
+        public int CullingMask
+        {
+            get => MainCamera.cullingMask;
+            set
+            {
+                Debug.Log("setting culling mask from " + MainCamera.cullingMask + " to " + value);
+                //MainCamera.cullingMask = value;
+            }
+        }
+
         public AIRenderingPath RenderingPath
         {
             get => (AIRenderingPath)MainCamera.renderingPath;

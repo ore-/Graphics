@@ -94,6 +94,7 @@ namespace AIGraphics
             {
                 StartCoroutine(InitializeLight(scene));
             }
+            CullingMaskExtensions.RefreshLayers();
         }
 
         private IEnumerator InitializeLight(Scene scene)

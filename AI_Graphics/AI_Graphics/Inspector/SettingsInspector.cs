@@ -10,12 +10,19 @@ namespace AIGraphics.Inspector
         private const float FOVMax = 120f;
         private const float FOVDefault = 23.5f;
 
-        internal static void Draw(CameraSettings cameraSettings, GlobalSettings renderingSettings, AIGraphics parent)
+        internal static void Draw(CameraSettings cameraSettings, GlobalSettings renderingSettings, bool showAdvanced)
         {
             GUILayout.BeginVertical(GUIStyles.Skin.box);
             {
                 GUILayout.Label("Camera", GUIStyles.boldlabel);
                 cameraSettings.ClearFlag = Selection("Clear Flags", cameraSettings.ClearFlag, flag => cameraSettings.ClearFlag = flag);
+                if (showAdvanced)
+                {
+                    GUI.enabled = false; 
+                    SelectionMask("Culling Mask", cameraSettings.CullingMask, mask => cameraSettings.CullingMask = mask);
+                    Label("Culling Mask", cameraSettings.CullingMask.ToString());
+                    GUI.enabled = true;
+                }
                 Slider("Near Clipping Plane", cameraSettings.NearClipPlane, 0.01f, 15000f, "N2", ncp => { cameraSettings.NearClipPlane = ncp; });
                 Slider("Far Clipping Plane", cameraSettings.FarClipPlane, 0.01f, 15000f, "N2", ncp => { cameraSettings.FarClipPlane = ncp; });
                 Selection("Rendering Path", cameraSettings.RenderingPath, path => cameraSettings.RenderingPath = path);
