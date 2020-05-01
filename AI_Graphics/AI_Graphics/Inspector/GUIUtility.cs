@@ -454,6 +454,25 @@ namespace AIGraphics.Inspector
             return count;
         }
 
+        internal static string Text(string label, string text, bool enable = true, Action<bool> onChangedEnable = null)
+        {
+            GUILayout.BeginHorizontal();
+            int spacing = 0;
+            EnableToggle(label, ref spacing, ref enable, onChangedEnable);
+            if (!enable)
+            {
+                GUI.enabled = false;
+            }
+            text = GUILayout.TextField(text, 32);
+            if (!enable)
+            {
+                GUI.enabled = true;
+            }
+
+            GUILayout.EndHorizontal();
+            return text;
+        }
+
         internal static Vector3 Dimension(string label, Vector3 size, Action<Vector3> onChanged = null)
         {
             GUILayout.BeginHorizontal();
