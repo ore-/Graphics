@@ -19,5 +19,10 @@ namespace AIGraphics
             FieldInfo field = obj.GetType().GetField(name, bindingFlags);
             field?.SetValue(obj, value);
         }
+
+        internal static void CallMethod(this object obj, string methodName, object[] values)
+        {
+            obj.GetType().GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Instance).Invoke(obj, values);
+        }
     }
 }
