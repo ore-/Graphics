@@ -33,12 +33,14 @@ namespace AIGraphics.Textures
         private static readonly int _Rotation = Shader.PropertyToID("_Rotation");
         private static readonly int _Tint = Shader.PropertyToID("_Tint");
 
+        public SkyboxSettings dynSkyboxSetting;
         public SkyboxParams skyboxParams = new SkyboxParams(1f, 0f, new Color32(128, 128, 128, 128), "");
         public Material Skyboxbg { get; set; }
         public Material Skybox { get; set; }
         public Material MapSkybox { get; set; }
 
         internal static string noCubemap = "No skybox";
+
         private string selectedCubeMap = noCubemap;
 
         private ReflectionProbe _probe;
@@ -170,7 +172,16 @@ namespace AIGraphics.Textures
 
             ApplySkybox();
             ApplySkyboxParams();
-            Update = true;
+
+            dynSkyboxSetting = null;
+            // do you know better way?
+            if (Skybox.shader.name == ProceduralSkyboxSettings.shaderName)
+                dynSkyboxSetting = new ProceduralSkyboxSettings();
+            else if (Skybox.shader.name == TwoPointColorSkyboxSettings.shaderName)
+                dynSkyboxSetting = new TwoPointColorSkyboxSettings();
+
+
+                Update = true;
             Resources.UnloadUnusedAssets();
         }
 
@@ -193,7 +204,7 @@ namespace AIGraphics.Textures
                 //if cubemap is changed
                 if (value != selectedCubeMap)
                 {
-                    //switch off cubemapb
+                    //switch off cubemap
                     if (noCubemap == value)
                     {
                         TurnOffCubeMap(Camera);

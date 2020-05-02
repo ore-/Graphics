@@ -1,6 +1,5 @@
 ﻿using AIGraphics.Settings;
 using AIGraphics.Textures;
-using System;
 using System.Linq;
 using UnityEngine;
 using static AIGraphics.Inspector.Util;
@@ -45,6 +44,7 @@ namespace AIGraphics.Inspector
 
                     GUILayout.EndScrollView();
                 }
+                DrawDynSkyboxOptions(lightingSettings, skyboxManager, showAdvanced);
                 GUILayout.Space(10);
                 if (showAdvanced)
                 {
@@ -58,8 +58,8 @@ namespace AIGraphics.Inspector
                 {
                     lightingSettings.AmbientModeSetting = mode;
                     if (mode != LightingSettings.AIAmbientMode.Skybox)
-                    {   
-                        skyboxManager.CurrentTexturePath = SkyboxManager.noCubemap; 
+                    {
+                        skyboxManager.CurrentTexturePath = SkyboxManager.noCubemap;
                     }
                 });
                 Slider("Intensity", lightingSettings.AmbientIntensity, LightSettings.IntensityMin, LightSettings.IntensityMax, "N1", intensity => { lightingSettings.AmbientIntensity = intensity; });
@@ -113,7 +113,6 @@ namespace AIGraphics.Inspector
                         rp.nearClipPlane = Text("Clipping Planes - Near", rp.nearClipPlane, "N1");
                         rp.farClipPlane = Text("Clipping Planes - Far", rp.farClipPlane, "N1");
                         Selection("Time Slicing Mode", rp.timeSlicingMode, mode => rp.timeSlicingMode = mode);
-
                     }
                     GUILayout.EndScrollView();
                     GUILayout.EndVertical();
@@ -121,6 +120,54 @@ namespace AIGraphics.Inspector
             }
             GUILayout.EndVertical();
             GUI.enabled = true;
+        }
+
+        internal static void DrawDynSkyboxOptions(LightingSettings lightingSettings, SkyboxManager skyboxManager, bool showAdvanced)
+        {
+            if (skyboxManager.dynSkyboxSetting != null)
+            {
+                Material mat = skyboxManager.Skybox;
+                // mmmm
+                GUILayout.Space(10);
+                if (skyboxManager.dynSkyboxSetting.GetType() == typeof(ProceduralSkyboxSettings) &&
+                    mat.shader.name == ProceduralSkyboxSettings.shaderName)
+                {
+                }
+                else if (skyboxManager.dynSkyboxSetting.GetType() == typeof(TwoPointColorSkyboxSettings) &&
+                    mat.shader.name == TwoPointColorSkyboxSettings.shaderName)
+                {
+                    SliderColor("Colour A", mat.GetColor("_ColorA"), c =>
+                    {
+                        mat.SetColor("_ColorA", c);
+                        skyboxManager.Update = true;
+                    }, true);
+                    Slider("Intensity A", mat.GetFloat("_IntensityA"), 0, 2, "N1", intensity =>
+                    {
+                        mat.SetFloat("_IntensityA", intensity);
+                        skyboxManager.Update = true;
+                    });
+                    Dimension("Box Size", mat.GetVector("_DirA"), direction =>
+                    {
+                        mat.SetVector("_DirA", direction);
+                        skyboxManager.Update = true;
+                    });
+                    SliderColor("Colour B", mat.GetColor("_ColorB"), c =>
+                    {
+                        mat.SetColor("_ColorB", c);
+                        skyboxManager.Update = true;
+                    }, true);
+                    Slider("Intensity B", mat.GetFloat("_IntensityB"), 0, 2, "N1", intensity =>
+                    {
+                        mat.SetFloat("_IntensityB", intensity);
+                        skyboxManager.Update = true;
+                    });
+                    Dimension("Box Size", mat.GetVector("_DirB"), direction =>
+                    {
+                        mat.SetVector("_DirB", direction);
+                        skyboxManager.Update = true;
+                    });
+                }
+            }
         }
     }
 }

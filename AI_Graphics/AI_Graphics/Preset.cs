@@ -15,14 +15,16 @@ namespace AIGraphics
         public LightingSettings lights;
         public PostProcessingSettings pp;
         public SkyboxParams skybox;
+        public SkyboxSettings skyboxSetting;
 
-        public Preset(GlobalSettings global, CameraSettings camera, LightingSettings lights, PostProcessingSettings pp, SkyboxParams skybox)
+        public Preset(GlobalSettings global, CameraSettings camera, LightingSettings lights, PostProcessingSettings pp, SkyboxParams skybox, SkyboxSettings skyboxSetting)
         {
             this.camera = camera;
             this.global = global;
             this.lights = lights;
             this.pp = pp;
             this.skybox = skybox;
+            this.skyboxSetting = skyboxSetting;
         }
 
         public void UpdateParameters()
