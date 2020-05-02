@@ -197,6 +197,9 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="Alloy\AreaLight\Defaults\DefaultSpotCookie.tif" />
+    <Content Include="Resources\localization.kor.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\localization.jpn.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

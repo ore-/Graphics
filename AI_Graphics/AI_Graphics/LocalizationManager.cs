@@ -11,6 +11,7 @@ namespace AIGraphics
         internal enum Language
         {
             English = SystemLanguage.English,
+            Korean = SystemLanguage.Korean,
             Japanese = SystemLanguage.Japanese
         }
 
@@ -58,6 +59,8 @@ namespace AIGraphics
             {
                 case SystemLanguage.Japanese:
                     return "jpn";
+                case SystemLanguage.Korean:
+                    return "kor";
                 default:
                     return "eng";
             }
@@ -79,7 +82,7 @@ namespace AIGraphics
         private static IEnumerator LoadLocalization(SystemLanguage language)
         {
             yield return new WaitUntil(() => Initialized);
-            if (SystemLanguage.Japanese == language)
+            if (SystemLanguage.Japanese == language || SystemLanguage.Korean == language)
             {
                 _lookup.TryGetValue(CurrentLocale(), out _textLookup);
             }
