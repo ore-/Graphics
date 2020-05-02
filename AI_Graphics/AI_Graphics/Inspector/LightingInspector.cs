@@ -103,17 +103,19 @@ namespace AIGraphics.Inspector
                         Dimension("Box Offset", rp.center, size => rp.center = size);
                         GUILayout.Space(10);
                         GUILayout.Label("Cubemap capture settings");
-                        Selection("Resolution", rp.resolution, LightingSettings.ReflectionResolutions, resolution => rp.resolution = resolution);
+                        Selection("Resolution", rp.resolution, LightingSettings.ReflectionResolutions, resolution => rp.resolution = resolution);                        
                         rp.hdr = Toggle("HDR", rp.hdr);
                         rp.shadowDistance = Text("Shadow Distance", rp.shadowDistance);
                         GUILayout.Label("Clear Flags");
                         Selection("Clear Flags", rp.clearFlags, flag => rp.clearFlags = flag);
+                        if (showAdvanced)
+                        {
+                            SelectionMask("Culling Mask", rp.cullingMask, mask => rp.cullingMask = mask);
+                        }
+                        rp.nearClipPlane = Text("Clipping Planes - Near", rp.nearClipPlane, "N2");
+                        rp.farClipPlane = Text("Clipping Planes - Far", rp.farClipPlane, "N2");
                         SliderColor("Background", rp.backgroundColor, colour => { rp.backgroundColor = colour; });
-                        Label("Culling Mask", rp.cullingMask.ToString());
-                        rp.nearClipPlane = Text("Clipping Planes - Near", rp.nearClipPlane, "N1");
-                        rp.farClipPlane = Text("Clipping Planes - Far", rp.farClipPlane, "N1");
                         Selection("Time Slicing Mode", rp.timeSlicingMode, mode => rp.timeSlicingMode = mode);
-
                     }
                     GUILayout.EndScrollView();
                     GUILayout.EndVertical();

@@ -117,6 +117,7 @@
     <Compile Include="Alloy\AlloyPropertyAttributes.cs" />
     <Compile Include="Alloy\AlloyUtils.cs" />
     <Compile Include="Alloy\AreaLight\AlloyAreaLight.cs" />
+    <Compile Include="CullingMaskExtensions.cs" />
     <Compile Include="FocusPuller.cs" />
     <Compile Include="Patch\Studio.cs" />
     <Compile Include="Inspector\LightingInspector.cs" />

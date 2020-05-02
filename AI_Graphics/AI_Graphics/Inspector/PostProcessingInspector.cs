@@ -353,7 +353,20 @@ namespace AIGraphics.Inspector
                 {
                     Selection("Preset", settings.screenSpaceReflectionsLayer.preset.value, preset => settings.screenSpaceReflectionsLayer.preset.value = preset, -1,
                         settings.screenSpaceReflectionsLayer.preset.overrideState, overrideState => settings.screenSpaceReflectionsLayer.preset.overrideState = overrideState);
-                    Text("Maximum March Distance", settings.screenSpaceReflectionsLayer.maximumMarchDistance.value, "N2",
+
+                    if (ScreenSpaceReflectionPreset.Custom == settings.screenSpaceReflectionsLayer.preset.value)
+                    {
+                        Slider("Maximum Iteration Count", settings.screenSpaceReflectionsLayer.maximumIterationCount.value, 0, 256, iteration => settings.screenSpaceReflectionsLayer.maximumIterationCount.value = iteration,
+                            settings.screenSpaceReflectionsLayer.maximumIterationCount.overrideState, overrideState => settings.screenSpaceReflectionsLayer.maximumIterationCount.overrideState = overrideState);
+
+                        Slider("Thickness", settings.screenSpaceReflectionsLayer.thickness.value, 1f, 64f, "N1", thickness => settings.screenSpaceReflectionsLayer.thickness.value = thickness,
+                            settings.screenSpaceReflectionsLayer.thickness.overrideState, overrideState => settings.screenSpaceReflectionsLayer.thickness.overrideState = overrideState);
+
+                        Selection("Resolution", settings.screenSpaceReflectionsLayer.resolution.value, resolution => settings.screenSpaceReflectionsLayer.resolution.value = resolution, -1,
+                            settings.screenSpaceReflectionsLayer.resolution.overrideState, overrideState => settings.screenSpaceReflectionsLayer.resolution.overrideState = overrideState);
+                    }
+
+                    settings.screenSpaceReflectionsLayer.maximumMarchDistance.value = Text("Maximum March Distance", settings.screenSpaceReflectionsLayer.maximumMarchDistance.value, "N2",
                         settings.screenSpaceReflectionsLayer.maximumMarchDistance.overrideState, overrideState => settings.screenSpaceReflectionsLayer.maximumMarchDistance.overrideState = overrideState);
                     Slider("Distance Fade", settings.screenSpaceReflectionsLayer.distanceFade, 0f, 1f, "N3", fade => settings.screenSpaceReflectionsLayer.distanceFade.value = fade,
                         settings.screenSpaceReflectionsLayer.distanceFade.overrideState, overrideState => settings.screenSpaceReflectionsLayer.distanceFade.overrideState = overrideState);

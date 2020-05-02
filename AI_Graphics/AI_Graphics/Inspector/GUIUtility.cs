@@ -339,6 +339,37 @@ namespace AIGraphics.Inspector
             return selectedIndex;
         }
 
+        internal static void SelectionMask(string label, int cullingMask, Action<int> onChanged = null, int columns = 4)
+        {
+            int newMask = cullingMask;
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(label, GUILayout.ExpandWidth(false));
+            GUILayout.Label("", GUILayout.Width(GUIStyles.labelWidth - GUI.skin.label.CalcSize(new GUIContent(label)).x));
+            int included = 0;
+            GUILayout.BeginVertical();
+            for (int i = 0; i < CullingMaskExtensions.Layers.Count; i++)
+            {
+                string layer = CullingMaskExtensions.Layers[i];
+                bool include = CullingMaskExtensions.LayerCullingIncludes(newMask, layer);
+                if (0 == (i % columns))
+                    GUILayout.BeginHorizontal();
+                include = GUILayout.Toggle(include, layer, GUIStyles.Skin.button);
+                included++;
+                newMask = CullingMaskExtensions.LayerCullingToggle(newMask, layer, include);
+                if (included == columns)
+                {
+                    GUILayout.EndHorizontal();
+                    included = 0;
+                }
+            }
+            if (0 != included)
+                GUILayout.EndHorizontal();
+            GUILayout.EndVertical();
+            GUILayout.EndHorizontal();
+            if (newMask != cullingMask)
+                onChanged(newMask);
+        }
+
         internal static TEnum Toolbar<TEnum>(TEnum selected)
         {
             GUILayout.BeginHorizontal();
