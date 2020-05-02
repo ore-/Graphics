@@ -1,6 +1,6 @@
-﻿
-using System;
+﻿using System;
 using UnityEngine;
+using static AIGraphics.Inspector.Util;
 
 namespace AIGraphics.Inspector
 {
@@ -17,11 +17,11 @@ namespace AIGraphics.Inspector
         internal static void Draw(PresetManager presetManager)
         {
             GUILayout.BeginVertical(GUIStyles.Skin.box);
-            GUILayout.Label("Presets");
+            Label("Presets","");
             GUILayout.Space(1);
             if (presetManager.PresetNames.IsNullOrEmpty())
             {
-                GUILayout.Label("No presets found");
+                Label("No presets found","");
             }
             else
             {
@@ -41,7 +41,7 @@ namespace AIGraphics.Inspector
             _nameToSave = GUILayout.TextField(_nameToSave);
             bool isValidFileName = (0 != _nameToSave.Length && 256 >= _nameToSave.Length);
             bool isCue = (_nameCue == _nameToSave);
-            if (GUILayout.Button("Save", GUILayout.ExpandWidth(false)) && isValidFileName && !isCue)
+            if (Button("Save") && isValidFileName && !isCue)
             {
                 presetManager.Save(_nameToSave);
                 presetManager.CurrentPreset = _nameToSave;

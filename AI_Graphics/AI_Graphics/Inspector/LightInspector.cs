@@ -1,8 +1,5 @@
 ﻿using AIGraphics.Settings;
-using Studio;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using static AIGraphics.Inspector.Util;
 using static AIGraphics.LightManager;
 
@@ -55,14 +52,14 @@ namespace AIGraphics.Inspector
                                 {
                                     alloyLight = lightManager.SelectedLight.light.GetComponent<AlloyAreaLight>();
                                 }
-                                
-                                GUILayout.Label(lightManager.SelectedLight.light.name, GUIStyles.boldlabel);
+
+                                Label(lightManager.SelectedLight.light.name, "", true);
                                 GUILayout.Space(10);
                                 GUILayout.BeginHorizontal();
                                 {
                                     GUILayout.BeginVertical();
                                     {
-                                        GUILayout.Label("Colour", GUIStyles.boldlabel);                                        
+                                        Label("Colour", "", true);
                                         SliderColor("Colour", lightManager.SelectedLight.color, c => lightManager.SelectedLight.color = c);
                                         if (renderingSettings.LightsUseColorTemperature)
                                         {
@@ -73,7 +70,7 @@ namespace AIGraphics.Inspector
                                         Slider("Intensity", lightManager.SelectedLight.intensity, LightSettings.IntensityMin, LightSettings.IntensityMax, "N2", i => lightManager.SelectedLight.intensity = i);
                                         Slider("Indirect Multiplier", lightManager.SelectedLight.light.bounceIntensity, LightSettings.IntensityMin, LightSettings.IntensityMax, "N0", bi => lightManager.SelectedLight.light.bounceIntensity = bi);
                                         GUILayout.Space(10);
-                                        GUILayout.Label("Shadows", GUIStyles.boldlabel);
+                                        Label("Shadows", "", true);
                                         Selection("Shadow Type", lightManager.SelectedLight.shadows, type => lightManager.SelectedLight.shadows = type);
                                         Slider("Strength", lightManager.SelectedLight.light.shadowStrength, 0f, 1f, "N2", strength => lightManager.SelectedLight.light.shadowStrength = strength);
                                         Selection("Resolution", lightManager.SelectedLight.light.shadowResolution, resolution => lightManager.SelectedLight.light.shadowResolution = resolution, 2);
@@ -101,7 +98,7 @@ namespace AIGraphics.Inspector
                                         else
                                         {
                                             Slider("Light Range", lightManager.SelectedLight.range, 0.1f, 100f, "N1", range => { lightManager.SelectedLight.range = range; });
-                                            if (lightManager.SelectedLight.type == LightType.Spot)                                            
+                                            if (lightManager.SelectedLight.type == LightType.Spot)
                                             {
                                                 Slider("Spot Angle", lightManager.SelectedLight.spotAngle, 1f, 179f, "N1", angle => { lightManager.SelectedLight.spotAngle = angle; });
                                             }
@@ -111,9 +108,9 @@ namespace AIGraphics.Inspector
                                         {
                                             Slider("Specular Highlight", alloyLight.Radius, 0f, 1f, "N2", i => alloyLight.Radius = i);
 
-                                            if (lightManager.SelectedLight.type == LightType.Point)                                            
+                                            if (lightManager.SelectedLight.type == LightType.Point)
                                             {
-                                                Slider("Length", alloyLight.Length, 0f, 1f, "N2", i => alloyLight.Length = i);                                                
+                                                Slider("Length", alloyLight.Length, 0f, 1f, "N2", i => alloyLight.Length = i);
                                             }
                                         }
                                         GUILayout.Space(10);
@@ -179,12 +176,12 @@ namespace AIGraphics.Inspector
                             }
                             else
                             {
-                                GUILayout.Label("Selected light is disabled.");
+                                Label("Selected light is disabled.", "");
                             }
                         }
                         else
                         {
-                            GUILayout.Label("Select a light source on the left panel.");
+                            Label("Select a light source on the left panel.", "");
                         }
                     }
                     GUILayout.EndVertical();
@@ -226,20 +223,20 @@ namespace AIGraphics.Inspector
 
         private static void LightOverviewModule(LightManager lightManager, LightObject l)
         {
-            if (null == l || null == l.light )
+            if (null == l || null == l.light)
             {
                 lightManager.Light();
                 return;
             }
             GUILayout.BeginHorizontal();
             GUILayout.Space(5);
-            
-            if (GUILayout.Toggle(ReferenceEquals(l, lightManager.SelectedLight), l.light.name, GUIStyles.Skin.button))
+
+            if (ToggleButton(l.light.name, ReferenceEquals(l, lightManager.SelectedLight), true))
             {
                 lightManager.SelectedLight = l;
             }
             GUILayout.FlexibleSpace();
-            l.enabled = GUILayout.Toggle(l.enabled, l.enabled ? " ON" : "OFF", GUIStyles.Skin.button);
+            l.enabled = ToggleButton(l.enabled ? " ON" : "OFF", l.enabled, true);
             GUILayout.EndHorizontal();
         }
     }

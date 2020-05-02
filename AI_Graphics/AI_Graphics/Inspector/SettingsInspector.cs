@@ -27,10 +27,10 @@ namespace AIGraphics.Inspector
                 Slider("Far Clipping Plane", cameraSettings.FarClipPlane, 0.01f, 15000f, "N2", ncp => { cameraSettings.FarClipPlane = ncp; });
                 Selection("Rendering Path", cameraSettings.RenderingPath, path => cameraSettings.RenderingPath = path);
                 Slider("Field of View", cameraSettings.Fov, FOVMin, FOVMax, "N0", fov => { cameraSettings.Fov = fov; });
-                cameraSettings.OcculsionCulling = Toggle("Occulsion Culling", cameraSettings.OcculsionCulling);
+                cameraSettings.OcculsionCulling = Toggle("Occlusion Culling", cameraSettings.OcculsionCulling);
                 cameraSettings.HDR = Toggle("Allow HDR", cameraSettings.HDR);
                 cameraSettings.MSAA = Toggle("Allow MSAA (Forward Only)", cameraSettings.MSAA);
-                cameraSettings.DynamicResolution = Toggle("Allow DynamicResolution", cameraSettings.DynamicResolution);
+                cameraSettings.DynamicResolution = Toggle("Allow Dynamic Resolution", cameraSettings.DynamicResolution);
                 GUILayout.Space(10);                
                 Label("Rendering", "", true);
                 GUILayout.Space(1);

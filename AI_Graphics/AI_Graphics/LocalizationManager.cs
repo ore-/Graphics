@@ -6,11 +6,12 @@ using UnityEngine;
 
 namespace AIGraphics
 {
-    internal class LocalizationManager : MonoBehaviour
+    public class LocalizationManager : MonoBehaviour
     {
-        internal enum Language
+        public enum Language
         {
             English = SystemLanguage.English,
+            Korean = SystemLanguage.Korean,
             Japanese = SystemLanguage.Japanese
         }
 
@@ -31,9 +32,9 @@ namespace AIGraphics
             }
         }
 
-        private static void DefaultLanguage()
+        internal static Language DefaultLanguage()
         {
-            CurrentLanguage = Enum.IsDefined(typeof(Language), (Language)Application.systemLanguage) ? (Language)Application.systemLanguage : Language.English; 
+            return Enum.IsDefined(typeof(Language), (Language)Application.systemLanguage) ? (Language)Application.systemLanguage : Language.English; 
         }
 
         internal static Language CurrentLanguage
@@ -42,7 +43,8 @@ namespace AIGraphics
             set 
             {
                 _currentLanguage = value;
-                _parent?.StartCoroutine(LoadLocalization((SystemLanguage)_currentLanguage));
+                AIGraphics.ConfigLanguage.Value = value;
+               _parent?.StartCoroutine(LoadLocalization((SystemLanguage)_currentLanguage));
             }
             
         }
@@ -58,6 +60,8 @@ namespace AIGraphics
             {
                 case SystemLanguage.Japanese:
                     return "jpn";
+                case SystemLanguage.Korean:
+                    return "kor";
                 default:
                     return "eng";
             }
@@ -79,7 +83,7 @@ namespace AIGraphics
         private static IEnumerator LoadLocalization(SystemLanguage language)
         {
             yield return new WaitUntil(() => Initialized);
-            if (SystemLanguage.Japanese == language)
+            if (SystemLanguage.Japanese == language || SystemLanguage.Korean == language)
             {
                 _lookup.TryGetValue(CurrentLocale(), out _textLookup);
             }
@@ -110,7 +114,7 @@ namespace AIGraphics
                     continue;
                 }
                 yield return lines;
-                Dictionary<string, string> languageDictionary = new Dictionary<string, string>();
+                Dictionary<string, string> languageDictionary = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
                 _lookup.Add(languageTokens[1], languageDictionary);
                 foreach (string line in lines)
                 {
@@ -130,7 +134,6 @@ namespace AIGraphics
             set
             {
                 _parent = value;
-                DefaultLanguage();
                 LocalizationPath = AIGraphics.ConfigLocalizationPath.Value;
             }
         }
