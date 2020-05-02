@@ -40,8 +40,9 @@ namespace AIGraphics.Textures
 
         internal static string noCubemap = "No skybox";
         private string selectedCubeMap = noCubemap;
-
+        
         private ReflectionProbe _probe;
+        private GameObject _probeGameObject;
 
         internal ReflectionProbe DefaultProbe => _probe ? DefaultReflectionProbe() : _probe;
 
@@ -261,22 +262,27 @@ namespace AIGraphics.Textures
 
         internal ReflectionProbe DefaultReflectionProbe()
         {
-            _probe = this.GetOrAddComponent<ReflectionProbe>();
-            //_probe.name = "Default Reflection Probe";
-            _probe.mode = ReflectionProbeMode.Realtime;
-            _probe.boxProjection = false;
-            _probe.intensity = 1f;
-            _probe.importance = 100;
-            _probe.resolution = 512;
-            _probe.backgroundColor = Color.white;
-            _probe.hdr = true;
-            _probe.cullingMask = 1 | ~Camera.cullingMask;
-            _probe.clearFlags = ReflectionProbeClearFlags.Skybox;
-            _probe.size = new Vector3(10, 10, 10);
-            _probe.nearClipPlane = 1;
-            _probe.transform.position = new Vector3(0, 0, 0);
-            _probe.refreshMode = ReflectionProbeRefreshMode.EveryFrame;
-            _probe.timeSlicingMode = ReflectionProbeTimeSlicingMode.AllFacesAtOnce;
+            if (null == _probeGameObject || null == _probe)
+            {
+                _probeGameObject = new GameObject("Default Reflection Probe");
+                _probe = _probeGameObject.GetOrAddComponent<ReflectionProbe>();                
+                _probe.mode = ReflectionProbeMode.Realtime;
+                _probe.boxProjection = false;
+                _probe.intensity = 1f;
+                _probe.importance = 100;
+                _probe.resolution = 512;
+                _probe.backgroundColor = Color.white;
+                _probe.hdr = true;
+                _probe.clearFlags = ReflectionProbeClearFlags.Skybox;
+                _probe.cullingMask = Camera.cullingMask;
+                _probe.size = new Vector3(100, 100, 100);
+                _probe.nearClipPlane = 0.01f;
+                _probe.transform.position = new Vector3(0, 0, 0);
+                _probe.refreshMode = ReflectionProbeRefreshMode.EveryFrame;
+                _probe.timeSlicingMode = ReflectionProbeTimeSlicingMode.AllFacesAtOnce;
+                DontDestroyOnLoad(_probeGameObject);
+                DontDestroyOnLoad(_probe);
+            }
             return _probe;
         }
 

@@ -1,4 +1,5 @@
 ﻿using AIGraphics.Inspector;
+using AIGraphics.Patch;
 using AIGraphics.Settings;
 using AIGraphics.Textures;
 using BepInEx;
@@ -96,13 +97,14 @@ namespace AIGraphics
             {
                 StartCoroutine(InitializeLight(scene));
             }
+            CullingMaskExtensions.RefreshLayers();
         }
 
         private IEnumerator InitializeLight(Scene scene)
         {
             yield return new WaitUntil(() => _lightManager != null);
 
-            if (KKAPI.GameMode.Maker == KKAPI.KoikatuAPI.GetCurrentGameMode() && scene.name == "CharaCustom")
+            if (GameMode.Maker == KoikatuAPI.GetCurrentGameMode() && scene.name == "CharaCustom")
             {
                 GameObject lights = GameObject.Find("CharaCustom/CustomControl/CharaCamera/Main Camera/Lights Custom");
                 if (lights != null)
@@ -124,15 +126,18 @@ namespace AIGraphics
 
         private IEnumerator Start()
         {
+            if (IsStudio())
+                StudioHooks.Init();
+
             yield return new WaitUntil(() =>
             {
-                switch (KKAPI.KoikatuAPI.GetCurrentGameMode())
+                switch (KoikatuAPI.GetCurrentGameMode())
                 {
-                    case KKAPI.GameMode.Maker:
+                    case GameMode.Maker:
                         return KKAPI.Maker.MakerAPI.InsideAndLoaded;
-                    case KKAPI.GameMode.Studio:
+                    case GameMode.Studio:
                         return KKAPI.Studio.StudioAPI.StudioLoaded;
-                    case KKAPI.GameMode.MainGame:
+                    case GameMode.MainGame:
                         return null != GameObject.Find("MapScene") && SceneManager.GetActiveScene().isLoaded && null != Camera.main; //KKAPI doesn't provide an api for in game check 
                     default:
                         return false;
@@ -169,7 +174,7 @@ namespace AIGraphics
             // It takes some time to fully loaded in studio to save/load stuffs.
             yield return new WaitUntil(() =>
             {
-                return (KoikatuAPI.GetCurrentGameMode() == GameMode.Studio) ? KKAPI.Studio.StudioAPI.InsideStudio && _skyboxManager != null : true;
+                return IsStudio() ? KKAPI.Studio.StudioAPI.InsideStudio && _skyboxManager != null : true;
             });
 
             _isLoaded = true;
@@ -221,6 +226,11 @@ namespace AIGraphics
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
             }
+        }
+
+        internal bool IsStudio()
+        {
+            return GameMode.Studio == KoikatuAPI.GetCurrentGameMode();
         }
 
         private bool Show
