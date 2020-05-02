@@ -32,7 +32,7 @@ namespace AIGraphics.Inspector
                 //inactivate controls if no cubemap
                 if (skyboxManager.TexturePaths.IsNullOrEmpty())
                 {
-                    GUILayout.Label("No custom cubemaps found");
+                    Label("No custom cubemaps found", "");
                 }
                 else
                 {
@@ -63,7 +63,6 @@ namespace AIGraphics.Inspector
                     }
                 });
                 Slider("Intensity", lightingSettings.AmbientIntensity, LightSettings.IntensityMin, LightSettings.IntensityMax, "N1", intensity => { lightingSettings.AmbientIntensity = intensity; });
-                GUI.enabled = null != lightingSettings.SkyboxSetting;
                 if (null != skyboxManager.Skybox && null != skyboxManager.Skyboxbg)
                 {
                     Slider("Exposure", skyboxManager.Exposure, ExposureMin, ExposureMax, "N1", exp => { skyboxManager.Exposure = exp; skyboxManager.Update = true; });
@@ -93,8 +92,8 @@ namespace AIGraphics.Inspector
                     GUILayout.BeginVertical(GUIStyles.Skin.box);
                     probeSettingsScrollView = GUILayout.BeginScrollView(probeSettingsScrollView);
                     {
-                        Label("Type", rp.mode.ToString());
-                        GUILayout.Label("Runtime settings");
+                        Label("Type", rp.mode.ToString());                        
+                        Label("Runtime settings", "");
                         Slider("Importance", rp.importance, 0, 1000, importance => rp.importance = importance);
                         Slider("Intensity", rp.intensity, 0, 10, "N2", intensity => rp.intensity = intensity);
                         rp.boxProjection = Toggle("Box Projection", rp.boxProjection);
@@ -102,11 +101,10 @@ namespace AIGraphics.Inspector
                         Dimension("Box Size", rp.size, size => rp.size = size);
                         Dimension("Box Offset", rp.center, size => rp.center = size);
                         GUILayout.Space(10);
-                        GUILayout.Label("Cubemap capture settings");
+                        Label("Cubemap capture settings", "");
                         Selection("Resolution", rp.resolution, LightingSettings.ReflectionResolutions, resolution => rp.resolution = resolution);                        
                         rp.hdr = Toggle("HDR", rp.hdr);
-                        rp.shadowDistance = Text("Shadow Distance", rp.shadowDistance);
-                        GUILayout.Label("Clear Flags");
+                        rp.shadowDistance = Text("Shadow Distance", rp.shadowDistance);                        
                         Selection("Clear Flags", rp.clearFlags, flag => rp.clearFlags = flag);
                         if (showAdvanced)
                         {
@@ -122,7 +120,6 @@ namespace AIGraphics.Inspector
                 }
             }
             GUILayout.EndVertical();
-            GUI.enabled = true;
         }
     }
 }
