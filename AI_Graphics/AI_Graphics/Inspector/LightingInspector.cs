@@ -130,11 +130,32 @@ namespace AIGraphics.Inspector
             if (skyboxManager.dynSkyboxSetting != null)
             {
                 Material mat = skyboxManager.Skybox;
-                // mmmm
                 GUILayout.Space(10);
                 if (skyboxManager.dynSkyboxSetting.GetType() == typeof(ProceduralSkyboxSettings) &&
                     mat.shader.name == ProceduralSkyboxSettings.shaderName)
                 {
+                    Slider("Sun Size", mat.GetFloat("_SunSize"), 0, 2, "N2", value => {
+                        mat.SetFloat("_SunSize", value);
+                        skyboxManager.Update = true;
+                    });
+                    Slider("Sun Size Convergence", mat.GetFloat("_SunSizeConvergence"), 0, 2, "N2", value => {
+                        mat.SetFloat("_SunSizeConvergence", value);
+                        skyboxManager.Update = true;
+                    });
+                    Slider("Atmosphere Thickness", mat.GetFloat("_AtmosphereThickness"), 0, 2, "N2", value => {
+                        mat.SetFloat("_AtmosphereThickness", value);
+                        skyboxManager.Update = true;
+                    });
+                    SliderColor("Sky Tint", mat.GetColor("_SkyTint"), c =>
+                    {
+                        mat.SetColor("_SkyTint", c);
+                        skyboxManager.Update = true;
+                    }, true);
+                    SliderColor("Ground Color", mat.GetColor("_GroundColor"), c =>
+                    {
+                        mat.SetColor("_GroundColor", c);
+                        skyboxManager.Update = true;
+                    }, true);
                 }
                 else if (skyboxManager.dynSkyboxSetting.GetType() == typeof(TwoPointColorSkyboxSettings) &&
                     mat.shader.name == TwoPointColorSkyboxSettings.shaderName)
