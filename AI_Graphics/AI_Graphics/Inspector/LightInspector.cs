@@ -7,7 +7,9 @@ namespace AIGraphics.Inspector
 {
     internal static class LightInspector
     {
-        private static Vector2 lightScrollView;
+        private static Vector2 dirLightScrollView;
+        private static Vector2 pointLightScrollView;
+        private static Vector2 spotLightScrollView;
         private static Vector2 inspectorScrollView;
         private static int customLightIndex = 0;
         internal static void Draw(GlobalSettings renderingSettings, LightManager lightManager, bool showAdvanced)
@@ -22,23 +24,40 @@ namespace AIGraphics.Inspector
                 }
                 GUILayout.BeginHorizontal(GUIStyles.Skin.box);
                 {
-                    lightScrollView = GUILayout.BeginScrollView(lightScrollView);
                     GUILayout.BeginVertical(GUIStyles.Skin.box, GUILayout.Width(200), GUILayout.MaxWidth(250));
                     {
                         LightGroup(lightManager, "Directional Lights", LightSettings.LightType.Directional);
-                        GUILayout.Space(5);
-                        lightManager.DirectionalLights.ForEach(l => LightOverviewModule(lightManager, l));
-                        GUILayout.Space(10);
+                        if (0 < lightManager.DirectionalLights.Count)
+                        {
+                            GUILayout.BeginVertical(GUIStyles.Skin.box);
+                            dirLightScrollView = GUILayout.BeginScrollView(dirLightScrollView);
+                            lightManager.DirectionalLights.ForEach(l => LightOverviewModule(lightManager, l));
+                            GUILayout.FlexibleSpace();
+                            GUILayout.EndScrollView();
+                            GUILayout.EndVertical();
+                        }
                         LightGroup(lightManager, "Point Lights", LightSettings.LightType.Point);
-                        GUILayout.Space(5);
-                        lightManager.PointLights.ForEach(l => LightOverviewModule(lightManager, l));
-                        GUILayout.Space(10);
+                        if (0 < lightManager.PointLights.Count)
+                        {
+                            GUILayout.BeginVertical(GUIStyles.Skin.box);
+                            pointLightScrollView = GUILayout.BeginScrollView(pointLightScrollView);                            
+                            lightManager.PointLights.ForEach(l => LightOverviewModule(lightManager, l));
+                            GUILayout.FlexibleSpace();
+                            GUILayout.EndScrollView();
+                            GUILayout.EndVertical();
+                        }
                         LightGroup(lightManager, "Spot Lights", LightSettings.LightType.Spot);
-                        GUILayout.Space(5);
-                        lightManager.SpotLights.ForEach(l => LightOverviewModule(lightManager, l));
+                        if (0 < lightManager.SpotLights.Count)
+                        {
+                            GUILayout.BeginVertical(GUIStyles.Skin.box);
+                            spotLightScrollView = GUILayout.BeginScrollView(spotLightScrollView);                            
+                            lightManager.SpotLights.ForEach(l => LightOverviewModule(lightManager, l));
+                            GUILayout.FlexibleSpace();
+                            GUILayout.EndScrollView();
+                            GUILayout.EndVertical();
+                        }
                     }
-                    GUILayout.EndVertical();
-                    GUILayout.EndScrollView();
+                    GUILayout.EndVertical();                    
                     GUILayout.Space(1);
                     inspectorScrollView = GUILayout.BeginScrollView(inspectorScrollView);
                     GUILayout.BeginVertical(GUIStyles.Skin.box);
@@ -206,7 +225,8 @@ namespace AIGraphics.Inspector
                         lightManager.Light();
                     }
                 }
-                else if (KKAPI.GameMode.Maker == KKAPI.KoikatuAPI.GetCurrentGameMode() & typeName == "Directional Lights") //add custom directional lights in maker
+                //add custom directional lights in maker
+                else if (KKAPI.GameMode.Maker == KKAPI.KoikatuAPI.GetCurrentGameMode() && LightSettings.LightType.Directional == type) 
                 {
                     if (GUILayout.Button("+"))
                     {
