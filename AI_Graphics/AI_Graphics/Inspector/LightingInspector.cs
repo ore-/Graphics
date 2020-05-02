@@ -115,9 +115,6 @@ namespace AIGraphics.Inspector
                         rp.nearClipPlane = Text("Clipping Planes - Near", rp.nearClipPlane, "N2");
                         rp.farClipPlane = Text("Clipping Planes - Far", rp.farClipPlane, "N2");
                         SliderColor("Background", rp.backgroundColor, colour => { rp.backgroundColor = colour; });
-                        Label("Culling Mask", rp.cullingMask.ToString());
-                        rp.nearClipPlane = Text("Clipping Planes - Near", rp.nearClipPlane, "N1");
-                        rp.farClipPlane = Text("Clipping Planes - Far", rp.farClipPlane, "N1");
                         Selection("Time Slicing Mode", rp.timeSlicingMode, mode => rp.timeSlicingMode = mode);
                     }
                     GUILayout.EndScrollView();
