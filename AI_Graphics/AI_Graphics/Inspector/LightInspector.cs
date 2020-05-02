@@ -199,7 +199,7 @@ namespace AIGraphics.Inspector
         {
             GUILayout.BeginHorizontal();
             {
-                GUILayout.Label(typeName, GUIStyles.boldlabel);
+                Label(typeName, "", true);
                 GUILayout.FlexibleSpace();
                 if (AIGraphics.Instance.IsStudio())
                 {

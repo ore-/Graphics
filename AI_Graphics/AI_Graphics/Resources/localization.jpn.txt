@@ -1,0 +1,29 @@
+Lighting,ライティング
+Lights,ライト
+PostProcessing,ポストプロセシング
+Presets,プリセット
+Settings,設定
+Camera,カメラ
+Point Lights,ポイントライト
+Spot Lights,スポットライト
+Directional Lights,ディレクショナルライト
+English,英語
+Japanese,日本語
+Shadows,影
+Reflection Probes,リフレクションプローブ
+Language,言語
+Colour,色
+Anti-aliasing,アンチエイリアス
+Ambient Occlusion,アンビエントオクルージョン
+Screen Space Reflection,スクリーンスペースリフレクション
+Fog,フォグ
+Depth of Field,被写界深度
+Motion Blur,モーションブラー
+Eye Adaptation,アイアダプテーション
+Bloom,ブルーム
+Color Grading,カラーグレーディング
+User Lut,ユーザー LUT
+Chromatic Aberration,色収差
+Grain,グレイン
+Vignette,ビネット
+Dithering,ディザリング

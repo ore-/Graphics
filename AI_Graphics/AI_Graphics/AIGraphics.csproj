@@ -117,6 +117,7 @@
     <Compile Include="Alloy\AlloyPropertyAttributes.cs" />
     <Compile Include="Alloy\AlloyUtils.cs" />
     <Compile Include="Alloy\AreaLight\AlloyAreaLight.cs" />
+    <Compile Include="CullingMaskExtensions.cs" />
     <Compile Include="FocusPuller.cs" />
     <Compile Include="Patch\Studio.cs" />
     <Compile Include="Inspector\LightingInspector.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="Inspector\PostProcessingInspector.cs" />
     <Compile Include="Inspector\PresetInspector.cs" />
     <Compile Include="LightManager.cs" />
+    <Compile Include="LocalizationManager.cs" />
     <Compile Include="PCSS\PCSSLight.cs" />
     <Compile Include="PostProcessingManager.cs" />
     <Compile Include="Preset.cs" />
@@ -196,6 +198,12 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="Alloy\AreaLight\Defaults\DefaultSpotCookie.tif" />
+    <Content Include="Resources\localization.kor.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\localization.jpn.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

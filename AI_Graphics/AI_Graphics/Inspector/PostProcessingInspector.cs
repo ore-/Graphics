@@ -13,19 +13,18 @@ namespace AIGraphics.Inspector
         internal static void Draw(PostProcessingSettings postProcessingSettings, PostProcessingManager postprocessingManager, FocusPuller focusPuller, bool showAdvanced)
         {
             GUILayout.BeginVertical(GUIStyles.Skin.box);
-
             {
-                GUILayout.Label("Post Process Layer", GUIStyles.boldlabel);
+                Label("Post Process Layer", "", true);
                 GUILayout.Space(1);
                 if (showAdvanced)
                 {
-                    GUILayout.Label("Volume blending", GUIStyles.boldlabel);
+                    Label("Volume blending", "", true);
                     GUILayout.Space(1);
                     Label("Trigger", postProcessingSettings.VolumeTriggerSetting?.name);
                     Label("Layer", LayerMask.LayerToName(Mathf.RoundToInt(Mathf.Log(postProcessingSettings.VolumeLayerSetting.value, 2))));
                     GUILayout.Space(10);
-                }
-                GUILayout.Label("Anti-aliasing", GUIStyles.boldlabel);
+                }                
+                Label("Anti-aliasing", "", true);
                 Selection("Mode", postProcessingSettings.AntialiasingMode, mode => postProcessingSettings.AntialiasingMode = mode);
                 if (PostProcessingSettings.Antialiasing.SMAA == postProcessingSettings.AntialiasingMode)
                 {
@@ -55,8 +54,7 @@ namespace AIGraphics.Inspector
                 {
                     volumeLabel = "Post Process Volumes";
                 }
-
-                GUILayout.Label(volumeLabel, GUIStyles.boldlabel);
+                Label(volumeLabel, "", true);
                 postScrollView = GUILayout.BeginScrollView(postScrollView);
                 PostProcessVolumeSettings(postProcessingSettings, postprocessingManager, focusPuller, showAdvanced);
                 GUILayout.EndScrollView();
@@ -353,7 +351,20 @@ namespace AIGraphics.Inspector
                 {
                     Selection("Preset", settings.screenSpaceReflectionsLayer.preset.value, preset => settings.screenSpaceReflectionsLayer.preset.value = preset, -1,
                         settings.screenSpaceReflectionsLayer.preset.overrideState, overrideState => settings.screenSpaceReflectionsLayer.preset.overrideState = overrideState);
-                    Text("Maximum March Distance", settings.screenSpaceReflectionsLayer.maximumMarchDistance.value, "N2",
+
+                    if (ScreenSpaceReflectionPreset.Custom == settings.screenSpaceReflectionsLayer.preset.value)
+                    {
+                        Slider("Maximum Iteration Count", settings.screenSpaceReflectionsLayer.maximumIterationCount.value, 0, 256, iteration => settings.screenSpaceReflectionsLayer.maximumIterationCount.value = iteration,
+                            settings.screenSpaceReflectionsLayer.maximumIterationCount.overrideState, overrideState => settings.screenSpaceReflectionsLayer.maximumIterationCount.overrideState = overrideState);
+
+                        Slider("Thickness", settings.screenSpaceReflectionsLayer.thickness.value, 1f, 64f, "N1", thickness => settings.screenSpaceReflectionsLayer.thickness.value = thickness,
+                            settings.screenSpaceReflectionsLayer.thickness.overrideState, overrideState => settings.screenSpaceReflectionsLayer.thickness.overrideState = overrideState);
+
+                        Selection("Resolution", settings.screenSpaceReflectionsLayer.resolution.value, resolution => settings.screenSpaceReflectionsLayer.resolution.value = resolution, -1,
+                            settings.screenSpaceReflectionsLayer.resolution.overrideState, overrideState => settings.screenSpaceReflectionsLayer.resolution.overrideState = overrideState);
+                    }
+
+                    settings.screenSpaceReflectionsLayer.maximumMarchDistance.value = Text("Maximum March Distance", settings.screenSpaceReflectionsLayer.maximumMarchDistance.value, "N2",
                         settings.screenSpaceReflectionsLayer.maximumMarchDistance.overrideState, overrideState => settings.screenSpaceReflectionsLayer.maximumMarchDistance.overrideState = overrideState);
                     Slider("Distance Fade", settings.screenSpaceReflectionsLayer.distanceFade, 0f, 1f, "N3", fade => settings.screenSpaceReflectionsLayer.distanceFade.value = fade,
                         settings.screenSpaceReflectionsLayer.distanceFade.overrideState, overrideState => settings.screenSpaceReflectionsLayer.distanceFade.overrideState = overrideState);
