@@ -111,7 +111,6 @@ namespace AIGraphics.Inspector
                         if (showAdvanced)
                         {
                             SelectionMask("Culling Mask", rp.cullingMask, mask => rp.cullingMask = mask);
-                            Label("Culling Mask", rp.cullingMask.ToString());
                         }
                         rp.nearClipPlane = Text("Clipping Planes - Near", rp.nearClipPlane, "N2");
                         rp.farClipPlane = Text("Clipping Planes - Far", rp.farClipPlane, "N2");

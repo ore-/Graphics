@@ -18,9 +18,9 @@ namespace AIGraphics.Inspector
                 cameraSettings.ClearFlag = Selection("Clear Flags", cameraSettings.ClearFlag, flag => cameraSettings.ClearFlag = flag);
                 if (showAdvanced)
                 {
+                    //changing studio camera's culling mask breaks studio, possibly due to cinemachine
                     GUI.enabled = false; 
-                    SelectionMask("Culling Mask", cameraSettings.CullingMask, mask => cameraSettings.CullingMask = mask);
-                    Label("Culling Mask", cameraSettings.CullingMask.ToString());
+                    SelectionMask("Culling Mask", cameraSettings.CullingMask, mask => cameraSettings.CullingMask = mask);                    
                     GUI.enabled = true;
                 }
                 Slider("Near Clipping Plane", cameraSettings.NearClipPlane, 0.01f, 15000f, "N2", ncp => { cameraSettings.NearClipPlane = ncp; });
