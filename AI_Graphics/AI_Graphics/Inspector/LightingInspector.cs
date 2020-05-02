@@ -27,7 +27,7 @@ namespace AIGraphics.Inspector
         {
             GUILayout.BeginVertical(GUIStyles.Skin.box);
             {
-                GUILayout.Label("Environment Skybox", GUIStyles.boldlabel);
+                Label("Environment Skybox", "", true);
                 GUILayout.Space(1);
                 //inactivate controls if no cubemap
                 if (skyboxManager.TexturePaths.IsNullOrEmpty())
@@ -51,8 +51,8 @@ namespace AIGraphics.Inspector
                     Label("Skybox Material", lightingSettings?.SkyboxSetting?.name ?? "");
                     Label("Sun Source", lightingSettings?.SunSetting?.name ?? "");
                     GUILayout.Space(10);
-                }
-                GUILayout.Label("Environment Lighting", GUIStyles.boldlabel);
+                }                
+                Label("Environment Lighting", "", true);
                 GUILayout.Space(1);
                 Selection("Source", lightingSettings.AmbientModeSetting, mode =>
                 {
@@ -71,8 +71,8 @@ namespace AIGraphics.Inspector
                     GUILayout.Space(10);
                     SliderColor("Skybox Tint", skyboxManager.Tint, c => { skyboxManager.Tint = c; skyboxManager.Update = true; }, true);
                 }
-                GUILayout.Space(10);
-                GUILayout.Label("Environment Reflections", GUIStyles.boldlabel);
+                GUILayout.Space(10);                
+                Label("Environment Reflections", "", true);
                 GUILayout.Space(1);
                 Selection("Resolution", lightingSettings.ReflectionResolution, LightingSettings.ReflectionResolutions, resolution => lightingSettings.ReflectionResolution = resolution);
                 Slider("Intensity", lightingSettings.ReflectionIntensity, 0f, 1f, "N1", intensity => { lightingSettings.ReflectionIntensity = intensity; });
@@ -82,7 +82,7 @@ namespace AIGraphics.Inspector
             GUILayout.Space(1);
             GUILayout.BeginVertical(GUIStyles.Skin.box);
             {
-                GUILayout.Label("Reflection Probes", GUIStyles.boldlabel);
+                Label("Reflection Probes", "", true);
                 ReflectionProbe[] rps = skyboxManager.GetReflectinProbes();
                 if (0 < rps.Length)
                 {

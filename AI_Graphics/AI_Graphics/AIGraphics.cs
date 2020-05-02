@@ -27,6 +27,7 @@ namespace AIGraphics
         public static ConfigEntry<string> ConfigCubeMapPath { get; private set; }
         public static ConfigEntry<string> ConfigPresetPath { get; private set; }
         public static ConfigEntry<string> ConfigLensDirtPath { get; private set; }
+        public static ConfigEntry<string> ConfigLocalizationPath { get; private set; }
         public static ConfigEntry<int> ConfigFontSize { get; internal set; }
         public static ConfigEntry<int> ConfigWindowWidth { get; internal set; }
         public static ConfigEntry<int> ConfigWindowHeight { get; internal set; }
@@ -67,6 +68,7 @@ namespace AIGraphics
             ConfigPresetPath = Config.Bind("Config", "Preset Location", Application.dataPath + "/../presets/", new ConfigDescription("Where presets are stored"));
             ConfigCubeMapPath = Config.Bind("Config", "Cubemap path", Application.dataPath + "/../cubemaps/", new ConfigDescription("Where cubemaps are stored"));
             ConfigLensDirtPath = Config.Bind("Config", "Lens dirt texture path", Application.dataPath + "/../lensdirts/", new ConfigDescription("Where lens dirt textures are stored"));
+            ConfigLocalizationPath = Config.Bind("Config", "Localization path", Application.dataPath + "/../BepInEx/plugins/AIGraphics/Resources/", new ConfigDescription("Where localizations are stored"));
             ConfigFontSize = Config.Bind("Config", "Font Size", 12, new ConfigDescription("Font Size"));
             GUIStyles.FontSize = ConfigFontSize.Value;
             ConfigWindowWidth = Config.Bind("Config", "Window Width", 750, new ConfigDescription("Window Width"));
@@ -158,6 +160,8 @@ namespace AIGraphics
             _postProcessingManager.LensDirtTexturesPath = ConfigLensDirtPath.Value;
             DontDestroyOnLoad(_postProcessingManager);
 
+            LocalizationManager.Parent = this;
+            
             _lightManager = new LightManager(this);
 
             _focusPuller = Instance.GetOrAddComponent<FocusPuller>();
@@ -180,7 +184,7 @@ namespace AIGraphics
         internal PostProcessingManager PostProcessingManager => _postProcessingManager;
         internal LightManager LightManager => _lightManager;
         internal FocusPuller FocusPuller => _focusPuller;
-        internal PresetManager PresetManager => _presetManager;
+        internal PresetManager PresetManager => _presetManager;        
 
         internal void OnGUI()
         {

@@ -14,7 +14,7 @@ namespace AIGraphics.Inspector
         {
             GUILayout.BeginVertical(GUIStyles.Skin.box);
             {
-                GUILayout.Label("Camera", GUIStyles.boldlabel);
+                Label("Camera", "", true);
                 cameraSettings.ClearFlag = Selection("Clear Flags", cameraSettings.ClearFlag, flag => cameraSettings.ClearFlag = flag);
                 if (showAdvanced)
                 {
@@ -31,8 +31,8 @@ namespace AIGraphics.Inspector
                 cameraSettings.HDR = Toggle("Allow HDR", cameraSettings.HDR);
                 cameraSettings.MSAA = Toggle("Allow MSAA (Forward Only)", cameraSettings.MSAA);
                 cameraSettings.DynamicResolution = Toggle("Allow DynamicResolution", cameraSettings.DynamicResolution);
-                GUILayout.Space(10);
-                GUILayout.Label("Rendering", GUIStyles.boldlabel);
+                GUILayout.Space(10);                
+                Label("Rendering", "", true);
                 GUILayout.Space(1);
                 Label("Colour Space", QualitySettings.activeColorSpace.ToString());
                 Label("Quality Level", QualitySettings.names[QualitySettings.GetQualityLevel()]);
@@ -40,8 +40,8 @@ namespace AIGraphics.Inspector
                 Selection("Anisotropic Textures", renderingSettings.AnisotropicFiltering, filtering => renderingSettings.AnisotropicFiltering = filtering);
                 Slider("MSAA Multiplier", renderingSettings.AntiAliasing, 0, 8, aa => renderingSettings.AntiAliasing = aa);
                 renderingSettings.RealtimeReflectionProbes = Toggle("Realtime Reflection Probes", renderingSettings.RealtimeReflectionProbes);
-                GUILayout.Space(10);
-                GUILayout.Label("Shadows", GUIStyles.boldlabel);
+                GUILayout.Space(10);                
+                Label("Shadows", "", true);
                 GUILayout.Space(1);
                 Selection("Shadowmask Mode", renderingSettings.ShadowmaskModeSetting, mode => renderingSettings.ShadowmaskModeSetting = mode);
                 Selection("Shadows", renderingSettings.ShadowQualitySetting, setting => renderingSettings.ShadowQualitySetting = setting);
@@ -50,6 +50,7 @@ namespace AIGraphics.Inspector
                 renderingSettings.ShadowDistance = Text("Shadow Distance", renderingSettings.ShadowDistance);
                 renderingSettings.ShadowNearPlaneOffset = Text("Shadow Near Plane Offset", renderingSettings.ShadowNearPlaneOffset);
                 GUILayout.Space(10);
+                Selection("Language", LocalizationManager.CurrentLanguage, language => LocalizationManager.CurrentLanguage = language);
                 Slider("Font Size", renderingSettings.FontSize, 12, 17, size => renderingSettings.FontSize = size);
                 Slider("Window Width", Inspector.Width, 400, Screen.width / 2, size => Inspector.Width = size);
                 Slider("Window Height", Inspector.Height, 400, Screen.height, size => Inspector.Height = size);

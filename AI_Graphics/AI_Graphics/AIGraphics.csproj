@@ -125,6 +125,7 @@
     <Compile Include="Inspector\PostProcessingInspector.cs" />
     <Compile Include="Inspector\PresetInspector.cs" />
     <Compile Include="LightManager.cs" />
+    <Compile Include="LocalizationManager.cs" />
     <Compile Include="PCSS\PCSSLight.cs" />
     <Compile Include="PostProcessingManager.cs" />
     <Compile Include="Preset.cs" />
@@ -196,6 +197,9 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="Alloy\AreaLight\Defaults\DefaultSpotCookie.tif" />
+    <Content Include="Resources\localization.jpn.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
