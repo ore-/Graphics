@@ -126,6 +126,7 @@
     <Compile Include="Inspector\PresetInspector.cs" />
     <Compile Include="LightManager.cs" />
     <Compile Include="LocalizationManager.cs" />
+    <Compile Include="PCSS\PCSSLight.cs" />
     <Compile Include="PostProcessingManager.cs" />
     <Compile Include="Preset.cs" />
     <Compile Include="PresetManager.cs" />
