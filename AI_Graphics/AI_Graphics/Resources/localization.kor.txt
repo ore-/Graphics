@@ -1,0 +1,180 @@
+﻿Lighting,전체조명
+Lights,부분조명
+PostProcessing,후처리셰이더
+Presets,빠른설정
+Mode,모드
+SMAA Quality,SMAA 퀄리티
+Settings,설정
+Camera,카메라
+Point Lights,포인트 조명
+Spot Lights,스팟 조명
+Directional Lights,방향 조명
+English,English
+Japanese,日本語
+Korean,한국어
+Shadows,그림자
+Reflection Probes,반사 설정
+Colour,색
+Anti-aliasing,안티 앨리어싱
+Ambient Occlusion,간접 그림자
+Amplify Ambient Occlusion,Amplify 간접 그림자
+Auto Exposure,자동 노출도
+Red,빨강
+Blue,파랑
+Green,초록
+Screen Space Reflection,화면 반사
+Fog,안개
+Depth Of Field,피사계심도
+Motion Blur,모션 블러
+Eye Adaptation,노출 적응
+Bloom,빛퍼짐
+Color Grading,색감
+User Lut,사용자 LUT 색감
+LUT Blend,LUT 전환율
+Chromatic Aberration,광학 색분리
+Grain,필름 노이즈
+Vignette,가장자리 어둡게
+Dithering,디더링
+Intensity,강도
+Clear Flags,렌더 기본값
+Skybox,스카이박스
+Depth,깊이
+Nothing,없음
+Near Clipping Plane,최저 렌더링 거리 
+Far Clipping Plane,최고 렌더링 거리
+Clipping Planes - Near,최저 렌더링 거리 
+Clipping Planes - Far,최고 렌더링 거리
+Rendering Path,렌더링 방식
+Field of View,시야각
+Occulsion Culling,동적 지역 숨김
+Allow HDR,HDR 허용
+Allow MSAA (Forward Only),MSAA 허용 (Forward 렌더링 전용)
+Allow DynamicResolution,동적 해상도 허용
+Colour Space,색조 범위
+Linear,선형
+Quality Level,게임 그래픽 설정
+Pixel Light Count,픽셀 조명 수
+Anisotropic Textures,이방성 텍스처
+MSAA Multiplier,MSAA 강도
+Realtime Reflection Probes,실시간 반사구 최신화
+Shadowmask Mode,그림자 마스크 모드
+Shadowmask,그림자마스크
+DistanceShadowmask,장거리 그림자마스크
+Shadow Resolution,그림자 해상도
+Low,낮음
+Medium,보통
+High,높음
+Very High,매우 높음
+VeryHigh,매우 높음
+Shadow Projection,그림자 투사 방법
+CloseFit,가장 가까운대로 투사
+StableFit,안정적으로 투사
+Shadow Distance,그림자 렌더링 거리
+Shadow Near Plane Offset,그림자 근접면 거리
+Font Size,글꼴 크기
+Language,언어
+Window Width,창 가로 크기
+Window Height,창 세로 크기
+Show Advanced Settings,고급 사용자용 메뉴 사용
+Disable,비활성
+All,전부
+Environment Skybox,전체광 배경
+Environment Lighting,전체광 조명
+Source,근원지
+Trilight,삼색
+Flat,단색
+Environment Reflections,전체광 반사
+Resolution,해상도
+Bounces,반사 반복
+Type,종류
+Runtime setting,실시간 세팅
+Importance,중요도
+Box Projection,박스형 지역 반사
+Blend Distance,전환 거리
+Box Size,지역 사이즈
+Box Offset,지역 위치
+Cubemap capture settings,전체광 배경 캡처 설정
+Background,배경
+Fast Mode,고속 모드
+Lens Dirt,렌즈 먼지
+Dirt Intensity,먼지 세기
+White Balance,백색 균형
+Temperature,색 온도
+Tint,색조
+Tone,톤
+Saturation,색 강도
+Brightness,밝기
+Contrast,대비
+Lift,리프트
+Gamma,감마
+Gain,게인
+Value,값
+Auto Focus,자동 초점
+Aperture,조리개 값
+Focal Distance,초점 거리
+Focal Length,초점 길이
+Max Blur Size,최대 흐림 사이즈
+Luminance Contribution,조명 기여도
+Preset,빠른 설정
+Lower,매우 낮음
+Higher,매우 높음
+Ultra,가장 높음
+Overkill,완전 최대치
+Distance Fade,사라짐 거리
+Smoothness,부드러움
+Roundness,원형율
+Shutter Angle,셔터 각도
+Sample Count,표본 수
+Ambient Only,주변환경만 적용
+Cache Aware,캐시 사용
+Downsample,표본 표준화
+Apply Method,적용 방식
+PerPixel Normals,픽셀 노말값
+Bias,치우침
+Power Exponent,강도 제곱근
+Radius,범위
+Thickness,굵기
+Blur Enabled,흐림 필터 사용
+Blur Sharpness,흐림 필터 선명하게
+Blur Passes,흐림 필터 반복
+Blur Radius,흐림 필터 범위
+Filter Enabled,필터 사용
+Filter Blending,필터 전환
+Filter Response,필터 반응
+Fade Enabled,거리 전환 사용
+Fade Length,거리 전환 길이
+Fade Start,거리 전환 시작점
+Fade To Intensity,거리 전환 목표 강도
+Fade To Power Exponent,거리 전환 목표 강도 제곱근
+Fade To Radius,거리 전환 목표 범위
+Fade To Thickness,거리 전환 목표 굵기
+Fade To Tint,거리 전환 목표 색조
+Histogram Filtering (%),히스토그램 필터링(%)
+Lower Bound,최저 범위
+Upper Bound,최고 범위
+Min Luminance (EV),최저 밝기 (EV)
+Max Luminance (EV),최고 밝기 (EV)
+Speed from light to dark,밝은 곳에서 어두운 곳으로 전환 속도
+Speed from dark to light,어두운 곳에서 밝은 곳으로 전환 속도
+Progressive,점진적
+Fixed,고정값
+Threshold,최소 요구값
+SoftKnee,빛퍼짐 전환값 
+Clamp,최대값
+Diffusion,색퍼짐값
+AnamorphicRatio,가로세로 비율 (중앙값 0)
+Hue Shift,색변환율
+Size,크기
+Maximum March Distance,최대 반사 거리
+Color,색
+Rounded,원형
+Time Slicing Mode,시간 스케쥴 모드
+SolidColor,단색
+Keep Alpha,알파값 유지
+None,없음
+Weight,무게
+Jitter Spread,끊김 분산
+Stationary Blending,정적 전환
+Motion Blending,동작 전환
+Sharpness,선명도
+HardOnly,부드러움 없는 그림자
