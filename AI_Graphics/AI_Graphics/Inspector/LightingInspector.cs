@@ -127,13 +127,14 @@ namespace AIGraphics.Inspector
 
         internal static void DrawDynSkyboxOptions(LightingSettings lightingSettings, SkyboxManager skyboxManager, bool showAdvanced)
         {
-            if (skyboxManager.dynSkyboxSetting != null)
+            if (skyboxManager != null && skyboxManager.Skybox != null)
             {
-                Material mat = skyboxManager.Skybox;
                 GUILayout.Space(10);
-                if (skyboxManager.dynSkyboxSetting.GetType() == typeof(ProceduralSkyboxSettings) &&
-                    mat.shader.name == ProceduralSkyboxSettings.shaderName)
+                Material mat = skyboxManager.Skybox;
+
+                if (mat.shader.name == ProceduralSkyboxSettings.shaderName)
                 {
+                    Label("Unity Skybox Settings", "", true);
                     Slider("Sun Size", mat.GetFloat("_SunSize"), 0, 2, "N2", value => {
                         mat.SetFloat("_SunSize", value);
                         skyboxManager.Update = true;
@@ -157,9 +158,9 @@ namespace AIGraphics.Inspector
                         skyboxManager.Update = true;
                     }, true);
                 }
-                else if (skyboxManager.dynSkyboxSetting.GetType() == typeof(TwoPointColorSkyboxSettings) &&
-                    mat.shader.name == TwoPointColorSkyboxSettings.shaderName)
+                else if (mat.shader.name == TwoPointColorSkyboxSettings.shaderName)
                 {
+                    Label("Two Point Color Skybox Settings", "", true);
                     SliderColor("Colour A", mat.GetColor("_ColorA"), c =>
                     {
                         mat.SetColor("_ColorA", c);
@@ -190,6 +191,25 @@ namespace AIGraphics.Inspector
                         mat.SetVector("_DirB", direction);
                         skyboxManager.Update = true;
                     });
+                }
+                else if (mat.shader.name == HemisphereGradientSkyboxSetting.shaderName)
+                {
+                    Label("Hemisphere Dynamic Skybox Settings", "", true);
+                    SliderColor("North Pole", mat.GetColor("_TopColor"), c =>
+                    {
+                        mat.SetColor("_TopColor", c);
+                        skyboxManager.Update = true;
+                    }, true);
+                    SliderColor("Equator", mat.GetColor("_MiddleColor"), c =>
+                    {
+                        mat.SetColor("_MiddleColor", c);
+                        skyboxManager.Update = true;
+                    }, true);
+                    SliderColor("South Pole", mat.GetColor("_BottomColor"), c =>
+                    {
+                        mat.SetColor("_BottomColor", c);
+                        skyboxManager.Update = true;
+                    }, true);
                 }
             }
         }

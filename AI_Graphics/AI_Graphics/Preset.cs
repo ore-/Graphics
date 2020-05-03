@@ -17,20 +17,41 @@ namespace AIGraphics
         public SkyboxParams skybox;
         public SkyboxSettings skyboxSetting;
 
-        public Preset(GlobalSettings global, CameraSettings camera, LightingSettings lights, PostProcessingSettings pp, SkyboxParams skybox, SkyboxSettings skyboxSetting)
+        public Preset(GlobalSettings global, CameraSettings camera, LightingSettings lights, PostProcessingSettings pp, SkyboxParams skybox)
         {
             this.camera = camera;
             this.global = global;
             this.lights = lights;
             this.pp = pp;
             this.skybox = skybox;
-            this.skyboxSetting = skyboxSetting;
+
+            // Skybox setting is generated when preset is being saved.
+            skyboxSetting = null;
         }
 
         public void UpdateParameters()
         {
             pp.SaveParameters();
-            skybox = AIGraphics.Instance.SkyboxManager.skyboxParams;
+            SkyboxManager manager = AIGraphics.Instance.SkyboxManager;
+
+            Material mat = manager.Skybox;
+            if (mat)
+            {
+                SkyboxSettings setting = null;
+
+                // Generate Setting Class
+                if (mat.shader.name == ProceduralSkyboxSettings.shaderName) setting = new ProceduralSkyboxSettings();
+                else if (mat.shader.name == TwoPointColorSkyboxSettings.shaderName) setting = new TwoPointColorSkyboxSettings();
+
+                // Save Setting Variables and assign settings..
+                if (setting != null)
+                {
+                    setting.Save();
+                    skyboxSetting = setting;
+                }
+            }
+
+            skybox = manager.skyboxParams;
         }
         public byte[] Serialize()
         {
@@ -100,7 +121,10 @@ namespace AIGraphics
             SkyboxManager manager = AIGraphics.Instance.SkyboxManager;
             if (manager)
             {
+                if (skyboxSetting != null)
+                    manager.dynSkyboxSetting = skyboxSetting;
                 manager.skyboxParams = skybox;
+                manager.PresetUpdate = true;
                 manager.LoadSkyboxParams();
             }
         }

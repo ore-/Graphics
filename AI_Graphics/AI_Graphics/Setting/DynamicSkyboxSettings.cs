@@ -11,9 +11,8 @@ namespace AIGraphics.Settings
 {
     [Union(0, typeof(ProceduralSkyboxSettings))]
     [Union(1, typeof(TwoPointColorSkyboxSettings))]
-    public abstract class SkyboxSettings {
-        readonly static public string shaderName;
-
+    public abstract class SkyboxSettings
+    {
         virtual public void Save() { }
         virtual public void Load() { }
     }
@@ -21,19 +20,19 @@ namespace AIGraphics.Settings
     [MessagePackObject(keyAsPropertyName: true)]
     public class ProceduralSkyboxSettings : SkyboxSettings
     {
+        [IgnoreMember]
         readonly static public string shaderName = "Skybox/Procedural";
 
-        internal float sunSize;
-        internal float sunsizeConvergence;
-        internal float atmosphereThickness;
-        internal float[] skyTint;
-        internal float[] groundTint;
-        internal float exposure;
+        public float sunSize;
+        public float sunsizeConvergence;
+        public float atmosphereThickness;
+        public float[] skyTint;
+        public float[] groundTint;
 
-        override public void Save()
+        public override void Save()
         {
         }
-        override public void Load()
+        public override void Load()
         {
         }
     }
@@ -41,15 +40,16 @@ namespace AIGraphics.Settings
     [MessagePackObject(keyAsPropertyName: true)]
     public class TwoPointColorSkyboxSettings : SkyboxSettings
     {
-        internal float intensityA;
-        internal float intensityB;
-        internal float[] colorA;
-        internal float[] colorB;
-        internal float[] directionA;
-        internal float[] directionB;
+        public float intensityA;
+        public float intensityB;
+        public float[] colorA;
+        public float[] colorB;
+        public float[] directionA;
+        public float[] directionB;
 
+        [IgnoreMember]
         readonly static public string shaderName = "SkyBox/Simple Two Colors";
-        override public void Save()
+        public override void Save()
         {
             Material mat = AIGraphics.Instance.SkyboxManager.Skybox;
             if (mat != null && mat.shader.name == shaderName)
@@ -66,7 +66,7 @@ namespace AIGraphics.Settings
                 directionB = new float[3] { matDirectionB.x, matDirectionB.y, matDirectionB.z };
             }
         }
-        override public void Load()
+        public override void Load()
         {
             Material mat = AIGraphics.Instance.SkyboxManager.Skybox;
             if (mat != null && mat.shader.name == shaderName)
@@ -80,4 +80,44 @@ namespace AIGraphics.Settings
             }
         }
     }
+    public class FourPointGradientSkyboxSetting : SkyboxSettings
+    {
+        [IgnoreMember]
+        readonly static public string shaderName = "SkyboxPlus/Gradients";
+    }
+
+    public class HemisphereGradientSkyboxSetting : SkyboxSettings
+    {
+        public float[] colorA;
+        public float[] colorB;
+        public float[] colorC;
+
+        [IgnoreMember]
+        readonly static public string shaderName = "SkyboxPlus/Hemisphere";
+
+        public override void Save()
+        {
+            Material mat = AIGraphics.Instance.SkyboxManager.Skybox;
+            if (mat != null && mat.shader.name == shaderName)
+            {
+                Color matColorA = mat.GetColor("_TopColor");
+                colorA = new float[3] { matColorA.r, matColorA.g, matColorA.b };
+                Color matColorB = mat.GetColor("_MiddleColor");
+                colorB = new float[3] { matColorB.r, matColorB.g, matColorB.b };
+                Color matColorC = mat.GetColor("_BottomColor");
+                colorC = new float[3] { matColorC.r, matColorC.g, matColorC.b };
+            }
+        }
+        public override void Load()
+        {
+            Material mat = AIGraphics.Instance.SkyboxManager.Skybox;
+            if (mat != null && mat.shader.name == shaderName)
+            {
+                mat.SetColor("_TopColor", new Color(colorA[0], colorA[1], colorA[2]));
+                mat.SetColor("_MiddleColor", new Color(colorB[0], colorB[1], colorB[2]));
+                mat.SetColor("_BottomColor", new Color(colorC[0], colorC[1], colorC[2]));
+            }
+        }
+    }
+
 }

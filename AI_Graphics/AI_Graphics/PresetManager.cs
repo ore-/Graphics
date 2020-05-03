@@ -42,14 +42,14 @@ namespace AIGraphics
 
         internal void Save(string presetName)
         {
-            Preset preset = new Preset(_parent.Settings, _parent.CameraSettings, _parent.LightingSettings, _parent.PostProcessingSettings, _parent.SkyboxManager.skyboxParams, _parent.SkyboxManager.dynSkyboxSetting);
+            Preset preset = new Preset(_parent.Settings, _parent.CameraSettings, _parent.LightingSettings, _parent.PostProcessingSettings, _parent.SkyboxManager.skyboxParams);
             preset.Save(presetName);
             LoadPresets();
         }
 
         internal PluginData GetExtendedData()
         {
-            Preset preset = new Preset(_parent.Settings, _parent.CameraSettings, _parent.LightingSettings, _parent.PostProcessingSettings, _parent.SkyboxManager.skyboxParams, _parent.SkyboxManager.dynSkyboxSetting);
+            Preset preset = new Preset(_parent.Settings, _parent.CameraSettings, _parent.LightingSettings, _parent.PostProcessingSettings, _parent.SkyboxManager.skyboxParams);
             PluginData saveData = new PluginData();
             preset.UpdateParameters();
             byte[] presetData = preset.Serialize();
@@ -60,7 +60,7 @@ namespace AIGraphics
 
         internal bool Load(string presetName)
         {
-            Preset preset = new Preset(_parent.Settings, _parent.CameraSettings, _parent.LightingSettings, _parent.PostProcessingSettings, _parent.SkyboxManager.skyboxParams, _parent.SkyboxManager.dynSkyboxSetting);
+            Preset preset = new Preset(_parent.Settings, _parent.CameraSettings, _parent.LightingSettings, _parent.PostProcessingSettings, _parent.SkyboxManager.skyboxParams);
             return preset.Load(presetName);
         }
 
@@ -71,7 +71,7 @@ namespace AIGraphics
                 byte[] presetData = (byte[])val;
                 if (!presetData.IsNullOrEmpty())
                 {
-                    Preset preset = new Preset(_parent.Settings, _parent.CameraSettings, _parent.LightingSettings, _parent.PostProcessingSettings, _parent.SkyboxManager.skyboxParams, _parent.SkyboxManager.dynSkyboxSetting);
+                    Preset preset = new Preset(_parent.Settings, _parent.CameraSettings, _parent.LightingSettings, _parent.PostProcessingSettings, _parent.SkyboxManager.skyboxParams);
                     preset.Load(presetData);
                 }
             }

@@ -42,7 +42,7 @@ namespace AIGraphics.Textures
         internal static string noCubemap = "No skybox";
 
         private string selectedCubeMap = noCubemap;
-        
+
         private ReflectionProbe _probe;
         private GameObject _probeGameObject;
 
@@ -52,6 +52,7 @@ namespace AIGraphics.Textures
         internal Camera Camera => Parent.CameraSettings.MainCamera;
 
         public bool Update { get; set; }
+        public bool PresetUpdate { get; set; }
 
         internal BepInEx.Logging.ManualLogSource Logger { get; set; }
 
@@ -174,15 +175,12 @@ namespace AIGraphics.Textures
             ApplySkybox();
             ApplySkyboxParams();
 
+
+            // dynSkyboxSetting is only being used for setting up parameters from preset after assetbundle loading.
+            if (dynSkyboxSetting != null) dynSkyboxSetting.Load();
             dynSkyboxSetting = null;
-            // do you know better way?
-            if (Skybox.shader.name == ProceduralSkyboxSettings.shaderName)
-                dynSkyboxSetting = new ProceduralSkyboxSettings();
-            else if (Skybox.shader.name == TwoPointColorSkyboxSettings.shaderName)
-                dynSkyboxSetting = new TwoPointColorSkyboxSettings();
 
-
-                Update = true;
+            Update = true;
             Resources.UnloadUnusedAssets();
         }
 
@@ -203,7 +201,7 @@ namespace AIGraphics.Textures
                 }
 
                 //if cubemap is changed
-                if (value != selectedCubeMap)
+                if (value != selectedCubeMap || PresetUpdate)
                 {
                     //switch off cubemap
                     if (noCubemap == value)
@@ -236,6 +234,7 @@ namespace AIGraphics.Textures
                     }
                     selectedCubeMap = value;
                     skyboxParams.selectedCubeMap = value;
+                    PresetUpdate = false;
                 }
             }
         }
