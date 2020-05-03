@@ -21,7 +21,7 @@ namespace AIGraphics
 
         private void LoadPresets()
         {
-            _presetNameToPath = Util.GetFiles(_path, "*.preset").ToDictionary(entry => Path.GetFileNameWithoutExtension(entry), entry => entry);
+            _presetNameToPath = Util.GetRelativeFileNameToFullPathMap(_path, "*.preset");
         }
 
         internal string PresetPath(string presetName)

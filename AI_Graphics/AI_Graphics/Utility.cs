@@ -93,6 +93,34 @@ namespace AIGraphics
             return files;
         }
 
+        internal static Dictionary<string, string> GetRelativeFileNameToFullPathMap(string path, string fileSearchPattern)
+        {
+            return GetFiles(path, fileSearchPattern, "*", SearchOption.AllDirectories).ToDictionary(entry
+                => GetRelativePathWithFileExtension(entry,path), entry => entry);
+        }
+
+        private static string GetRelativePathWithFileExtension(string fileFullPath, string basePath)
+        {
+            string fileDir = Path.GetDirectoryName(fileFullPath);
+            string baseDir = Path.GetDirectoryName(basePath);
+            if (string.Equals(Path.GetFullPath(fileDir), Path.GetFullPath(baseDir), StringComparison.OrdinalIgnoreCase)) 
+                return Path.GetFileNameWithoutExtension(fileFullPath);
+            
+            // Uri requires trailing backslash for relative path to work as expected
+            if (!baseDir.EndsWith("\\"))
+                baseDir += "\\";
+
+            if (!fileDir.EndsWith("\\"))
+                fileDir += "\\";
+
+            Uri baseUri = new Uri(baseDir);
+            Uri fullUri = new Uri(fileDir);
+            Uri relativeUri = baseUri.MakeRelativeUri(fullUri);
+
+            // Uri's use forward slashes so convert back to backward slashes
+            return Path.Combine(relativeUri.ToString().Replace("../", "").Replace("/", "\\"), Path.GetFileNameWithoutExtension(fileFullPath));
+        }
+
         private static List<string> GetDirectories(string path, string searchPattern)
         {
             try
