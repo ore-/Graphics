@@ -210,6 +210,32 @@ namespace AIGraphics.Inspector
                         mat.SetColor("_BottomColor", c);
                         skyboxManager.Update = true;
                     }, true);
+                } else if (mat.shader.name == FourPointGradientSkyboxSetting.shaderName)
+                {
+                    SliderColor("Base Color", mat.GetColor("_BaseColor"), c =>
+                    {
+                        mat.SetColor("_BaseColor", c);
+                        skyboxManager.Update = true;
+                    }, true);
+                    for (int i = 1; i <= 4; i++)
+                    {
+                        // Switch is compile time property.
+                        SliderColor("Color " + i, mat.GetColor("_Color" + i), c =>
+                        {
+                            mat.SetColor("_Color" + i, c);
+                            skyboxManager.Update = true;
+                        }, true);
+                        Dimension("Direction " + i, mat.GetVector("_Direction" + i), direction =>
+                        {
+                            mat.SetVector("_Direction" + i, direction);
+                            skyboxManager.Update = true;
+                        });
+                        Slider("Exponent " + i, mat.GetFloat("_Exponent" + i), 0, 2, "N1", intensity =>
+                        {
+                            mat.SetFloat("_Exponent" + i, intensity);
+                            skyboxManager.Update = true;
+                        });
+                    }
                 }
             }
         }
