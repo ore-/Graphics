@@ -20,6 +20,7 @@ namespace AIGraphics.Inspector
         //private static int selectedCubeMapIdx = -1;
 
         private static Vector2 probeSettingsScrollView;
+        private static Vector2 dynSkyScrollView;
         private static int selectedProbe = 0;
 
         internal static void Draw(LightingSettings lightingSettings, SkyboxManager skyboxManager, bool showAdvanced)
@@ -130,113 +131,122 @@ namespace AIGraphics.Inspector
             if (skyboxManager != null && skyboxManager.Skybox != null)
             {
                 GUILayout.Space(10);
-                Material mat = skyboxManager.Skybox;
 
-                if (mat.shader.name == ProceduralSkyboxSettings.shaderName)
+                GUILayout.BeginVertical(GUIStyles.Skin.box);
+                dynSkyScrollView = GUILayout.BeginScrollView(dynSkyScrollView);
                 {
-                    Label("Unity Skybox Settings", "", true);
-                    Slider("Sun Size", mat.GetFloat("_SunSize"), 0, 2, "N2", value => {
-                        mat.SetFloat("_SunSize", value);
-                        skyboxManager.Update = true;
-                    });
-                    Slider("Sun Size Convergence", mat.GetFloat("_SunSizeConvergence"), 0, 2, "N2", value => {
-                        mat.SetFloat("_SunSizeConvergence", value);
-                        skyboxManager.Update = true;
-                    });
-                    Slider("Atmosphere Thickness", mat.GetFloat("_AtmosphereThickness"), 0, 2, "N2", value => {
-                        mat.SetFloat("_AtmosphereThickness", value);
-                        skyboxManager.Update = true;
-                    });
-                    SliderColor("Sky Tint", mat.GetColor("_SkyTint"), c =>
+                    Material mat = skyboxManager.Skybox;
+
+                    if (mat.shader.name == ProceduralSkyboxSettings.shaderName)
                     {
-                        mat.SetColor("_SkyTint", c);
-                        skyboxManager.Update = true;
-                    }, true);
-                    SliderColor("Ground Color", mat.GetColor("_GroundColor"), c =>
-                    {
-                        mat.SetColor("_GroundColor", c);
-                        skyboxManager.Update = true;
-                    }, true);
-                }
-                else if (mat.shader.name == TwoPointColorSkyboxSettings.shaderName)
-                {
-                    Label("Two Point Color Skybox Settings", "", true);
-                    SliderColor("Colour A", mat.GetColor("_ColorA"), c =>
-                    {
-                        mat.SetColor("_ColorA", c);
-                        skyboxManager.Update = true;
-                    }, true);
-                    Slider("Intensity A", mat.GetFloat("_IntensityA"), 0, 2, "N1", intensity =>
-                    {
-                        mat.SetFloat("_IntensityA", intensity);
-                        skyboxManager.Update = true;
-                    });
-                    Dimension("Box Size", mat.GetVector("_DirA"), direction =>
-                    {
-                        mat.SetVector("_DirA", direction);
-                        skyboxManager.Update = true;
-                    });
-                    SliderColor("Colour B", mat.GetColor("_ColorB"), c =>
-                    {
-                        mat.SetColor("_ColorB", c);
-                        skyboxManager.Update = true;
-                    }, true);
-                    Slider("Intensity B", mat.GetFloat("_IntensityB"), 0, 2, "N1", intensity =>
-                    {
-                        mat.SetFloat("_IntensityB", intensity);
-                        skyboxManager.Update = true;
-                    });
-                    Dimension("Box Size", mat.GetVector("_DirB"), direction =>
-                    {
-                        mat.SetVector("_DirB", direction);
-                        skyboxManager.Update = true;
-                    });
-                }
-                else if (mat.shader.name == HemisphereGradientSkyboxSetting.shaderName)
-                {
-                    Label("Hemisphere Dynamic Skybox Settings", "", true);
-                    SliderColor("North Pole", mat.GetColor("_TopColor"), c =>
-                    {
-                        mat.SetColor("_TopColor", c);
-                        skyboxManager.Update = true;
-                    }, true);
-                    SliderColor("Equator", mat.GetColor("_MiddleColor"), c =>
-                    {
-                        mat.SetColor("_MiddleColor", c);
-                        skyboxManager.Update = true;
-                    }, true);
-                    SliderColor("South Pole", mat.GetColor("_BottomColor"), c =>
-                    {
-                        mat.SetColor("_BottomColor", c);
-                        skyboxManager.Update = true;
-                    }, true);
-                } else if (mat.shader.name == FourPointGradientSkyboxSetting.shaderName)
-                {
-                    SliderColor("Base Color", mat.GetColor("_BaseColor"), c =>
-                    {
-                        mat.SetColor("_BaseColor", c);
-                        skyboxManager.Update = true;
-                    }, true);
-                    for (int i = 1; i <= 4; i++)
-                    {
-                        // Switch is compile time property.
-                        SliderColor("Color " + i, mat.GetColor("_Color" + i), c =>
-                        {
-                            mat.SetColor("_Color" + i, c);
-                            skyboxManager.Update = true;
-                        }, true);
-                        Dimension("Direction " + i, mat.GetVector("_Direction" + i), direction =>
-                        {
-                            mat.SetVector("_Direction" + i, direction);
+                        Label("Unity Skybox Settings", "", true);
+                        Slider("Sun Size", mat.GetFloat("_SunSize"), 0, 2, "N2", value => {
+                            mat.SetFloat("_SunSize", value);
                             skyboxManager.Update = true;
                         });
-                        Slider("Exponent " + i, mat.GetFloat("_Exponent" + i), 0, 2, "N1", intensity =>
+                        Slider("Sun Size Convergence", mat.GetFloat("_SunSizeConvergence"), 0, 2, "N2", value => {
+                            mat.SetFloat("_SunSizeConvergence", value);
+                            skyboxManager.Update = true;
+                        });
+                        Slider("Atmosphere Thickness", mat.GetFloat("_AtmosphereThickness"), 0, 2, "N2", value => {
+                            mat.SetFloat("_AtmosphereThickness", value);
+                            skyboxManager.Update = true;
+                        });
+                        SliderColor("Sky Tint", mat.GetColor("_SkyTint"), c =>
                         {
-                            mat.SetFloat("_Exponent" + i, intensity);
+                            mat.SetColor("_SkyTint", c);
+                            skyboxManager.Update = true;
+                        }, true);
+                        SliderColor("Ground Color", mat.GetColor("_GroundColor"), c =>
+                        {
+                            mat.SetColor("_GroundColor", c);
+                            skyboxManager.Update = true;
+                        }, true);
+                    }
+                    else if (mat.shader.name == TwoPointColorSkyboxSettings.shaderName)
+                    {
+                        Label("Two Point Color Skybox Settings", "", true);
+                        SliderColor("Colour A", mat.GetColor("_ColorA"), c =>
+                        {
+                            mat.SetColor("_ColorA", c);
+                            skyboxManager.Update = true;
+                        }, true);
+                        Slider("Intensity A", mat.GetFloat("_IntensityA"), 0, 2, "N1", intensity =>
+                        {
+                            mat.SetFloat("_IntensityA", intensity);
+                            skyboxManager.Update = true;
+                        });
+                        Dimension("Box Size", mat.GetVector("_DirA"), direction =>
+                        {
+                            mat.SetVector("_DirA", direction);
+                            skyboxManager.Update = true;
+                        });
+                        SliderColor("Colour B", mat.GetColor("_ColorB"), c =>
+                        {
+                            mat.SetColor("_ColorB", c);
+                            skyboxManager.Update = true;
+                        }, true);
+                        Slider("Intensity B", mat.GetFloat("_IntensityB"), 0, 2, "N1", intensity =>
+                        {
+                            mat.SetFloat("_IntensityB", intensity);
+                            skyboxManager.Update = true;
+                        });
+                        Dimension("Box Size", mat.GetVector("_DirB"), direction =>
+                        {
+                            mat.SetVector("_DirB", direction);
                             skyboxManager.Update = true;
                         });
                     }
+                    else if (mat.shader.name == HemisphereGradientSkyboxSetting.shaderName)
+                    {
+                        Label("Hemisphere Skybox Settings", "", true);
+                        SliderColor("North Pole", mat.GetColor("_TopColor"), c =>
+                        {
+                            mat.SetColor("_TopColor", c);
+                            skyboxManager.Update = true;
+                        }, true);
+                        SliderColor("Equator", mat.GetColor("_MiddleColor"), c =>
+                        {
+                            mat.SetColor("_MiddleColor", c);
+                            skyboxManager.Update = true;
+                        }, true);
+                        SliderColor("South Pole", mat.GetColor("_BottomColor"), c =>
+                        {
+                            mat.SetColor("_BottomColor", c);
+                            skyboxManager.Update = true;
+                        }, true);
+                    }
+                    else if (mat.shader.name == FourPointGradientSkyboxSetting.shaderName)
+                    {
+                        Label("Four Point Gradient Skybox Settings", "", true);
+                        SliderColor("Base Color", mat.GetColor("_BaseColor"), c =>
+                        {
+                            mat.SetColor("_BaseColor", c);
+                            skyboxManager.Update = true;
+                        }, true);
+                        for (int i = 1; i <= 4; i++)
+                        {
+                            // Switch is compile time property.
+                            SliderColor("Color " + i, mat.GetColor("_Color" + i), c =>
+                            {
+                                mat.SetColor("_Color" + i, c);
+                                skyboxManager.Update = true;
+                            }, true);
+                            Dimension("Direction " + i, mat.GetVector("_Direction" + i), direction =>
+                            {
+                                mat.SetVector("_Direction" + i, direction);
+                                skyboxManager.Update = true;
+                            });
+                            Slider("Exponent " + i, mat.GetFloat("_Exponent" + i), 0, 2, "N1", intensity =>
+                            {
+                                mat.SetFloat("_Exponent" + i, intensity);
+                                skyboxManager.Update = true;
+                            });
+                        }
+                    }
                 }
+                GUILayout.EndScrollView();
+                GUILayout.EndVertical();
             }
         }
     }
