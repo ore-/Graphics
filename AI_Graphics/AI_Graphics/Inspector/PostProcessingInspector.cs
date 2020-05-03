@@ -311,7 +311,7 @@ namespace AIGraphics.Inspector
                 if (settings.depthOfFieldLayer.enabled.value)
                 {
                     focusPuller.enabled = Toggle("Auto Focus", focusPuller.enabled);
-                    Slider("Focal Distance", settings.depthOfFieldLayer.focusDistance.value, 0.1f, 20f, "N2", focusDistance => settings.depthOfFieldLayer.focusDistance.value = focusDistance,
+                    Slider("Focal Distance", settings.depthOfFieldLayer.focusDistance.value, 0.1f, 1000f, "N2", focusDistance => settings.depthOfFieldLayer.focusDistance.value = focusDistance,
                         settings.depthOfFieldLayer.focusDistance.overrideState && !focusPuller.enabled, overrideState => settings.depthOfFieldLayer.focusDistance.overrideState = overrideState);
                     Slider("Aperture", settings.depthOfFieldLayer.aperture.value, 1f, 22f, "N1", aperture => settings.depthOfFieldLayer.aperture.value = aperture,
                         settings.depthOfFieldLayer.aperture.overrideState, overrideState => settings.depthOfFieldLayer.aperture.overrideState = overrideState);
