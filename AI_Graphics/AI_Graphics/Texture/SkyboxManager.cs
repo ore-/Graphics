@@ -181,7 +181,6 @@ namespace AIGraphics.Textures
             ApplySkybox();
             ApplySkyboxParams();
 
-
             // dynSkyboxSetting is only being used for setting up parameters from preset after assetbundle loading.
             if (dynSkyboxSetting != null) dynSkyboxSetting.Load();
             dynSkyboxSetting = null;

@@ -17,11 +17,16 @@ namespace AIGraphics.Settings
     {
         public static Color FloatArrayToColor(float[] array)
         {
-            return array != null ? new Color(array[0], array[1], array[2], array[3]) : Color.white;
+            return (array != null && array.Length >= 3 && array.Length <= 4) ?
+                new Color(array[0], array[1], array[2], array.Length == 4 ? array[3] : 1f) : Color.white;
         }
-        public static Vector4 FloatArrayToVector(float[] array)
+        public static Vector3 FloatArrayToVector3(float[] array)
         {
-            return array != null ? new Vector4(array[0], array[1], array[2], array[3]) : Vector4.zero;
+            return (array != null && array.Length == 3) ? new Vector3(array[0], array[1], array[2]) : Vector3.zero;
+        }
+        public static Vector4 FloatArrayToVector4(float[] array)
+        {
+            return (array != null && array.Length == 4) ? new Vector4(array[0], array[1], array[2], array[3]) : Vector4.zero;
         }
         virtual public void Save() { }
         virtual public void Load() { }
@@ -75,8 +80,8 @@ namespace AIGraphics.Settings
         public float intensityB;
         public float[] colorA = new float[3];
         public float[] colorB = new float[3];
-        public float[] directionA = new float[3];
-        public float[] directionB = new float[3];
+        public float[] directionA = new float[4];
+        public float[] directionB = new float[4];
 
         [IgnoreMember]
         public static readonly string shaderName = "SkyBox/Simple Two Colors";
@@ -105,11 +110,13 @@ namespace AIGraphics.Settings
                 mat.SetFloat("_IntensityB", intensityB);
                 mat.SetColor("_ColorA", FloatArrayToColor(colorA));
                 mat.SetColor("_ColorB", FloatArrayToColor(colorB));
-                mat.SetVector("_DirA", FloatArrayToVector(directionA));
-                mat.SetVector("_DirB", FloatArrayToVector(directionB));
+                mat.SetVector("_DirA", FloatArrayToVector4(directionA));
+                mat.SetVector("_DirB", FloatArrayToVector4(directionB));
             }
         }
     }
+
+    [MessagePackObject(keyAsPropertyName: true)]
     public class FourPointGradientSkyboxSetting : SkyboxSettings
     {
         public float[] colorA = new float[3];
@@ -159,10 +166,10 @@ namespace AIGraphics.Settings
                 mat.SetColor("_Color2", FloatArrayToColor(colorB));
                 mat.SetColor("_Color3", FloatArrayToColor(colorC));
                 mat.SetColor("_Color4", FloatArrayToColor(colorD));
-                mat.SetVector("_Direction1", FloatArrayToVector(directionA));
-                mat.SetVector("_Direction2", FloatArrayToVector(directionB));
-                mat.SetVector("_Direction3", FloatArrayToVector(directionC));
-                mat.SetVector("_Direction4", FloatArrayToVector(directionD));
+                mat.SetVector("_Direction1", FloatArrayToVector3(directionA));
+                mat.SetVector("_Direction2", FloatArrayToVector3(directionB));
+                mat.SetVector("_Direction3", FloatArrayToVector3(directionC));
+                mat.SetVector("_Direction4", FloatArrayToVector3(directionD));
                 mat.SetFloat("_Exponent1", exponentA);
                 mat.SetFloat("_Exponent2", exponentB);
                 mat.SetFloat("_Exponent3", exponentC);
@@ -171,6 +178,7 @@ namespace AIGraphics.Settings
         }
     }
 
+    [MessagePackObject(keyAsPropertyName: true)]
     public class HemisphereGradientSkyboxSetting : SkyboxSettings
     {
         public float[] colorA = new float[3];

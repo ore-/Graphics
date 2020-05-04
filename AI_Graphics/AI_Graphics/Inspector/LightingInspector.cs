@@ -172,7 +172,7 @@ namespace AIGraphics.Inspector
                             mat.SetColor("_ColorA", c);
                             skyboxManager.Update = true;
                         }, true);
-                        Slider("Intensity A", mat.GetFloat("_IntensityA"), 0, 2, "N1", intensity =>
+                        Slider("Intensity A", mat.GetFloat("_IntensityA"), 0, 2, "N2", intensity =>
                         {
                             mat.SetFloat("_IntensityA", intensity);
                             skyboxManager.Update = true;
@@ -187,7 +187,7 @@ namespace AIGraphics.Inspector
                             mat.SetColor("_ColorB", c);
                             skyboxManager.Update = true;
                         }, true);
-                        Slider("Intensity B", mat.GetFloat("_IntensityB"), 0, 2, "N1", intensity =>
+                        Slider("Intensity B", mat.GetFloat("_IntensityB"), 0, 2, "N2", intensity =>
                         {
                             mat.SetFloat("_IntensityB", intensity);
                             skyboxManager.Update = true;
