@@ -21,13 +21,14 @@ namespace AIGraphics
     {
         public const string GUID = "ore.ai.graphics";
         public const string PluginName = "AI Graphics";
-        public const string Version = "0.2.0";
+        public const string Version = "0.3.0";
 
         public KeyCode ShowHotkey { get; set; } = KeyCode.F5;
         public static ConfigEntry<string> ConfigCubeMapPath { get; private set; }
         public static ConfigEntry<string> ConfigPresetPath { get; private set; }
         public static ConfigEntry<string> ConfigLensDirtPath { get; private set; }
         public static ConfigEntry<string> ConfigLocalizationPath { get; private set; }
+        public static ConfigEntry<LocalizationManager.Language> ConfigLanguage { get; private set; }
         public static ConfigEntry<int> ConfigFontSize { get; internal set; }
         public static ConfigEntry<int> ConfigWindowWidth { get; internal set; }
         public static ConfigEntry<int> ConfigWindowHeight { get; internal set; }
@@ -69,6 +70,7 @@ namespace AIGraphics
             ConfigCubeMapPath = Config.Bind("Config", "Cubemap path", Application.dataPath + "/../cubemaps/", new ConfigDescription("Where cubemaps are stored"));
             ConfigLensDirtPath = Config.Bind("Config", "Lens dirt texture path", Application.dataPath + "/../lensdirts/", new ConfigDescription("Where lens dirt textures are stored"));
             ConfigLocalizationPath = Config.Bind("Config", "Localization path", Application.dataPath + "/../BepInEx/plugins/AIGraphics/Resources/", new ConfigDescription("Where localizations are stored"));
+            ConfigLanguage = Config.Bind("Config", "Language", LocalizationManager.DefaultLanguage(), new ConfigDescription("Default Language"));
             ConfigFontSize = Config.Bind("Config", "Font Size", 12, new ConfigDescription("Font Size"));
             GUIStyles.FontSize = ConfigFontSize.Value;
             ConfigWindowWidth = Config.Bind("Config", "Window Width", 750, new ConfigDescription("Window Width"));
@@ -161,7 +163,8 @@ namespace AIGraphics
             DontDestroyOnLoad(_postProcessingManager);
 
             LocalizationManager.Parent = this;
-            
+            LocalizationManager.CurrentLanguage = ConfigLanguage.Value;
+
             _lightManager = new LightManager(this);
 
             _focusPuller = Instance.GetOrAddComponent<FocusPuller>();

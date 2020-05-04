@@ -228,7 +228,7 @@ namespace AIGraphics.Inspector
             {
                 GUILayout.Label("", GUILayout.Width(spacing));
             }
-
+            label = LocalizationManager.HasLocalization() ? LocalizationManager.Localized(label) : label;
             GUILayout.Label(label, GUILayout.ExpandWidth(false));
             GUILayout.Label("", GUILayout.Width(GUIStyles.labelWidth - GUI.skin.label.CalcSize(new GUIContent(label)).x - spacing));
             float newValue = GUILayout.HorizontalSlider(value, minValue, maxValue);
@@ -344,6 +344,7 @@ namespace AIGraphics.Inspector
 
         internal static void SelectionMask(string label, int cullingMask, Action<int> onChanged = null, int columns = 4)
         {
+            label = LocalizationManager.HasLocalization() ? LocalizationManager.Localized(label) : label;
             int newMask = cullingMask;
             GUILayout.BeginHorizontal();
             GUILayout.Label(label, GUILayout.ExpandWidth(false));
@@ -410,9 +411,22 @@ namespace AIGraphics.Inspector
             return toggle;
         }
 
+        internal static bool ToggleButton(string label, bool toggle, bool UseButton = false)
+        {
+            label = LocalizationManager.HasLocalization() ? LocalizationManager.Localized(label) : label;
+            return UseButton ? GUILayout.Toggle(toggle, label, GUIStyles.Skin.button) : GUILayout.Toggle(toggle, label);
+        }
+
+        internal static bool Button(string label, bool ExpandWidth = false)
+        {
+            label = LocalizationManager.HasLocalization() ? LocalizationManager.Localized(label) : label;
+            return GUILayout.Button(label, GUILayout.ExpandWidth(ExpandWidth));
+        }
+
         internal static void Label(string label, string text, bool bold = false)
         {
             label = LocalizationManager.HasLocalization() ? LocalizationManager.Localized(label) : label;
+            if(0 < text.Length) text = LocalizationManager.HasLocalization() ? LocalizationManager.Localized(text) : text;
             GUILayout.BeginHorizontal();
             if (bold)
             {

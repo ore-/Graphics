@@ -23,7 +23,7 @@ namespace AIGraphics.Inspector
                     Label("Trigger", postProcessingSettings.VolumeTriggerSetting?.name);
                     Label("Layer", LayerMask.LayerToName(Mathf.RoundToInt(Mathf.Log(postProcessingSettings.VolumeLayerSetting.value, 2))));
                     GUILayout.Space(10);
-                }                
+                }
                 Label("Anti-aliasing", "", true);
                 Selection("Mode", postProcessingSettings.AntialiasingMode, mode => postProcessingSettings.AntialiasingMode = mode);
                 if (PostProcessingSettings.Antialiasing.SMAA == postProcessingSettings.AntialiasingMode)
@@ -77,6 +77,7 @@ namespace AIGraphics.Inspector
                 settings.ambientOcclusionLayer.enabled.value = Toggle("Ambient Occlusion", settings.ambientOcclusionLayer.enabled.value, true);
                 if (settings.ambientOcclusionLayer.enabled.value)
                 {
+                    if (!showAdvanced && null != settings.AmplifyOcclusionComponent) settings.AmplifyOcclusionComponent.enabled = false;
                     Selection("Mode", settings.ambientOcclusionLayer.mode.value, mode => settings.ambientOcclusionLayer.mode.value = mode);
                     Slider("Intensity", settings.ambientOcclusionLayer.intensity.value, 0f, 4f, "N2",
                         intensity => settings.ambientOcclusionLayer.intensity.value = intensity, settings.ambientOcclusionLayer.intensity.overrideState,
@@ -107,10 +108,10 @@ namespace AIGraphics.Inspector
             {
                 GUILayout.Space(1);
                 GUILayout.BeginVertical(GUIStyles.Skin.box);
-
                 settings.AmplifyOcclusionComponent.enabled = Toggle("Amplify Ambient Occlusion", settings.AmplifyOcclusionComponent.enabled, true);
                 if (settings.AmplifyOcclusionComponent.enabled)
                 {
+                    if (!showAdvanced && null != settings.ambientOcclusionLayer) settings.ambientOcclusionLayer.enabled.value = false;
                     settings.AmplifyOcclusionComponent.CacheAware = Toggle("Cache Aware", settings.AmplifyOcclusionComponent.CacheAware);
                     settings.AmplifyOcclusionComponent.Downsample = Toggle("Downsample", settings.AmplifyOcclusionComponent.Downsample);
 
@@ -263,13 +264,13 @@ namespace AIGraphics.Inspector
                             Selection("Tonemapping", settings.colorGradingLayer.tonemapper.value, mode => settings.colorGradingLayer.tonemapper.value = mode);
                         }
                         GUILayout.Space(1);
-                        GUILayout.Label("White Balance");
+                        Label("White Balance", "");
                         Slider("Temperature", settings.colorGradingLayer.temperature.value, -100, 100, "N1", temperature => settings.colorGradingLayer.temperature.value = temperature,
                             settings.colorGradingLayer.temperature.overrideState, overrideState => settings.colorGradingLayer.temperature.overrideState = overrideState);
                         Slider("Tint", settings.colorGradingLayer.tint.value, -100, 100, "N1", tint => settings.colorGradingLayer.tint.value = tint,
                             settings.colorGradingLayer.tint.overrideState, overrideState => settings.colorGradingLayer.tint.overrideState = overrideState);
                         GUILayout.Space(1);
-                        GUILayout.Label("Tone");
+                        Label("Tone", "");
                         if (GradingMode.HighDefinitionRange == settings.colorGradingLayer.gradingMode.value)
                         {
                             settings.colorGradingLayer.postExposure.value = Text("Post-exposure (EV)", settings.colorGradingLayer.postExposure.value, "N2",
@@ -295,7 +296,7 @@ namespace AIGraphics.Inspector
                     }
                     else
                     {
-                        GUILayout.Label("Not supported at present");
+                        Label("Not supported at present", "");
                     }
                 }
                 GUILayout.EndVertical();
@@ -310,7 +311,7 @@ namespace AIGraphics.Inspector
                 if (settings.depthOfFieldLayer.enabled.value)
                 {
                     focusPuller.enabled = Toggle("Auto Focus", focusPuller.enabled);
-                    Slider("Focal Distance", settings.depthOfFieldLayer.focusDistance.value, 0.1f, 20f, "N2", focusDistance => settings.depthOfFieldLayer.focusDistance.value = focusDistance,
+                    Slider("Focal Distance", settings.depthOfFieldLayer.focusDistance.value, 0.1f, 1000f, "N2", focusDistance => settings.depthOfFieldLayer.focusDistance.value = focusDistance,
                         settings.depthOfFieldLayer.focusDistance.overrideState && !focusPuller.enabled, overrideState => settings.depthOfFieldLayer.focusDistance.overrideState = overrideState);
                     Slider("Aperture", settings.depthOfFieldLayer.aperture.value, 1f, 22f, "N1", aperture => settings.depthOfFieldLayer.aperture.value = aperture,
                         settings.depthOfFieldLayer.aperture.overrideState, overrideState => settings.depthOfFieldLayer.aperture.overrideState = overrideState);
@@ -384,7 +385,7 @@ namespace AIGraphics.Inspector
                 {
                     Selection("Mode", settings.vignetteLayer.mode.value, mode => settings.vignetteLayer.mode.value = mode, -1,
                         settings.vignetteLayer.mode.overrideState, overrideState => settings.vignetteLayer.mode.overrideState = overrideState);
-                    SliderColor("Color", settings.vignetteLayer.color.value, colour => settings.vignetteLayer.color.value = colour, false,
+                    SliderColor("Colour", settings.vignetteLayer.color.value, colour => settings.vignetteLayer.color.value = colour, false,
                         settings.vignetteLayer.color.overrideState, overrideState => settings.vignetteLayer.color.overrideState = overrideState);
                     Slider("Intensity", settings.vignetteLayer.intensity, 0f, 1f, "N3", fade => settings.vignetteLayer.intensity.value = fade,
                         settings.vignetteLayer.intensity.overrideState, overrideState => settings.vignetteLayer.intensity.overrideState = overrideState);
