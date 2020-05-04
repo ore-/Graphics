@@ -17,11 +17,11 @@ namespace AIGraphics.Settings
     {
         public static Color FloatArrayToColor(float[] array)
         {
-            return array != null ? new Color(array[0], array[1], array[2]) : Color.white;
+            return array != null ? new Color(array[0], array[1], array[2], array[3]) : Color.white;
         }
-        public static Vector3 FloatArrayToVector(float[] array)
+        public static Vector4 FloatArrayToVector(float[] array)
         {
-            return array != null ? new Vector3(array[0], array[1], array[2]) : Vector3.zero;
+            return array != null ? new Vector4(array[0], array[1], array[2], array[3]) : Vector4.zero;
         }
         virtual public void Save() { }
         virtual public void Load() { }

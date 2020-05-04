@@ -508,6 +508,30 @@ namespace AIGraphics.Inspector
             return newSize;
         }
 
+        internal static Vector4 Dimension(string label, Vector4 size, Action<Vector4> onChanged = null)
+        {
+            GUILayout.BeginHorizontal();
+            label = LocalizationManager.HasLocalization() ? LocalizationManager.Localized(label) : label;
+            GUILayout.Label(label, GUILayout.ExpandWidth(false));
+            GUILayout.Label("", GUILayout.Width(GUIStyles.labelWidth - GUI.skin.label.CalcSize(new GUIContent(label)).x));
+            GUILayout.Label("X", GUILayout.ExpandWidth(false));
+            float.TryParse(GUILayout.TextField(size.x.ToString()), out float x);
+            GUILayout.Label("Y", GUILayout.ExpandWidth(false));
+            float.TryParse(GUILayout.TextField(size.y.ToString()), out float y);
+            GUILayout.Label("Z", GUILayout.ExpandWidth(false));
+            float.TryParse(GUILayout.TextField(size.z.ToString()), out float z);
+            GUILayout.Label("W", GUILayout.ExpandWidth(false));
+            float.TryParse(GUILayout.TextField(size.w.ToString()), out float w);
+            Vector4 newSize = size;
+            if (x != size.x || y != size.y || z != size.z || w != size.w)
+            {
+                newSize = new Vector4(x, y, z, w);
+                onChanged?.Invoke(newSize);
+            }
+            GUILayout.EndHorizontal();
+            return newSize;
+        }
+
         private static void EnableToggle(string label, ref int spacing, ref bool enable, Action<bool> onChangedEnable = null)
         {
             bool newEnable = enable;
