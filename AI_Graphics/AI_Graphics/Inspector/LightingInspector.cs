@@ -67,10 +67,14 @@ namespace AIGraphics.Inspector
                 GUI.enabled = null != lightingSettings.SkyboxSetting;
                 if (null != skyboxManager.Skybox && null != skyboxManager.Skyboxbg)
                 {
-                    Slider("Exposure", skyboxManager.Exposure, ExposureMin, ExposureMax, "N1", exp => { skyboxManager.Exposure = exp; skyboxManager.Update = true; });
-                    Slider("Rotation", skyboxManager.Rotation, RotationMin, RotationMax, "N1", rot => { skyboxManager.Rotation = rot; skyboxManager.Update = true; });
+                    Material skybox = skyboxManager.Skybox;
+                    if (skybox.HasProperty("_Exposure"))
+                        Slider("Exposure", skyboxManager.Exposure, ExposureMin, ExposureMax, "N1", exp => { skyboxManager.Exposure = exp; skyboxManager.Update = true; });
+                    if (skybox.HasProperty("_Rotation"))
+                        Slider("Rotation", skyboxManager.Rotation, RotationMin, RotationMax, "N1", rot => { skyboxManager.Rotation = rot; skyboxManager.Update = true; });
                     GUILayout.Space(10);
-                    SliderColor("Skybox Tint", skyboxManager.Tint, c => { skyboxManager.Tint = c; skyboxManager.Update = true; }, true);
+                    if (skybox.HasProperty("_Tint"))
+                        SliderColor("Skybox Tint", skyboxManager.Tint, c => { skyboxManager.Tint = c; skyboxManager.Update = true; }, true);
                 }
                 GUILayout.Space(10);                
                 Label("Environment Reflections", "", true);

@@ -40,10 +40,12 @@ namespace AIGraphics
                 SkyboxSettings setting = null;
 
                 // Generate Setting Class
+                // TODO: Find better way
                 if (mat.shader.name == ProceduralSkyboxSettings.shaderName) setting = new ProceduralSkyboxSettings();
                 else if (mat.shader.name == TwoPointColorSkyboxSettings.shaderName) setting = new TwoPointColorSkyboxSettings();
+                else if (mat.shader.name == FourPointGradientSkyboxSetting.shaderName) setting = new FourPointGradientSkyboxSetting();
+                else if (mat.shader.name == HemisphereGradientSkyboxSetting.shaderName) setting = new HemisphereGradientSkyboxSetting();
 
-                // Save Setting Variables and assign settings..
                 if (setting != null)
                 {
                     setting.Save();

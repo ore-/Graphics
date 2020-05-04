@@ -68,12 +68,18 @@ namespace AIGraphics.Textures
         }
         public void ApplySkyboxParams()
         {
-            Skyboxbg?.SetFloat(_Exposure, skyboxParams.exposure);
-            Skyboxbg?.SetFloat(_Rotation, skyboxParams.rotation);
-            Skyboxbg?.SetColor(_Tint, skyboxParams.tint);
-            Skybox?.SetFloat(_Exposure, skyboxParams.exposure);
-            Skybox?.SetColor(_Tint, skyboxParams.tint);
-            Skybox?.SetFloat(_Rotation, skyboxParams.rotation);
+            if (Skyboxbg != null)
+            {
+                if (Skyboxbg.HasProperty(_Exposure)) Skyboxbg.SetFloat(_Exposure, skyboxParams.exposure);
+                if (Skyboxbg.HasProperty(_Rotation)) Skyboxbg.SetFloat(_Rotation, skyboxParams.rotation);
+                if (Skyboxbg.HasProperty(_Tint)) Skyboxbg.SetColor(_Tint, skyboxParams.tint);
+            }
+            if (Skybox != null)
+            {
+                if (Skybox.HasProperty(_Exposure)) Skybox.SetFloat(_Exposure, skyboxParams.exposure);
+                if (Skybox.HasProperty(_Tint)) Skybox.SetColor(_Tint, skyboxParams.tint);
+                if (Skybox.HasProperty(_Rotation)) Skybox.SetFloat(_Rotation, skyboxParams.rotation);
+            }
         }
         public void SaveMapSkyBox()
         {
