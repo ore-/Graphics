@@ -17,8 +17,7 @@ namespace AIGraphics.Settings
     {
         public static Color FloatArrayToColor(float[] array)
         {
-            return (array != null && array.Length >= 3 && array.Length <= 4) ?
-                new Color(array[0], array[1], array[2], array.Length == 4 ? array[3] : 1f) : Color.white;
+            return (array != null && array.Length == 4) ? new Color(array[0], array[1], array[2], array[3]) : Color.white;
         }
         public static Vector3 FloatArrayToVector3(float[] array)
         {
@@ -41,8 +40,8 @@ namespace AIGraphics.Settings
         public float sunSize;
         public float sunsizeConvergence;
         public float atmosphereThickness;
-        public float[] skyTint = new float[3];
-        public float[] groundTint = new float[3];
+        public float[] skyTint = new float[4];
+        public float[] groundTint = new float[4];
 
         public override void Save()
         {
@@ -78,8 +77,8 @@ namespace AIGraphics.Settings
     {
         public float intensityA;
         public float intensityB;
-        public float[] colorA = new float[3];
-        public float[] colorB = new float[3];
+        public float[] colorA = new float[4];
+        public float[] colorB = new float[4];
         public float[] directionA = new float[4];
         public float[] directionB = new float[4];
 
@@ -119,10 +118,10 @@ namespace AIGraphics.Settings
     [MessagePackObject(keyAsPropertyName: true)]
     public class FourPointGradientSkyboxSetting : SkyboxSettings
     {
-        public float[] colorA = new float[3];
-        public float[] colorB = new float[3];
-        public float[] colorC = new float[3];
-        public float[] colorD = new float[3];
+        public float[] colorA = new float[4];
+        public float[] colorB = new float[4];
+        public float[] colorC = new float[4];
+        public float[] colorD = new float[4];
         public float[] directionA = new float[3];
         public float[] directionB = new float[3];
         public float[] directionC = new float[3];
@@ -181,9 +180,9 @@ namespace AIGraphics.Settings
     [MessagePackObject(keyAsPropertyName: true)]
     public class HemisphereGradientSkyboxSetting : SkyboxSettings
     {
-        public float[] colorA = new float[3];
-        public float[] colorB = new float[3];
-        public float[] colorC = new float[3];
+        public float[] colorA = new float[4];
+        public float[] colorB = new float[4];
+        public float[] colorC = new float[4];
 
         [IgnoreMember]
         public static readonly string shaderName = "SkyboxPlus/Hemisphere";
