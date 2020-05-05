@@ -15,18 +15,6 @@ namespace AIGraphics.Settings
     [Union(3, typeof(HemisphereGradientSkyboxSetting))]
     public abstract class SkyboxSettings
     {
-        public static Color FloatArrayToColor(float[] array)
-        {
-            return (array != null && array.Length == 4) ? new Color(array[0], array[1], array[2], array[3]) : Color.white;
-        }
-        public static Vector3 FloatArrayToVector3(float[] array)
-        {
-            return (array != null && array.Length == 3) ? new Vector3(array[0], array[1], array[2]) : Vector3.zero;
-        }
-        public static Vector4 FloatArrayToVector4(float[] array)
-        {
-            return (array != null && array.Length == 4) ? new Vector4(array[0], array[1], array[2], array[3]) : Vector4.zero;
-        }
         virtual public void Save() { }
         virtual public void Load() { }
     }
@@ -39,12 +27,12 @@ namespace AIGraphics.Settings
 
         public enum SunDisk
         {
-            None, 
-            Simple, 
+            None,
+            Simple,
             HighQuality,
         }
 
-        public SunDisk sunDisk;        
+        public SunDisk sunDisk;
         public float sunSize;
         public float sunsizeConvergence;
         public float atmosphereThickness;
@@ -57,7 +45,7 @@ namespace AIGraphics.Settings
             Material mat = AIGraphics.Instance?.SkyboxManager?.Skybox;
             if (mat != null && mat.shader.name == shaderName)
             {
-                sunDisk = (ProceduralSkyboxSettings.SunDisk) mat.GetInt("_SunDisk");
+                sunDisk = (ProceduralSkyboxSettings.SunDisk)mat.GetInt("_SunDisk");
                 sunSize = mat.GetFloat("_SunSize");
                 sunsizeConvergence = mat.GetFloat("_SunSizeConvergence");
                 atmosphereThickness = mat.GetFloat("_AtmosphereThickness");
@@ -87,10 +75,10 @@ namespace AIGraphics.Settings
     {
         public float intensityA;
         public float intensityB;
-        public float[] colorA = new float[4];
-        public float[] colorB = new float[4];
-        public float[] directionA = new float[4];
-        public float[] directionB = new float[4];
+        public Color colorA = new Color();
+        public Color colorB = new Color();
+        public Vector4 directionA = new Vector4();
+        public Vector4 directionB = new Vector4();
 
         [IgnoreMember]
         public static readonly string shaderName = "SkyBox/Simple Two Colors";
@@ -101,13 +89,10 @@ namespace AIGraphics.Settings
             {
                 intensityA = mat.GetFloat("_IntensityA");
                 intensityB = mat.GetFloat("_IntensityB");
-                for (int i = 0; i < 3; i++)
-                {
-                    colorA[i] = mat.GetColor("_ColorA")[i];
-                    colorB[i] = mat.GetColor("_ColorB")[i];
-                    directionA[i] = mat.GetVector("_DirA")[i];
-                    directionB[i] = mat.GetVector("_DirB")[i];
-                }
+                colorA = mat.GetColor("_ColorA");
+                colorB = mat.GetColor("_ColorB");
+                directionA = mat.GetVector("_DirA");
+                directionB = mat.GetVector("_DirB");
             }
         }
         public override void Load()
@@ -117,10 +102,10 @@ namespace AIGraphics.Settings
             {
                 mat.SetFloat("_IntensityA", intensityA);
                 mat.SetFloat("_IntensityB", intensityB);
-                mat.SetColor("_ColorA", FloatArrayToColor(colorA));
-                mat.SetColor("_ColorB", FloatArrayToColor(colorB));
-                mat.SetVector("_DirA", FloatArrayToVector4(directionA));
-                mat.SetVector("_DirB", FloatArrayToVector4(directionB));
+                mat.SetColor("_ColorA", colorA);
+                mat.SetColor("_ColorB", colorB);
+                mat.SetVector("_DirA", directionA);
+                mat.SetVector("_DirB", directionB);
             }
         }
     }
@@ -128,14 +113,14 @@ namespace AIGraphics.Settings
     [MessagePackObject(keyAsPropertyName: true)]
     public class FourPointGradientSkyboxSetting : SkyboxSettings
     {
-        public float[] colorA = new float[4];
-        public float[] colorB = new float[4];
-        public float[] colorC = new float[4];
-        public float[] colorD = new float[4];
-        public float[] directionA = new float[3];
-        public float[] directionB = new float[3];
-        public float[] directionC = new float[3];
-        public float[] directionD = new float[3];
+        public Color colorA = new Color();
+        public Color colorB = new Color();
+        public Color colorC = new Color();
+        public Color colorD = new Color();
+        public Vector3 directionA = new Vector3();
+        public Vector3 directionB = new Vector3();
+        public Vector3 directionC = new Vector3();
+        public Vector3 directionD = new Vector3();
         public float exponentA;
         public float exponentB;
         public float exponentC;
@@ -149,17 +134,14 @@ namespace AIGraphics.Settings
             Material mat = AIGraphics.Instance?.SkyboxManager?.Skybox;
             if (mat != null && mat.shader.name == shaderName)
             {
-                for (int i = 0; i < 3; i++)
-                {
-                    colorA[i] = mat.GetColor("_Color1")[i];
-                    colorB[i] = mat.GetColor("_Color2")[i];
-                    colorC[i] = mat.GetColor("_Color3")[i];
-                    colorD[i] = mat.GetColor("_Color4")[i];
-                    directionA[i] = mat.GetVector("_Direction1")[i];
-                    directionB[i] = mat.GetVector("_Direction2")[i];
-                    directionC[i] = mat.GetVector("_Direction3")[i];
-                    directionD[i] = mat.GetVector("_Direction4")[i];
-                }
+                colorA = mat.GetColor("_Color1");
+                colorB = mat.GetColor("_Color2");
+                colorC = mat.GetColor("_Color3");
+                colorD = mat.GetColor("_Color4");
+                directionA = mat.GetVector("_Direction1");
+                directionB = mat.GetVector("_Direction2");
+                directionC = mat.GetVector("_Direction3");
+                directionD = mat.GetVector("_Direction4");
                 exponentA = mat.GetFloat("_Exponent1");
                 exponentB = mat.GetFloat("_Exponent2");
                 exponentC = mat.GetFloat("_Exponent3");
@@ -171,14 +153,14 @@ namespace AIGraphics.Settings
             Material mat = AIGraphics.Instance?.SkyboxManager?.Skybox;
             if (mat != null && mat.shader.name == shaderName)
             {
-                mat.SetColor("_Color1", FloatArrayToColor(colorA));
-                mat.SetColor("_Color2", FloatArrayToColor(colorB));
-                mat.SetColor("_Color3", FloatArrayToColor(colorC));
-                mat.SetColor("_Color4", FloatArrayToColor(colorD));
-                mat.SetVector("_Direction1", FloatArrayToVector3(directionA));
-                mat.SetVector("_Direction2", FloatArrayToVector3(directionB));
-                mat.SetVector("_Direction3", FloatArrayToVector3(directionC));
-                mat.SetVector("_Direction4", FloatArrayToVector3(directionD));
+                mat.SetColor("_Color1", colorA);
+                mat.SetColor("_Color2", colorB);
+                mat.SetColor("_Color3", colorC);
+                mat.SetColor("_Color4", colorD);
+                mat.SetVector("_Direction1", directionA);
+                mat.SetVector("_Direction2", directionB);
+                mat.SetVector("_Direction3", directionC);
+                mat.SetVector("_Direction4", directionD);
                 mat.SetFloat("_Exponent1", exponentA);
                 mat.SetFloat("_Exponent2", exponentB);
                 mat.SetFloat("_Exponent3", exponentC);
@@ -190,9 +172,9 @@ namespace AIGraphics.Settings
     [MessagePackObject(keyAsPropertyName: true)]
     public class HemisphereGradientSkyboxSetting : SkyboxSettings
     {
-        public float[] colorA = new float[4];
-        public float[] colorB = new float[4];
-        public float[] colorC = new float[4];
+        public Color colorA = new Color();
+        public Color colorB = new Color();
+        public Color colorC = new Color();
 
         [IgnoreMember]
         public static readonly string shaderName = "SkyboxPlus/Hemisphere";
@@ -202,12 +184,9 @@ namespace AIGraphics.Settings
             Material mat = AIGraphics.Instance?.SkyboxManager?.Skybox;
             if (mat != null && mat.shader.name == shaderName)
             {
-                for (int i = 0; i < 3; i++)
-                {
-                    colorA[i] = mat.GetColor("_TopColor")[i];
-                    colorB[i] = mat.GetColor("_MiddleColor")[i];
-                    colorC[i] = mat.GetColor("_BottomColor")[i];
-                }
+                colorA = mat.GetColor("_TopColor");
+                colorB = mat.GetColor("_MiddleColor");
+                colorC = mat.GetColor("_BottomColor");
             }
         }
         public override void Load()
@@ -215,9 +194,9 @@ namespace AIGraphics.Settings
             Material mat = AIGraphics.Instance?.SkyboxManager?.Skybox;
             if (mat != null && mat.shader.name == shaderName)
             {
-                mat.SetColor("_TopColor", FloatArrayToColor(colorA));
-                mat.SetColor("_MiddleColor", FloatArrayToColor(colorB));
-                mat.SetColor("_BottomColor", FloatArrayToColor(colorC));
+                mat.SetColor("_TopColor", colorA);
+                mat.SetColor("_MiddleColor", colorB);
+                mat.SetColor("_BottomColor", colorC);
             }
         }
     }
