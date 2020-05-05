@@ -37,25 +37,33 @@ namespace AIGraphics.Settings
         [IgnoreMember]
         public static readonly string shaderName = "Skybox/Procedural";
 
+        public enum SunDisk
+        {
+            None, 
+            Simple, 
+            HighQuality,
+        }
+
+        public SunDisk sunDisk;        
         public float sunSize;
         public float sunsizeConvergence;
         public float atmosphereThickness;
-        public float[] skyTint = new float[4];
-        public float[] groundTint = new float[4];
+        public Color skyTint;
+        public Color groundTint;
+        public float exposure;
 
         public override void Save()
         {
             Material mat = AIGraphics.Instance?.SkyboxManager?.Skybox;
             if (mat != null && mat.shader.name == shaderName)
             {
+                sunDisk = (ProceduralSkyboxSettings.SunDisk) mat.GetInt("_SunDisk");
                 sunSize = mat.GetFloat("_SunSize");
                 sunsizeConvergence = mat.GetFloat("_SunSizeConvergence");
                 atmosphereThickness = mat.GetFloat("_AtmosphereThickness");
-                for (int i = 0; i < 3; i++)
-                {
-                    skyTint[i] = mat.GetColor("_SkyTint")[i];
-                    groundTint[i] = mat.GetColor("_GroundColor")[i];
-                }
+                skyTint = mat.GetColor("_SkyTint");
+                groundTint = mat.GetColor("_GroundColor");
+                exposure = mat.GetFloat("_Exposure");
             }
         }
         public override void Load()
@@ -63,11 +71,13 @@ namespace AIGraphics.Settings
             Material mat = AIGraphics.Instance?.SkyboxManager?.Skybox;
             if (mat != null && mat.shader.name == shaderName)
             {
+                mat.SetInt("_SunDisk", (int)sunDisk);
                 mat.SetFloat("_SunSize", sunSize);
                 mat.SetFloat("_SunSizeConvergence", sunsizeConvergence);
                 mat.SetFloat("_AtmosphereThickness", atmosphereThickness);
-                mat.SetColor("_SkyTint", FloatArrayToColor(skyTint));
-                mat.SetColor("_GroundColor", FloatArrayToColor(groundTint));
+                mat.SetColor("_SkyTint", skyTint);
+                mat.SetColor("_GroundColor", groundTint);
+                mat.SetFloat("_Exposure", exposure);
             }
         }
     }

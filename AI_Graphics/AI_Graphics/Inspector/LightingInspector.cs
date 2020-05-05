@@ -52,7 +52,7 @@ namespace AIGraphics.Inspector
                     Label("Skybox Material", lightingSettings?.SkyboxSetting?.name ?? "");
                     Label("Sun Source", lightingSettings?.SunSetting?.name ?? "");
                     GUILayout.Space(10);
-                }                
+                }
                 Label("Environment Lighting", "", true);
                 GUILayout.Space(1);
                 Selection("Source", lightingSettings.AmbientModeSetting, mode =>
@@ -75,7 +75,7 @@ namespace AIGraphics.Inspector
                     if (skybox.HasProperty("_Tint"))
                         SliderColor("Skybox Tint", skyboxManager.Tint, c => { skyboxManager.Tint = c; skyboxManager.Update = true; }, true);
                 }
-                GUILayout.Space(10);                
+                GUILayout.Space(10);
                 Label("Environment Reflections", "", true);
                 GUILayout.Space(1);
                 Selection("Resolution", lightingSettings.ReflectionResolution, LightingSettings.ReflectionResolutions, resolution => lightingSettings.ReflectionResolution = resolution);
@@ -97,7 +97,7 @@ namespace AIGraphics.Inspector
                     GUILayout.BeginVertical(GUIStyles.Skin.box);
                     probeSettingsScrollView = GUILayout.BeginScrollView(probeSettingsScrollView);
                     {
-                        Label("Type", rp.mode.ToString());                        
+                        Label("Type", rp.mode.ToString());
                         Label("Runtime settings", "");
                         Slider("Importance", rp.importance, 0, 1000, importance => rp.importance = importance);
                         Slider("Intensity", rp.intensity, 0, 10, "N2", intensity => rp.intensity = intensity);
@@ -107,9 +107,9 @@ namespace AIGraphics.Inspector
                         Dimension("Box Offset", rp.center, size => rp.center = size);
                         GUILayout.Space(10);
                         Label("Cubemap capture settings", "");
-                        Selection("Resolution", rp.resolution, LightingSettings.ReflectionResolutions, resolution => rp.resolution = resolution);                        
+                        Selection("Resolution", rp.resolution, LightingSettings.ReflectionResolutions, resolution => rp.resolution = resolution);
                         rp.hdr = Toggle("HDR", rp.hdr);
-                        rp.shadowDistance = Text("Shadow Distance", rp.shadowDistance);                        
+                        rp.shadowDistance = Text("Shadow Distance", rp.shadowDistance);
                         Selection("Clear Flags", rp.clearFlags, flag => rp.clearFlags = flag);
                         if (showAdvanced)
                         {
@@ -141,15 +141,24 @@ namespace AIGraphics.Inspector
                     if (mat.shader.name == ProceduralSkyboxSettings.shaderName)
                     {
                         Label("Unity Skybox Settings", "", true);
-                        Slider("Sun Size", mat.GetFloat("_SunSize"), 0, 2, "N2", value => {
+
+                        Selection("Sun", (ProceduralSkyboxSettings.SunDisk)mat.GetInt("_SunDisk"), quality =>
+                        {
+                            mat.SetInt("_SunDisk", (int)quality);
+                            skyboxManager.Update = true;
+                        });
+                        Slider("Sun Size", mat.GetFloat("_SunSize"), 0, 1, "N2", value =>
+                        {
                             mat.SetFloat("_SunSize", value);
                             skyboxManager.Update = true;
                         });
-                        Slider("Sun Size Convergence", mat.GetFloat("_SunSizeConvergence"), 0, 2, "N2", value => {
+                        Slider("Sun Size Convergence", mat.GetFloat("_SunSizeConvergence"), 1, 10, "N2", value =>
+                        {
                             mat.SetFloat("_SunSizeConvergence", value);
                             skyboxManager.Update = true;
                         });
-                        Slider("Atmosphere Thickness", mat.GetFloat("_AtmosphereThickness"), 0, 2, "N2", value => {
+                        Slider("Atmosphere Thickness", mat.GetFloat("_AtmosphereThickness"), 0, 5, "N2", value =>
+                        {
                             mat.SetFloat("_AtmosphereThickness", value);
                             skyboxManager.Update = true;
                         });
@@ -163,6 +172,11 @@ namespace AIGraphics.Inspector
                             mat.SetColor("_GroundColor", c);
                             skyboxManager.Update = true;
                         }, true);
+                        Slider("Exposure", mat.GetFloat("_Exposure"), 0, 8, "N2", value =>
+                        {
+                            mat.SetFloat("_Exposure", value);
+                            skyboxManager.Update = true;
+                        });
                     }
                     else if (mat.shader.name == TwoPointColorSkyboxSettings.shaderName)
                     {
