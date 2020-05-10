@@ -36,7 +36,7 @@ namespace AIGraphics.Inspector
                 }
                 else
                 {
-                    cubeMapScrollView = GUILayout.BeginScrollView(cubeMapScrollView);
+                    cubeMapScrollView = GUILayout.BeginScrollView(cubeMapScrollView, GUILayout.MaxHeight(300));
                     int selectedCubeMapIdx = GUILayout.SelectionGrid(skyboxManager.CurrentTextureIndex, skyboxManager.Previews.ToArray(), Inspector.Width / 150, GUIStyles.Skin.box);
                     if (-1 != selectedCubeMapIdx)
                     {
