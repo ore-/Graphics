@@ -138,6 +138,7 @@
     <Compile Include="Inspector\SettingsInspector.cs" />
     <Compile Include="Inspector\Inspector.cs" />
     <Compile Include="Inspector\GUIUtility.cs" />
+    <Compile Include="Setting\DynamicSkyboxSettings.cs" />
     <Compile Include="Setting\LightingSettings.cs" />
     <Compile Include="Setting\LightSettings.cs" />
     <Compile Include="Setting\PostProcessingParameters.cs" />

@@ -33,14 +33,16 @@ namespace AIGraphics.Textures
         private static readonly int _Rotation = Shader.PropertyToID("_Rotation");
         private static readonly int _Tint = Shader.PropertyToID("_Tint");
 
+        public SkyboxSettings dynSkyboxSetting;
         public SkyboxParams skyboxParams = new SkyboxParams(1f, 0f, new Color32(128, 128, 128, 128), "");
         public Material Skyboxbg { get; set; }
         public Material Skybox { get; set; }
         public Material MapSkybox { get; set; }
 
         internal static string noCubemap = "No skybox";
+
         private string selectedCubeMap = noCubemap;
-        
+
         private ReflectionProbe _probe;
         private GameObject _probeGameObject;
 
@@ -50,6 +52,7 @@ namespace AIGraphics.Textures
         internal Camera Camera => Parent.CameraSettings.MainCamera;
 
         public bool Update { get; set; }
+        public bool PresetUpdate { get; set; }
 
         internal BepInEx.Logging.ManualLogSource Logger { get; set; }
 
@@ -65,12 +68,18 @@ namespace AIGraphics.Textures
         }
         public void ApplySkyboxParams()
         {
-            Skyboxbg?.SetFloat(_Exposure, skyboxParams.exposure);
-            Skyboxbg?.SetFloat(_Rotation, skyboxParams.rotation);
-            Skyboxbg?.SetColor(_Tint, skyboxParams.tint);
-            Skybox?.SetFloat(_Exposure, skyboxParams.exposure);
-            Skybox?.SetColor(_Tint, skyboxParams.tint);
-            Skybox?.SetFloat(_Rotation, skyboxParams.rotation);
+            if (Skyboxbg != null)
+            {
+                if (Skyboxbg.HasProperty(_Exposure)) Skyboxbg.SetFloat(_Exposure, skyboxParams.exposure);
+                if (Skyboxbg.HasProperty(_Rotation)) Skyboxbg.SetFloat(_Rotation, skyboxParams.rotation);
+                if (Skyboxbg.HasProperty(_Tint)) Skyboxbg.SetColor(_Tint, skyboxParams.tint);
+            }
+            if (Skybox != null)
+            {
+                if (Skybox.HasProperty(_Exposure)) Skybox.SetFloat(_Exposure, skyboxParams.exposure);
+                if (Skybox.HasProperty(_Tint)) Skybox.SetColor(_Tint, skyboxParams.tint);
+                if (Skybox.HasProperty(_Rotation)) Skybox.SetFloat(_Rotation, skyboxParams.rotation);
+            }
         }
         public void SaveMapSkyBox()
         {
@@ -171,6 +180,11 @@ namespace AIGraphics.Textures
 
             ApplySkybox();
             ApplySkyboxParams();
+
+            // dynSkyboxSetting is only being used for setting up parameters from preset after assetbundle loading.
+            if (dynSkyboxSetting != null) dynSkyboxSetting.Load();
+            dynSkyboxSetting = null;
+
             Update = true;
             Resources.UnloadUnusedAssets();
         }
@@ -192,9 +206,9 @@ namespace AIGraphics.Textures
                 }
 
                 //if cubemap is changed
-                if (value != selectedCubeMap)
+                if (value != selectedCubeMap || PresetUpdate)
                 {
-                    //switch off cubemapb
+                    //switch off cubemap
                     if (noCubemap == value)
                     {
                         TurnOffCubeMap(Camera);
@@ -225,6 +239,7 @@ namespace AIGraphics.Textures
                     }
                     selectedCubeMap = value;
                     skyboxParams.selectedCubeMap = value;
+                    PresetUpdate = false;
                 }
             }
         }
