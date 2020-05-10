@@ -119,6 +119,7 @@
     <Compile Include="Alloy\AreaLight\AlloyAreaLight.cs" />
     <Compile Include="CullingMaskExtensions.cs" />
     <Compile Include="FocusPuller.cs" />
+    <Compile Include="Inspector\SSSInspector.cs" />
     <Compile Include="Patch\Studio.cs" />
     <Compile Include="Inspector\LightingInspector.cs" />
     <Compile Include="Inspector\LightInspector.cs" />
@@ -144,6 +145,7 @@
     <Compile Include="Setting\PostProcessingSettings.cs" />
     <Compile Include="Setting\GlobalSettings.cs" />
     <Compile Include="Setting\PostProcessingValues.cs" />
+    <Compile Include="SSSManager.cs" />
     <Compile Include="Texture\SkyboxManager.cs" />
     <Compile Include="Texture\ExternalTextureManager.cs" />
     <Compile Include="Texture\InternalTextureManager.cs" />

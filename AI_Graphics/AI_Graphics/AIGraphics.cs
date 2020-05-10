@@ -47,6 +47,7 @@ namespace AIGraphics
         private FocusPuller _focusPuller;
         private LightManager _lightManager;
         private PostProcessingManager _postProcessingManager;
+        private SSSManager _sssManager;
         private PresetManager _presetManager;
         private Inspector.Inspector _inspector;
 
@@ -171,6 +172,7 @@ namespace AIGraphics
             _focusPuller.init(this);
             DontDestroyOnLoad(_focusPuller);
             _presetManager = new PresetManager(ConfigPresetPath.Value, this);
+            _sssManager = new SSSManager(this);
 
             _inspector = new Inspector.Inspector(this);
 
@@ -188,6 +190,7 @@ namespace AIGraphics
         internal LightManager LightManager => _lightManager;
         internal FocusPuller FocusPuller => _focusPuller;
         internal PresetManager PresetManager => _presetManager;        
+        internal SSSManager SSSManager => _sssManager;        
 
         internal void OnGUI()
         {

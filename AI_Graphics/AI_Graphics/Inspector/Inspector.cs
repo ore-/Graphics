@@ -7,7 +7,7 @@ namespace AIGraphics.Inspector
     {
         private static Rect _windowRect;
         private readonly int _windowID = 0;
-        private enum Tab { Lighting, Lights, PostProcessing, Presets, Settings };
+        private enum Tab { Lighting, Lights, PostProcessing, SSS, Presets, Settings };
         private Tab SelectedTab { get; set; }
         internal AIGraphics Parent { get; set; }
 
@@ -80,6 +80,9 @@ namespace AIGraphics.Inspector
                     break;
                 case Tab.PostProcessing:
                     PostProcessingInspector.Draw(Parent.PostProcessingSettings, Parent.PostProcessingManager, Parent.FocusPuller, Parent.Settings.ShowAdvancedSettings);
+                    break;
+                case Tab.SSS:
+                    SSSInspector.Draw(Parent.SSSManager);
                     break;
                 case Tab.Presets:
                     PresetInspector.Draw(Parent.PresetManager);
