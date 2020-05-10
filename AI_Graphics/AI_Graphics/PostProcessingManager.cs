@@ -47,7 +47,7 @@ namespace AIGraphics
 
         internal Texture CurrentLUTTexture => _lutManager.CurrentTexture;
 
-        internal string CurrentLUTName => _lutManager.CurrentTextureName;
+        internal string CurrentLUTName => _lutManager.CurrentTextureName.IsNullOrEmpty() ? LUTNames[0] : _lutManager.CurrentTextureName;
 
         internal int CurrentLUTIndex => _lutManager.CurrentTextureIndex >= 0 ? _lutManager.CurrentTextureIndex : 0;
 
