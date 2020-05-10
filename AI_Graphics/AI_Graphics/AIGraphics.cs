@@ -21,7 +21,7 @@ namespace AIGraphics
     {
         public const string GUID = "ore.ai.graphics";
         public const string PluginName = "AI Graphics";
-        public const string Version = "0.3.0";
+        public const string Version = "0.3.1";
 
         public KeyCode ShowHotkey { get; set; } = KeyCode.F5;
         public static ConfigEntry<string> ConfigCubeMapPath { get; private set; }
