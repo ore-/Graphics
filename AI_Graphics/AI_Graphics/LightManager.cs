@@ -170,19 +170,7 @@ namespace AIGraphics
                 set
                 {
                     if (value == shadows) return;
-
-                    if (IsStudioLight)
-                    {
-                        _ociLight.SetShadow(LightShadows.Soft == value);
-                        UnityEngine.UI.Toggle toggle = LightControl()?.GetFieldValue<UnityEngine.UI.Toggle>("toggleShadow");
-                        if (null != toggle)
-                        {
-                            toggle.isOn = LightShadows.Soft == value;
-                            LightControl()?.SetFieldValue<UnityEngine.UI.Toggle>("toggleShadow", toggle);
-                        }
-                    }
-                    else
-                        _light.shadows = value;
+                    (IsStudioLight ? _light : light).shadows = value;
                 }
             }
 
