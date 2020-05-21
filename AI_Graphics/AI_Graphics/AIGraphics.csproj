@@ -198,10 +198,13 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="Alloy\AreaLight\Defaults\DefaultSpotCookie.tif" />
-    <Content Include="Resources\localization.kor.txt">
+    <Content Include="Resources\localization.chinesesimplified.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\localization.jpn.txt">
+    <Content Include="Resources\localization.korean.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\localization.japanese.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

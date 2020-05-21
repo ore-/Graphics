@@ -178,3 +178,4 @@ Stationary Blending,정적 전환
 Motion Blending,동작 전환
 Sharpness,선명도
 HardOnly,부드러움 없는 그림자
+ChineseSimplified,간체중국어

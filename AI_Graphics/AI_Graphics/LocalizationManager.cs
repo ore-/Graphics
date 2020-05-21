@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
 namespace AIGraphics
@@ -12,7 +13,8 @@ namespace AIGraphics
         {
             English = SystemLanguage.English,
             Korean = SystemLanguage.Korean,
-            Japanese = SystemLanguage.Japanese
+            Japanese = SystemLanguage.Japanese,
+            ChineseSimplified = SystemLanguage.ChineseSimplified
         }
 
         private static bool Initialized { get; set; }
@@ -34,38 +36,25 @@ namespace AIGraphics
 
         internal static Language DefaultLanguage()
         {
-            return Enum.IsDefined(typeof(Language), (Language)Application.systemLanguage) ? (Language)Application.systemLanguage : Language.English; 
+            return Enum.IsDefined(typeof(Language), (Language)Application.systemLanguage) ? (Language)Application.systemLanguage : Language.English;
         }
 
         internal static Language CurrentLanguage
         {
             get => _currentLanguage;
-            set 
+            set
             {
                 _currentLanguage = value;
                 AIGraphics.ConfigLanguage.Value = value;
-               _parent?.StartCoroutine(LoadLocalization((SystemLanguage)_currentLanguage));
+                _parent?.StartCoroutine(LoadLocalization((SystemLanguage)_currentLanguage));
             }
-            
+
         }
         private static string CurrentLocale()
         {
-            return Locale((SystemLanguage)CurrentLanguage);
+            return Enum.GetName(typeof(Language), CurrentLanguage);
         }
 
-        private static string Locale(SystemLanguage languge)
-        {
-            //TODO: use Enum.GetNames
-            switch (languge)
-            {
-                case SystemLanguage.Japanese:
-                    return "jpn";
-                case SystemLanguage.Korean:
-                    return "kor";
-                default:
-                    return "eng";
-            }
-        }
         internal static string Localized(string text, bool fallBackOnDefault = true)
         {
             if (_textLookup.TryGetValue(text, out string localized))
@@ -83,16 +72,16 @@ namespace AIGraphics
         private static IEnumerator LoadLocalization(SystemLanguage language)
         {
             yield return new WaitUntil(() => Initialized);
-            if (SystemLanguage.Japanese == language || SystemLanguage.Korean == language)
+            if (Enum.IsDefined(typeof(Language), (Language)language))
             {
-                _lookup.TryGetValue(CurrentLocale(), out _textLookup);
+                _lookup.TryGetValue(CurrentLocale(), out _textLookup);                
             }
         }
 
         private static IEnumerator Load(string path)
         {
             Initialized = false;
-            _lookup = new Dictionary<string, Dictionary<string, string>>();
+            _lookup = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
             List<string> paths = Util.GetFiles(path, "localization.*.txt");
             yield return paths;
             foreach (string localization in paths)
