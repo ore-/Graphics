@@ -24,6 +24,7 @@ Box Size,サイズ
 brightness,輝度
 Cam Light,カメラライト
 Camera,カメラ
+ChineseSimplified,中国語
 Chromatic Aberration,色収差
 clamp,クランプ
 Clear Flags,フラグをクリア
@@ -180,6 +181,7 @@ Tone,トーン
 Trilight,トリライト
 Type,種類
 upper bound,上界
+Ultra,ウルトラ
 Use Alloy Light,Alloyライト
 User Lut,ユーザー LUT
 value,値

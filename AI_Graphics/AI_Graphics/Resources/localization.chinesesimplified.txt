@@ -1,0 +1,181 @@
+﻿Lighting,整体照明
+Lights,部分照明
+PostProcessing,后期处理
+Presets,快速设置
+Mode,模式
+SMAA Quality,SMAA 质量
+Settings,设置
+Camera,照相机
+Point Lights,单点光
+Spot Lights,聚光灯
+Directional Lights,平行光源
+English,英语
+Japanese,日本语
+Korean,韩语
+Shadows,阴影
+Reflection Probes,反射探头
+Colour,颜色
+Anti-aliasing,抗锯齿处理
+Ambient Occlusion,环境光遮罩
+Amplify Ambient Occlusion,放大环境光遮罩
+Auto Exposure,自动曝光控制
+Red,红色
+Blue,蓝色
+Green,绿色
+Screen Space Reflection,画面反射
+Fog,雾化效果
+Depth Of Field,景深
+Motion Blur,动态模糊效果
+Eye Adaptation,曝光度
+Bloom,辉光
+Color Grading,色感
+User Lut,用户LUT色感
+LUT Blend,LUT 融合
+Chromatic Aberration,色差
+Grain,电影颗粒效果
+Vignette,边缘晕影
+Dithering,抖动
+Intensity,强度
+Clear Flags,渲染默认值
+Skybox,天空环境
+Depth,深度
+Nothing,无
+Near Clipping Plane,最低渲染距离 
+Far Clipping Plane,最高渲染距离
+Clipping Planes - Near,最低渲染距离 
+Clipping Planes - Far,最高渲染距离
+Rendering Path,渲染方式
+Field of View,视角范围
+Occulsion Culling,隐藏动态区域
+Allow HDR,打开 HDR
+Allow MSAA (Forward Only),打开MSAA(Forward 渲染专用)
+Allow DynamicResolution,打开动态分辨率
+Colour Space,色域
+Linear,线性
+Quality Level,游戏图像设置
+Pixel Light Count,像素光源数
+Anisotropic Textures,各向异性纹理
+MSAA Multiplier,MSAA 强度
+Realtime Reflection Probes,实时反射探头
+Shadowmask Mode,阴影遮罩模式
+Shadowmask,阴影遮罩
+DistanceShadowmask,长距离阴影遮罩
+Shadow Resolution,阴影分辨率
+Low,低
+Medium,一般
+High,高
+Very High,极高
+VeryHigh,极高
+Shadow Projection,阴影投射
+CloseFit,固定分配
+StableFit,稳定分配
+Shadow Distance,阴影渲染距离
+Shadow Near Plane Offset,阴影近距离补偿
+Font Size,字体大小
+Language,语言
+Window Width,窗口宽度
+Window Height,窗口高度
+Show Advanced Settings,高级设置
+Disable,禁用
+All,全部
+Environment Skybox,全光背景
+Environment Lighting,全光照明
+Source,光源
+Trilight,三色光
+Flat,单色光
+Environment Reflections,全光反射
+Resolution,分辨率
+Bounces,反射
+Type,类型
+Runtime setting,运行时设置
+Importance,重要性
+Box Projection,箱形地域反射
+Blend Distance,融合距离
+Box Size,地域尺寸
+Box Offset,地域偏移
+Cubemap capture settings,全光背景捕获设置
+Background,背景
+Fast Mode,高速模式
+Lens Dirt,透镜覆盖
+Dirt Intensity,覆盖强度
+White Balance,白色平衡
+Temperature,色温
+Tint,色调
+Tone,风格
+Saturation,饱和度
+Brightness,亮度调节
+Contrast,对比度
+Lift,暗部调节（提升）
+Gamma,灰部调节（伽玛）
+Gain,高光调节（增益）
+Value,值
+Auto Focus,自动对焦
+Aperture,光圈值
+Focal Distance,焦距
+Focal Length,焦距
+Max Blur Size,最大模糊尺寸
+Luminance Contribution,亮度贡献
+Preset,预设
+Lower,更低
+Higher,更高
+Ultra,最高
+Overkill,完全最大值
+Distance Fade,衰减距离
+Smoothness,平滑度
+Roundness,圆形度
+Shutter Angle,快门角度
+Sample Count,采样计数
+Ambient Only,仅环境光
+Cache Aware,缓存感知
+Downsample,标准化采样
+Apply Method,使用方式
+PerPixel Normals,每像素法线
+Bias,偏斜
+Power Exponent,幂指数
+Radius,范围
+Thickness,厚度
+Blur Enabled,启用混频过滤器
+Blur Sharpness,模糊过滤器
+Blur Passes,循环混频过滤器
+Blur Radius,混频滤波器范围
+Filter Enabled,启用过滤器
+Filter Blending,切换过滤器
+Filter Response,滤波器反应
+Fade Enabled,淡入启用
+Fade Length,淡入度长度
+Fade Start,淡入淡出开始
+Fade To Intensity,淡入强度
+Fade To Power Exponent,衰减幂指数
+Fade To Radius,淡入半径
+Fade To Thickness,淡入变厚
+Fade To Tint,淡入淡薄
+Histogram Filtering (%),透明滤波器(%)
+Lower Bound,下限
+Upper Bound,上限
+Min Luminance (EV),最小亮度 (EV)
+Max Luminance (EV),最大亮度 (EV)
+Speed from light to dark,明暗切换速度
+Speed from dark to light,暗明切换速度
+Progressive,逐行扫描
+Fixed,固定值
+Threshold,阙值
+SoftKnee,光切换值 
+Clamp,最大值
+Diffusion,色彩模糊值
+AnamorphicRatio,纵横比例（中央值0）
+Hue Shift,色移
+Size,尺寸
+Maximum March Distance,最大反射距离
+Color,颜色
+Rounded,圆形
+Time Slicing Mode,时间调度模式
+SolidColor,单色
+Keep Alpha,保留阿尔法值
+None,无
+Weight,重量
+Jitter Spread,抖动伸展
+Stationary Blending,静态转换
+Motion Blending,动态切换
+Sharpness,清晰度
+HardOnly,仅硬阴影
+ChineseSimplified,简体中文
