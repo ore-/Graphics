@@ -74,8 +74,16 @@ namespace AIGraphics
                 {
                     List<OCILight> ociLights = Singleton<Studio.Studio>.Instance.dicObjectCtrl.Values.OfType<OCILight>().ToList();
                     List<LightObject> lightObjects = ociLights.Select(light => new LightObject(light)).ToList();
-                    List<Light> lights = GameObject.FindObjectsOfType<Light>().Where(light => "CommonSpace" != light.transform.root.name).ToList();
+                    //filter for non studio lights, including light from custom maps
+                    //all lights
+                    List<Light> lights = GameObject.FindObjectsOfType<Light>().ToList();
+                    //all studio lights
+                    List<Light> lightsFromOCI = ociLights.Select(light => light.light).ToList();
+                    //all light except studio lights
+                    lights = lights.Where(light => !lightsFromOCI.Contains(light)).ToList();
+                    //instantiate these lights
                     List<LightObject> additionalLightObjects = lights.Select(light => new LightObject(light)).ToList();
+                    //full list of studio and "non-studio" lights
                     return lightObjects.Concat(additionalLightObjects).ToList();
                 }
                 else
