@@ -9,6 +9,9 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using BepInEx.Harmony;
+using HarmonyLib;
+using Studio;
 
 namespace Graphics
 {
@@ -84,6 +87,8 @@ namespace Graphics
 
         private IEnumerator Start()
         {
+            HarmonyWrapper.PatchAll(typeof(AIGraphics));
+
             if (IsStudio())
                 StudioHooks.Init();
 
@@ -224,6 +229,46 @@ namespace Graphics
                     }
                     _showGUI = value;
                 }
+            }
+        }
+
+        [HarmonyPostfix, HarmonyPatch(typeof(AddObjectLight), nameof(AddObjectLight.Load), new Type[] { 
+            typeof(OILightInfo), typeof(ObjectCtrlInfo), typeof(TreeNodeObject), typeof(bool), typeof(int)
+        })]
+        public static void PCSSInitialization(ref OCILight __result, OILightInfo _info, ObjectCtrlInfo _parent, TreeNodeObject _parentNode, bool _addInfo, int _initialPosition)
+        {
+            GameObject gameObject = __result.objectLight;
+            if (gameObject != null)
+            {
+                   Light lightComponent = gameObject.GetComponentInChildren<Light>();
+
+                if (lightComponent != null)
+                {
+                    if (lightComponent.type == LightType.Directional)
+                    {
+                        PCSSLight pcssComponent = gameObject.GetOrAddComponent<PCSSLight>();
+                        pcssComponent.Blocker_SampleCount = 64;
+                        pcssComponent.PCF_SampleCount = 64;
+                        pcssComponent.Softness = 7.5f;
+                        pcssComponent.SoftnessFalloff = 1.5f;
+                        pcssComponent.MaxStaticGradientBias = 0.15f;
+                        pcssComponent.Blocker_GradientBias = 0f;
+                        pcssComponent.PCF_GradientBias = 0f;
+                        pcssComponent.Setup();
+                        Debug.Log("PCSS Component Injected.");
+                    }
+                    else
+                    {
+                        Debug.Log("Light is not directional?");
+                    }
+                } else
+                {
+                    Debug.Log("light component does not exists?");
+                }
+
+            } else
+            {
+                Debug.Log("Game object does not exists? what the?");
             }
         }
     }
