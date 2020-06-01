@@ -5,13 +5,11 @@ using Graphics.Patch;
 using Graphics.Settings;
 using Graphics.Textures;
 using KKAPI;
+using KKAPI.Studio.SaveLoad;
 using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using BepInEx.Harmony;
-using HarmonyLib;
-using Studio;
 
 namespace Graphics
 {
@@ -24,8 +22,8 @@ namespace Graphics
         public const string GUID = "ore.graphics";
         public const string PluginName = "Graphics";
         public const string Version = "0.3.2";
-
-        public KeyCode ShowHotkey { get; set; } = KeyCode.F5;
+        
+        public static ConfigEntry<KeyCode> ConfigShortcut { get; private set; }
         public static ConfigEntry<string> ConfigCubeMapPath { get; private set; }
         public static ConfigEntry<string> ConfigPresetPath { get; private set; }
         public static ConfigEntry<string> ConfigLensDirtPath { get; private set; }
@@ -68,6 +66,7 @@ namespace Graphics
 
             Instance = this;
 
+            ConfigShortcut = Config.Bind("Config", "Keyboard Shortcut", KeyCode.F5, new ConfigDescription("Keyboard Shortcut"));
             ConfigPresetPath = Config.Bind("Config", "Preset Location", Application.dataPath + "/../presets/", new ConfigDescription("Where presets are stored"));
             ConfigCubeMapPath = Config.Bind("Config", "Cubemap path", Application.dataPath + "/../cubemaps/", new ConfigDescription("Where cubemaps are stored"));
             ConfigLensDirtPath = Config.Bind("Config", "Lens dirt texture path", Application.dataPath + "/../lensdirts/", new ConfigDescription("Where lens dirt textures are stored"));
@@ -85,28 +84,20 @@ namespace Graphics
             Inspector.Inspector.StartOffsetY = ConfigWindowOffsetY.Value;
         }
 
+        private void Awake()
+        {
+            StudioSaveLoadApi.RegisterExtraBehaviour<SceneController>(GUID);
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
         private IEnumerator Start()
         {
-            HarmonyWrapper.PatchAll(typeof(AIGraphics));
-
             if (IsStudio())
                 StudioHooks.Init();
-
             yield return new WaitUntil(() =>
             {
-                switch (KoikatuAPI.GetCurrentGameMode())
-                {
-                    case GameMode.Maker:
-                        return KKAPI.Maker.MakerAPI.InsideAndLoaded;
-                    case GameMode.Studio:
-                        return KKAPI.Studio.StudioAPI.StudioLoaded;
-                    case GameMode.MainGame:
-                        return null != GameObject.Find("MapScene") && SceneManager.GetActiveScene().isLoaded && null != Camera.main; //KKAPI doesn't provide an api for in game check 
-                    default:
-                        return false;
-                }
+                return IsLoaded();
             });
-
             Settings = new GlobalSettings();
             CameraSettings = new CameraSettings();
             LightingSettings = new LightingSettings();
@@ -134,13 +125,6 @@ namespace Graphics
             _presetManager = new PresetManager(ConfigPresetPath.Value, this);
 
             _inspector = new Inspector.Inspector(this);
-
-            // It takes some time to fully loaded in studio to save/load stuffs.
-            yield return new WaitUntil(() =>
-            {
-                return IsStudio() ? KKAPI.Studio.StudioAPI.InsideStudio && _skyboxManager != null : true;
-            });
-
             _isLoaded = true;
         }
 
@@ -171,7 +155,7 @@ namespace Graphics
                 return;
             }
 
-            if (Input.GetKeyDown(ShowHotkey))
+            if (Input.GetKeyDown(ConfigShortcut.Value))
             {
                 Show = !Show;
             }
@@ -229,46 +213,6 @@ namespace Graphics
                     }
                     _showGUI = value;
                 }
-            }
-        }
-
-        [HarmonyPostfix, HarmonyPatch(typeof(AddObjectLight), nameof(AddObjectLight.Load), new Type[] { 
-            typeof(OILightInfo), typeof(ObjectCtrlInfo), typeof(TreeNodeObject), typeof(bool), typeof(int)
-        })]
-        public static void PCSSInitialization(ref OCILight __result, OILightInfo _info, ObjectCtrlInfo _parent, TreeNodeObject _parentNode, bool _addInfo, int _initialPosition)
-        {
-            GameObject gameObject = __result.objectLight;
-            if (gameObject != null)
-            {
-                   Light lightComponent = gameObject.GetComponentInChildren<Light>();
-
-                if (lightComponent != null)
-                {
-                    if (lightComponent.type == LightType.Directional)
-                    {
-                        PCSSLight pcssComponent = gameObject.GetOrAddComponent<PCSSLight>();
-                        pcssComponent.Blocker_SampleCount = 64;
-                        pcssComponent.PCF_SampleCount = 64;
-                        pcssComponent.Softness = 7.5f;
-                        pcssComponent.SoftnessFalloff = 1.5f;
-                        pcssComponent.MaxStaticGradientBias = 0.15f;
-                        pcssComponent.Blocker_GradientBias = 0f;
-                        pcssComponent.PCF_GradientBias = 0f;
-                        pcssComponent.Setup();
-                        Debug.Log("PCSS Component Injected.");
-                    }
-                    else
-                    {
-                        Debug.Log("Light is not directional?");
-                    }
-                } else
-                {
-                    Debug.Log("light component does not exists?");
-                }
-
-            } else
-            {
-                Debug.Log("Game object does not exists? what the?");
             }
         }
     }

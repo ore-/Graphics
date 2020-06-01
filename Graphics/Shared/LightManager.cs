@@ -44,6 +44,7 @@ namespace Graphics
                 }
                 else if (allLights[i].type == LightType.Directional)
                 {
+                    AddPCSS(allLights[i]);
                     DirectionalLights.Add(allLights[i]);
                 }
                 if (UseAlloyLight)
@@ -51,6 +52,19 @@ namespace Graphics
                     allLights[i].light.GetOrAddComponent<AlloyAreaLight>().UpdateBinding();
                 }
             }
+        }
+
+        internal void AddPCSS(LightObject directionLight)
+        {
+            PCSSLight pcssComponent = directionLight.light.GetOrAddComponent<PCSSLight>();
+            pcssComponent.Blocker_SampleCount = 64;
+            pcssComponent.PCF_SampleCount = 64;
+            pcssComponent.Softness = 7.5f;
+            pcssComponent.SoftnessFalloff = 1.5f;
+            pcssComponent.MaxStaticGradientBias = 0.15f;
+            pcssComponent.Blocker_GradientBias = 0f;
+            pcssComponent.PCF_GradientBias = 0f;
+            pcssComponent.Setup();
         }
 
         internal class LightObject

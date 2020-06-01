@@ -1,7 +1,8 @@
-﻿using Graphics.Settings;
-using BepInEx.Harmony;
+﻿using BepInEx.Harmony;
+using Graphics.Settings;
 using HarmonyLib;
 using Studio;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -82,6 +83,14 @@ namespace Graphics.Patch
             }
             Graphics.Instance?.LightManager?.Light();
             return false;
+        }
+
+        [HarmonyPostfix, HarmonyPatch(typeof(AddObjectLight), nameof(AddObjectLight.Load), new Type[] {
+            typeof(OILightInfo), typeof(ObjectCtrlInfo), typeof(TreeNodeObject), typeof(bool), typeof(int)
+        })]
+        public static void PCSSInitialization(ref OCILight __result, OILightInfo _info, ObjectCtrlInfo _parent, TreeNodeObject _parentNode, bool _addInfo, int _initialPosition)
+        {
+            Graphics.Instance?.LightManager?.Light();
         }
     }
 }
