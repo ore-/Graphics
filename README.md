@@ -1,5 +1,5 @@
-# AI_Graphics
-Graphics settings plugin for AIGirl
+# Graphics
+Graphics settings plugin for AIGirl and HoneySelect2
 
 Inspired and heavily influenced by PHIBL.
 
