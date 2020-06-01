@@ -10,11 +10,6 @@ namespace Graphics
 {
     public partial class Graphics : BaseUnityPlugin
     {
-        private void Awake()
-        {
-            StudioSaveLoadApi.RegisterExtraBehaviour<SceneController>(GUID);
-            SceneManager.sceneLoaded += OnSceneLoaded;
-        }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
@@ -51,6 +46,21 @@ namespace Graphics
             }
 
             LightManager.Light();
+        }
+
+        private bool IsLoaded()
+        {
+            switch (KoikatuAPI.GetCurrentGameMode())
+            {
+                case GameMode.Maker:
+                    return KKAPI.Maker.MakerAPI.InsideAndLoaded;
+                case GameMode.Studio:
+                    return KKAPI.Studio.StudioAPI.StudioLoaded;
+                case GameMode.MainGame:
+                    return null != GameObject.Find("MapScene") && SceneManager.GetActiveScene().isLoaded && null != Camera.main; //KKAPI doesn't provide an api for in game check 
+                default:
+                    return false;
+            }
         }
     }
 }

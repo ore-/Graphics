@@ -1,31 +1,18 @@
 ﻿using BepInEx;
-using Graphics.Settings;
 using KKAPI;
 using KKAPI.Studio.SaveLoad;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 namespace Graphics
 {
     public partial class Graphics : BaseUnityPlugin
     {
-        private void Awake()
-        {
-            StudioSaveLoadApi.RegisterExtraBehaviour<SceneController>(GUID);
-            SceneManager.sceneLoaded += OnSceneLoaded;
-        }
-
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-        {
-            if (scene.name == "map_title" && PostProcessingSettings != null)
-            {
-                PostProcessingSettings.ResetVolume();
-            }
-            else
-            {
-                StartCoroutine(InitializeLight(scene));
-            }
+        {   
+            StartCoroutine(InitializeLight(scene));
             CullingMaskExtensions.RefreshLayers();
         }
 
@@ -51,6 +38,21 @@ namespace Graphics
             }
 
             LightManager.Light();
+        }
+
+        private bool IsLoaded()
+        {
+            switch (KoikatuAPI.GetCurrentGameMode())
+            {
+                case GameMode.Maker:
+                    return KKAPI.Maker.MakerAPI.InsideAndLoaded;
+                case GameMode.Studio:
+                    return KKAPI.Studio.StudioAPI.StudioLoaded;
+                case GameMode.MainGame:
+                    return null != GameObject.Find("MapScene") && SceneManager.GetActiveScene().isLoaded && null != Camera.main; //KKAPI doesn't provide an api for in game check 
+                default:
+                    return false;
+            }
         }
     }
 }

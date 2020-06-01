@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using UnityEngine;
 
 namespace Graphics
@@ -57,7 +56,7 @@ namespace Graphics
 
         internal static string Localized(string text, bool fallBackOnDefault = true)
         {
-            if (_textLookup.TryGetValue(text, out string localized))
+            if (null != _textLookup && _textLookup.TryGetValue(text, out string localized))
             {
                 return localized;
             }
@@ -74,7 +73,7 @@ namespace Graphics
             yield return new WaitUntil(() => Initialized);
             if (Enum.IsDefined(typeof(Language), (Language)language))
             {
-                _lookup.TryGetValue(CurrentLocale(), out _textLookup);                
+                _lookup.TryGetValue(CurrentLocale(), out _textLookup);
             }
         }
 

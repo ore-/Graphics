@@ -97,4 +97,7 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\toolbar button on.png" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\toolbar button.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)MessagePack\" />
+  </ItemGroup>
 </Project>
