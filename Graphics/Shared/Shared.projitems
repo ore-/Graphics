@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)Alloy\AreaLight\Defaults\DefaultSpotCookie.tif" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\blue noise.png" />
     <Content Include="$(MSBuildThisFileDirectory)Resources\localization.chinesesimplified.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -99,5 +100,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)MessagePack\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\pcss" />
   </ItemGroup>
 </Project>

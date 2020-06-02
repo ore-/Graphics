@@ -18,9 +18,9 @@ namespace Graphics.Inspector
             {
                 if (showAdvanced)
                 {
-                    lightManager.UseAlloyLight = Toggle("Use Alloy Light", lightManager.UseAlloyLight);
-                    renderingSettings.LightsUseLinearIntensity = Toggle("Lights Use Linear Intensity", renderingSettings.LightsUseLinearIntensity);
-                    renderingSettings.LightsUseColorTemperature = Toggle("Lights Use Color Temperature", renderingSettings.LightsUseColorTemperature);
+                    Toggle("Use Alloy Light", lightManager.UseAlloyLight, false, useAlloy => lightManager.UseAlloyLight = useAlloy);                    
+                    Toggle("Lights Use Linear Intensity", renderingSettings.LightsUseLinearIntensity, false, useLinear => renderingSettings.LightsUseLinearIntensity = useLinear);
+                    Toggle("Lights Use Color Temperature", renderingSettings.LightsUseColorTemperature, false, useTemperature => renderingSettings.LightsUseColorTemperature = useTemperature);
                 }
                 GUILayout.BeginHorizontal(GUIStyles.Skin.box);
                 {
@@ -40,7 +40,7 @@ namespace Graphics.Inspector
                         if (0 < lightManager.PointLights.Count)
                         {
                             GUILayout.BeginVertical(GUIStyles.Skin.box);
-                            pointLightScrollView = GUILayout.BeginScrollView(pointLightScrollView);                            
+                            pointLightScrollView = GUILayout.BeginScrollView(pointLightScrollView);
                             lightManager.PointLights.ForEach(l => LightOverviewModule(lightManager, l));
                             GUILayout.FlexibleSpace();
                             GUILayout.EndScrollView();
@@ -50,14 +50,14 @@ namespace Graphics.Inspector
                         if (0 < lightManager.SpotLights.Count)
                         {
                             GUILayout.BeginVertical(GUIStyles.Skin.box);
-                            spotLightScrollView = GUILayout.BeginScrollView(spotLightScrollView);                            
+                            spotLightScrollView = GUILayout.BeginScrollView(spotLightScrollView);
                             lightManager.SpotLights.ForEach(l => LightOverviewModule(lightManager, l));
                             GUILayout.FlexibleSpace();
                             GUILayout.EndScrollView();
                             GUILayout.EndVertical();
                         }
                     }
-                    GUILayout.EndVertical();                    
+                    GUILayout.EndVertical();
                     GUILayout.Space(1);
                     inspectorScrollView = GUILayout.BeginScrollView(inspectorScrollView);
                     GUILayout.BeginVertical(GUIStyles.Skin.box);
@@ -71,7 +71,6 @@ namespace Graphics.Inspector
                                 {
                                     alloyLight = lightManager.SelectedLight.light.GetComponent<AlloyAreaLight>();
                                 }
-
                                 Label(lightManager.SelectedLight.light.name, "", true);
                                 GUILayout.Space(10);
                                 GUILayout.BeginHorizontal();
@@ -92,7 +91,12 @@ namespace Graphics.Inspector
                                         Label("Shadows", "", true);
                                         Selection("Shadow Type", lightManager.SelectedLight.shadows, type => lightManager.SelectedLight.shadows = type);
                                         Slider("Strength", lightManager.SelectedLight.light.shadowStrength, 0f, 1f, "N2", strength => lightManager.SelectedLight.light.shadowStrength = strength);
-                                        Selection("Resolution", lightManager.SelectedLight.light.shadowResolution, resolution => lightManager.SelectedLight.light.shadowResolution = resolution, 2);
+
+                                        if (LightType.Directional == lightManager.SelectedLight.type && renderingSettings.UsePCSS)
+                                            Slider("Resolution", lightManager.SelectedLight.ShadowCustomResolution, 0, 4096, resolution => lightManager.SelectedLight.ShadowCustomResolution = resolution);
+                                        else
+                                            Selection("Resolution", lightManager.SelectedLight.light.shadowResolution, resolution => lightManager.SelectedLight.light.shadowResolution = resolution, 2);
+
                                         Slider("Bias", lightManager.SelectedLight.light.shadowBias, 0f, 2f, "N3", bias => lightManager.SelectedLight.light.shadowBias = bias);
                                         Slider("Normal Bias", lightManager.SelectedLight.light.shadowNormalBias, 0f, 3f, "N2", nbias => lightManager.SelectedLight.light.shadowNormalBias = nbias);
                                         Slider("Near Plane", lightManager.SelectedLight.light.shadowNearPlane, 0f, 10f, "N2", np => lightManager.SelectedLight.light.shadowNearPlane = np);
@@ -226,7 +230,7 @@ namespace Graphics.Inspector
                     }
                 }
                 //add custom directional lights in maker
-                else if (KKAPI.GameMode.Maker == KKAPI.KoikatuAPI.GetCurrentGameMode() && LightSettings.LightType.Directional == type) 
+                else if (KKAPI.GameMode.Maker == KKAPI.KoikatuAPI.GetCurrentGameMode() && LightSettings.LightType.Directional == type)
                 {
                     if (GUILayout.Button("+"))
                     {

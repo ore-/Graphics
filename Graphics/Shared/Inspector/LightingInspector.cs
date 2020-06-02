@@ -101,14 +101,14 @@ namespace Graphics.Inspector
                         Label("Runtime settings", "");
                         Slider("Importance", rp.importance, 0, 1000, importance => rp.importance = importance);
                         Slider("Intensity", rp.intensity, 0, 10, "N2", intensity => rp.intensity = intensity);
-                        rp.boxProjection = Toggle("Box Projection", rp.boxProjection);
+                        Toggle("Box Projection", rp.boxProjection, false, box => rp.boxProjection = box);
                         rp.blendDistance = Text("Blend Distance", rp.blendDistance);
                         Dimension("Box Size", rp.size, size => rp.size = size);
                         Dimension("Box Offset", rp.center, size => rp.center = size);
                         GUILayout.Space(10);
                         Label("Cubemap capture settings", "");
                         Selection("Resolution", rp.resolution, LightingSettings.ReflectionResolutions, resolution => rp.resolution = resolution);
-                        rp.hdr = Toggle("HDR", rp.hdr);
+                        Toggle("HDR", rp.hdr, false, hdr => rp.hdr = hdr);
                         rp.shadowDistance = Text("Shadow Distance", rp.shadowDistance);
                         Selection("Clear Flags", rp.clearFlags, flag => rp.clearFlags = flag);
                         if (showAdvanced)

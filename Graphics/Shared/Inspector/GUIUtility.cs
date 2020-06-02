@@ -392,7 +392,7 @@ namespace Graphics.Inspector
             return selected;
         }
 
-        internal static bool Toggle(string label, bool toggle, bool bold = false)
+        internal static void Toggle(string label, bool toggle, bool bold = false, Action<bool> onChanged = null)
         {
             label = LocalizationManager.HasLocalization() ? LocalizationManager.Localized(label) : label;
             GUILayout.BeginHorizontal();
@@ -406,9 +406,12 @@ namespace Graphics.Inspector
                 GUILayout.Label(label, GUILayout.ExpandWidth(false));
                 GUILayout.Label("", GUILayout.Width(GUIStyles.labelWidth - GUI.skin.label.CalcSize(new GUIContent(label)).x));
             }
-            toggle = GUILayout.Toggle(toggle, "");
+            bool newToggle = GUILayout.Toggle(toggle, "");
             GUILayout.EndHorizontal();
-            return toggle;
+            if (onChanged != null && toggle != newToggle)
+            {
+                onChanged(newToggle);
+            }
         }
 
         internal static bool ToggleButton(string label, bool toggle, bool UseButton = false)

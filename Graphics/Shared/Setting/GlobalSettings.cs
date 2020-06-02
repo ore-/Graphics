@@ -8,7 +8,7 @@ namespace Graphics.Settings
     [MessagePackObject(keyAsPropertyName: true)]
     public class GlobalSettings
     {
-        private int _pixelLightCount;
+        private int _pixelLightCount;        
 
         public int PixelLightCount
         {
@@ -87,6 +87,22 @@ namespace Graphics.Settings
                 }
 
                 GraphicsSettings.lightsUseColorTemperature = value;
+            }
+        }
+
+        public bool UsePCSS
+        {
+            get => BuiltinShaderMode.Disabled != GraphicsSettings.GetShaderMode(BuiltinShaderType.ScreenSpaceShadows);
+            set
+            {
+                if (value)
+                {
+                    PCSSLight.EnablePCSS();
+                }
+                else
+                {
+                    PCSSLight.DisablePCSS();
+                }
             }
         }
 

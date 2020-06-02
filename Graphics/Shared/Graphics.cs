@@ -125,6 +125,9 @@ namespace Graphics
             _presetManager = new PresetManager(ConfigPresetPath.Value, this);
 
             _inspector = new Inspector.Inspector(this);
+            PCSSLight.LoadAssets();
+            PCSSLight.EnablePCSS();
+
             _isLoaded = true;
         }
 
