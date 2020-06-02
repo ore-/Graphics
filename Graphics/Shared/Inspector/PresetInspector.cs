@@ -27,7 +27,7 @@ namespace Graphics.Inspector
             {
                 presetScrollView = GUILayout.BeginScrollView(presetScrollView);
                 _presetIndexCurrent = Array.IndexOf(presetManager.PresetNames, presetManager.CurrentPreset);
-                _presetIndexCurrent = GUILayout.SelectionGrid(_presetIndexCurrent, presetManager.PresetNames, Inspector.Width / 150);
+                _presetIndexCurrent = GUILayout.SelectionGrid(_presetIndexCurrent, presetManager.PresetNames, Inspector.Width / 200);
                 if (ShouldUpdate)
                 {
                     presetManager.CurrentPreset = presetManager.PresetNames[_presetIndexCurrent];

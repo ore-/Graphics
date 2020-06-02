@@ -44,7 +44,8 @@ namespace Graphics
                 }
                 else if (allLights[i].type == LightType.Directional)
                 {
-                    AddPCSS(allLights[i]);
+                    if (Graphics.Instance.Settings.UsePCSS)
+                        AddPCSS(allLights[i]);
                     DirectionalLights.Add(allLights[i]);
                 }
                 if (UseAlloyLight)
@@ -57,13 +58,6 @@ namespace Graphics
         internal void AddPCSS(LightObject directionLight)
         {
             PCSSLight pcssComponent = directionLight.light.GetOrAddComponent<PCSSLight>();
-            pcssComponent.Blocker_SampleCount = 64;
-            pcssComponent.PCF_SampleCount = 64;
-            pcssComponent.Softness = 7.5f;
-            pcssComponent.SoftnessFalloff = 1.5f;
-            pcssComponent.MaxStaticGradientBias = 0.15f;
-            pcssComponent.Blocker_GradientBias = 0f;
-            pcssComponent.PCF_GradientBias = 0f;
             pcssComponent.Setup();
         }
 
@@ -279,6 +273,20 @@ namespace Graphics
                     else
                     {
                         _light.transform.eulerAngles = value;
+                    }
+                }
+            }
+
+            internal int ShadowCustomResolution
+            {
+                get => light.shadowCustomResolution;
+                set
+                {
+                    light.shadowCustomResolution = Mathf.Clamp(Mathf.NextPowerOfTwo(value), 0, 4096);
+                    if (Graphics.Instance.Settings.UsePCSS && LightType.Directional == light.type)
+                    {
+                        PCSSLight pcssComponent = light.GetComponent<PCSSLight>();
+                        pcssComponent?.UpdateShaderValues();
                     }
                 }
             }
