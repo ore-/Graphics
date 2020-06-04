@@ -45,7 +45,15 @@ namespace Graphics
                 else if (allLights[i].type == LightType.Directional)
                 {
                     if (Graphics.Instance.Settings.UsePCSS)
-                        AddPCSS(allLights[i]);
+                    {
+                        allLights[i].light.GetOrAddComponent<PCSSLight>();
+                    }
+                    else
+                    {
+                        PCSSLight pcss = allLights[i].light.GetComponent<PCSSLight>();
+                        Object.DestroyImmediate(pcss as Object, true);
+                    }
+
                     DirectionalLights.Add(allLights[i]);
                 }
                 if (UseAlloyLight)
@@ -53,12 +61,6 @@ namespace Graphics
                     allLights[i].light.GetOrAddComponent<AlloyAreaLight>().UpdateBinding();
                 }
             }
-        }
-
-        internal void AddPCSS(LightObject directionLight)
-        {
-            PCSSLight pcssComponent = directionLight.light.GetOrAddComponent<PCSSLight>();
-            pcssComponent.Setup();
         }
 
         internal class LightObject
@@ -282,9 +284,9 @@ namespace Graphics
                 get => light.shadowCustomResolution;
                 set
                 {
-                    light.shadowCustomResolution = Mathf.Clamp(Mathf.NextPowerOfTwo(value), 0, 4096);
                     if (Graphics.Instance.Settings.UsePCSS && LightType.Directional == light.type)
                     {
+                        light.shadowCustomResolution = Mathf.Clamp(Mathf.NextPowerOfTwo(value), 0, PCSSLight.MaxShadowCustomResolution);
                         PCSSLight pcssComponent = light.GetComponent<PCSSLight>();
                         pcssComponent?.UpdateShaderValues();
                     }

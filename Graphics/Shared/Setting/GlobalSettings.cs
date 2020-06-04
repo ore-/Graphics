@@ -8,7 +8,7 @@ namespace Graphics.Settings
     [MessagePackObject(keyAsPropertyName: true)]
     public class GlobalSettings
     {
-        private int _pixelLightCount;        
+        private int _pixelLightCount;
 
         public int PixelLightCount
         {
@@ -92,7 +92,8 @@ namespace Graphics.Settings
 
         public bool UsePCSS
         {
-            get => BuiltinShaderMode.Disabled != GraphicsSettings.GetShaderMode(BuiltinShaderType.ScreenSpaceShadows);
+            get => BuiltinShaderMode.UseCustom == GraphicsSettings.GetShaderMode(BuiltinShaderType.ScreenSpaceShadows)
+                && PCSSLight.pcssName == GraphicsSettings.GetCustomShader(BuiltinShaderType.ScreenSpaceShadows).name;
             set
             {
                 if (value)
@@ -103,6 +104,7 @@ namespace Graphics.Settings
                 {
                     PCSSLight.DisablePCSS();
                 }
+                Graphics.Instance.LightManager.Light();
             }
         }
 

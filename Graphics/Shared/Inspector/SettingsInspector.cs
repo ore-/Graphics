@@ -49,17 +49,20 @@ namespace Graphics.Inspector
                 Selection("Shadow Projection", renderingSettings.ShadowProjectionSetting, projection => renderingSettings.ShadowProjectionSetting = projection);
                 renderingSettings.ShadowDistance = Text("Shadow Distance", renderingSettings.ShadowDistance);
                 renderingSettings.ShadowNearPlaneOffset = Text("Shadow Near Plane Offset", renderingSettings.ShadowNearPlaneOffset);
-                Toggle("Use PCSS", renderingSettings.UsePCSS, false, pcss => renderingSettings.UsePCSS = pcss);
-                if (renderingSettings.UsePCSS)
+                if (showAdvanced)
                 {
-                    Slider("Blocker Sample Count", PCSSLight.Blocker_SampleCount, 1, 64, count => PCSSLight.Blocker_SampleCount = count);
-                    Slider("PCF Sample Count", PCSSLight.PCF_SampleCount, 1, 64, count => PCSSLight.PCF_SampleCount = count);
-                    Slider("Softness", PCSSLight.Softness, 0f, 7.5f, "N2", softness => PCSSLight.Softness = softness);
-                    Slider("Softness Falloff", PCSSLight.SoftnessFalloff, 0f, 5f, "N2", softnessFalloff => PCSSLight.SoftnessFalloff = softnessFalloff);
-                    Slider("Blocker Gradient Bias", PCSSLight.Blocker_GradientBias, 0f, 1f, "N2", bias => PCSSLight.Blocker_GradientBias = bias);
-                    Slider("PCF Gradient Bias", PCSSLight.PCF_GradientBias, 0f, 1f, "N2", bias => PCSSLight.PCF_GradientBias = bias);
-                    Slider("Max Static Gradient Bias", PCSSLight.MaxStaticGradientBias, 0f, 0.15f, "N2", bias => PCSSLight.MaxStaticGradientBias = bias);
-                    Slider("Cascade Blend Distance", PCSSLight.CascadeBlendDistance, 0f, 1f, "N2", distance => PCSSLight.CascadeBlendDistance = distance);
+                    Toggle("Use PCSS (Experimental)", renderingSettings.UsePCSS, false, pcss => renderingSettings.UsePCSS = pcss);
+                    if (renderingSettings.UsePCSS)
+                    {
+                        Slider("Blocker Sample Count", PCSSLight.Blocker_SampleCount, 1, 64, count => PCSSLight.Blocker_SampleCount = count);
+                        Slider("PCF Sample Count", PCSSLight.PCF_SampleCount, 1, 64, count => PCSSLight.PCF_SampleCount = count);
+                        Slider("Softness", PCSSLight.Softness, 0f, 7.5f, "N2", softness => PCSSLight.Softness = softness);
+                        Slider("Softness Falloff", PCSSLight.SoftnessFalloff, 0f, 5f, "N2", softnessFalloff => PCSSLight.SoftnessFalloff = softnessFalloff);
+                        Slider("Blocker Gradient Bias", PCSSLight.Blocker_GradientBias, 0f, 1f, "N2", bias => PCSSLight.Blocker_GradientBias = bias);
+                        Slider("PCF Gradient Bias", PCSSLight.PCF_GradientBias, 0f, 1f, "N2", bias => PCSSLight.PCF_GradientBias = bias);
+                        Slider("Max Static Gradient Bias", PCSSLight.MaxStaticGradientBias, 0f, 0.15f, "N2", bias => PCSSLight.MaxStaticGradientBias = bias);
+                        Slider("Cascade Blend Distance", PCSSLight.CascadeBlendDistance, 0f, 1f, "N2", distance => PCSSLight.CascadeBlendDistance = distance);
+                    }
                 }
                 GUILayout.Space(10);
                 Selection("Language", LocalizationManager.CurrentLanguage, language => LocalizationManager.CurrentLanguage = language);

@@ -97,8 +97,8 @@ namespace Graphics
         private RenderTextureFormat _format = RenderTextureFormat.RFloat;
         private LightEvent lightEvent = LightEvent.AfterShadowMap;
 
-        private static string pcssName = "Hidden/PCSS";
-        private static string builtinShaderName = "Hidden/Built-In-ScreenSpaceShadows";
+        internal static string pcssName = "Hidden/PCSS";
+        internal static string builtinShaderName = "Hidden/Built-In-ScreenSpaceShadows";
         private static Shader _pcss;
         private static Shader _sss;
         private static ShaderVariantCollection _shaderVariants;
@@ -107,7 +107,9 @@ namespace Graphics
 
         private CommandBuffer copyShadowBuffer;
         private Light _light;
-        private int _shadowCustomResolution = 4096;
+
+        internal static int MaxShadowCustomResolution = 4096;
+        private int _lastShadowCustomResolution = 0;
 
         #region Initialization
 
@@ -123,16 +125,11 @@ namespace Graphics
 
         internal void Setup()
         {
-            _light = GetComponent<Light>();
-
+            _light = GetComponent<Light>();            
             if (!_light || !_pcss)
                 return;
-
-            if (_light.shadowCustomResolution > 0)
-                _shadowCustomResolution = _light.shadowCustomResolution;
-            else
-                _light.shadowCustomResolution = _shadowCustomResolution;
-
+            if (_light.shadowCustomResolution < 0)
+                _light.shadowCustomResolution = MaxShadowCustomResolution;
             copyShadowBuffer = new CommandBuffer();
             copyShadowBuffer.name = "PCSS Shadows";
 
@@ -157,7 +154,8 @@ namespace Graphics
 
         internal void CreateShadowRenderTexture()
         {
-            _shadowRenderTexture = new RenderTexture(_light.shadowCustomResolution, _light.shadowCustomResolution, 0, _format);
+            int resolution = _light.shadowCustomResolution <= 0 ? MaxShadowCustomResolution : _light.shadowCustomResolution;
+            _shadowRenderTexture = new RenderTexture(resolution, resolution, 0, _format);
             _shadowRenderTexture.filterMode = FilterMode;
             _shadowRenderTexture.useMipMap = false;
             _shadowRenderTexture.antiAliasing = MSAA;
@@ -168,7 +166,7 @@ namespace Graphics
             DisablePCSS();
             DestroyImmediate(_shadowRenderTexture);
             if (!_light) return;
-            _light.shadowCustomResolution = 0;
+            _light.shadowCustomResolution = -1;
             _light.RemoveCommandBuffer(LightEvent.AfterShadowMap, copyShadowBuffer);
         }
         #endregion
@@ -185,7 +183,7 @@ namespace Graphics
             keywords.Clear();
             if (_shadowRenderTexture)
             {
-                if (_shadowRenderTexture.format != _format || _shadowCustomResolution != _light.shadowCustomResolution)
+                if (_shadowRenderTexture.format != _format || _lastShadowCustomResolution != _light.shadowCustomResolution)
                     CreateShadowRenderTexture();
 
                 _shadowRenderTexture.antiAliasing = MSAA;
@@ -198,6 +196,8 @@ namespace Graphics
             UpdatePoisson();
             if (_shaderVariants)
                 _shaderVariants.Add(new ShaderVariantCollection.ShaderVariant(_pcss, PassType.Normal, keywords.ToArray()));
+
+            _lastShadowCustomResolution = _light.shadowCustomResolution;
         }
 
         internal void UpdateCommandBuffer()
@@ -223,7 +223,7 @@ namespace Graphics
                 Shader.DisableKeyword(shaderKeyword);
         }
 
-        internal static void LoadAssets()
+        internal static bool LoadAssets()
         {
             AssetBundle assetBundle = AssetBundle.LoadFromMemory(ResourceUtils.GetEmbeddedResource("pcss"));
             _pcss = assetBundle.LoadAsset<Shader>("Assets/PCSS/Shaders/PCSS.shader");
@@ -232,13 +232,7 @@ namespace Graphics
             assetBundle.Unload(false);
             _noiseTexture = KKAPI.Utilities.TextureUtils.LoadTexture(ResourceUtils.GetEmbeddedResource("blue noise.png"));
             _shadowmapPropID = Shader.PropertyToID("_ShadowMap");
-            //sanity check
-            Shader pcss = Shader.Find(pcssName);
-            Shader sss = Shader.Find(builtinShaderName);
-            if (!pcss || !sss)
-            {
-                Debug.Log("failed to load " + pcssName + " " + builtinShaderName);
-            }
+            return true;
         }
 
         internal static void EnablePCSS()
@@ -249,8 +243,8 @@ namespace Graphics
                 GraphicsSettings.SetShaderMode(BuiltinShaderType.ScreenSpaceShadows, BuiltinShaderMode.UseCustom);
                 Blocker_SampleCount = 64;
                 PCF_SampleCount = 64;
-                Softness = 1.25f;
-                SoftnessFalloff = 1f;
+                Softness = 7.5f;
+                SoftnessFalloff = 2f;
                 MaxStaticGradientBias = 0f;
                 Blocker_GradientBias = 0.01f;
                 PCF_GradientBias = 1f;
@@ -265,15 +259,6 @@ namespace Graphics
 
         internal static void DisablePCSS()
         {
-            _sss = Shader.Find(builtinShaderName);
-            //		if (!Application.isEditor)
-            //		{
-            //			if (builtinShader)
-            //				Debug.LogErrorFormat("Built-In Shadow Shader Found: {0} | Supported {1}", builtinShader.name, builtinShader.isSupported);
-            //			else
-            //				Debug.LogError("Shadow Shader Not Found!!!");
-            //		}
-
             GraphicsSettings.SetCustomShader(BuiltinShaderType.ScreenSpaceShadows, _sss);
             GraphicsSettings.SetShaderMode(BuiltinShaderType.ScreenSpaceShadows, BuiltinShaderMode.Disabled);
             GraphicsSettings.SetShaderMode(BuiltinShaderType.ScreenSpaceShadows, BuiltinShaderMode.UseBuiltin);

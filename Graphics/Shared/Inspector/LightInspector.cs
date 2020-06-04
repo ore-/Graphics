@@ -93,7 +93,7 @@ namespace Graphics.Inspector
                                         Slider("Strength", lightManager.SelectedLight.light.shadowStrength, 0f, 1f, "N2", strength => lightManager.SelectedLight.light.shadowStrength = strength);
 
                                         if (LightType.Directional == lightManager.SelectedLight.type && renderingSettings.UsePCSS)
-                                            Slider("Resolution", lightManager.SelectedLight.ShadowCustomResolution, 0, 4096, resolution => lightManager.SelectedLight.ShadowCustomResolution = resolution);
+                                            Slider("Resolution", lightManager.SelectedLight.ShadowCustomResolution, 0, PCSSLight.MaxShadowCustomResolution, resolution => lightManager.SelectedLight.ShadowCustomResolution = resolution);
                                         else
                                             Selection("Resolution", lightManager.SelectedLight.light.shadowResolution, resolution => lightManager.SelectedLight.light.shadowResolution = resolution, 2);
 
@@ -137,61 +137,6 @@ namespace Graphics.Inspector
                                             }
                                         }
                                         GUILayout.Space(10);
-
-                                        /* PCSS
-                                            public Slider softnessSlider;
-                                            public Text softnessText;
-
-                                            [Space(10f)]
-                                            public Slider softnessFalloffSlider;
-                                            public Text softnessFalloffText;
-
-                                            [Space(10f)]
-                                            public Slider blockerSlider;
-                                            public Text blockerText;
-
-                                            [Space(10f)]
-                                            public Slider pcfSlider;
-                                            public Text pcfText;
-
-                                            public void SetBlockerSamples (float samplesFloat)
-                                            {
-                                                int samples = Mathf.RoundToInt(samplesFloat);
-                                                pcssScript.Blocker_SampleCount = samples;
-                                                blockerText.text = string.Format("Blocker Samples: {0}", samples);
-                                                pcssScript.UpdateShaderValues();
-                                            }
-
-                                            public void SetPCFSamples (float samplesFloat)
-                                            {
-                                                int samples = Mathf.RoundToInt(samplesFloat);
-                                                pcssScript.PCF_SampleCount = samples;
-                                                pcfText.text = string.Format("PCF Samples: {0}", samples);
-                                                pcssScript.UpdateShaderValues();
-                                            }
-
-                                            public void SetSoftness (float softness)
-                                            {
-                                                pcssScript.Softness = softness;
-                                                softnessText.text = string.Format("Softness: {0}", softness.ToString("N2"));
-                                                pcssScript.UpdateShaderValues();
-                                            }
-
-                                            public void SetSoftnessFalloff (float softnessFalloff)
-                                            {
-                                                pcssScript.SoftnessFalloff = softnessFalloff;
-                                                softnessFalloffText.text = string.Format("Softness Falloff: {0}", softnessFalloff.ToString("N2"));
-                                                pcssScript.UpdateShaderValues();
-                                            }
-
-                                            PCSSLight script = target as PCSSLight;
-                                            script.UpdateShaderValues();
-
-                                            if (script.Blocker_GradientBias < Mathf.Epsilon && QualitySettings.shadowCascades == 1)
-                                            {
-                                                EditorGUILayout.HelpBox("A 'Blocker Gradient Bias' of 0 seems to cause issues when not using shadow cascades. Any non-zero value should fix this.", MessageType.Error);
-                                            }
-                                         */
                                     }
                                     GUILayout.EndVertical();
                                 }
