@@ -25,8 +25,7 @@ namespace Graphics.Inspector
         private static int selectedProbe = 0;
 
         private static bool inspectReflectionProbes = true;
-        private static bool inspectSEGI = true;
-        private static bool enableSEGI = false;
+        private static bool inspectSEGI = false;
         private static SEGI segi;
 
         internal static void Draw(LightingSettings lightingSettings, SkyboxManager skyboxManager, bool showAdvanced)
@@ -136,17 +135,21 @@ namespace Graphics.Inspector
             GUILayout.EndVertical();
             GUILayout.BeginVertical(GUIStyles.Skin.box);
             {
-                Toggle("SEGI", inspectSEGI, true, inspect => inspectSEGI = inspect);
+                Toggle("SEGI (Experimental)", inspectSEGI, true, inspect => inspectSEGI = inspect);
                 if (inspectSEGI)
                 {
-                    Toggle("Enable", enableSEGI, false, enable => enableSEGI = enable);
-                    if (enableSEGI && null != Graphics.Instance.CameraSettings.MainCamera)
+                    if (null != Graphics.Instance.CameraSettings.MainCamera && null == segi)
                     {
+                        segi = Graphics.Instance.CameraSettings.MainCamera.GetOrAddComponent<SEGI>();
                         if (null != segi)
-                            segi = Graphics.Instance.CameraSettings.MainCamera.GetOrAddComponent<SEGI>();
-                        if (null != segi)
+                            segi.enabled = false;
+                    }
+
+                    if (null != segi)
+                    {
+                        Toggle("Enable", segi.enabled, false, enable => segi.enabled = enable);
+                        if (segi.enabled)
                         {
-                            segi.enabled = true;
                             GUILayout.BeginVertical(GUIStyles.Skin.box);
                             segiScrollView = GUILayout.BeginScrollView(segiScrollView);
                             {
@@ -206,13 +209,6 @@ namespace Graphics.Inspector
                             GUILayout.EndScrollView();
                             GUILayout.EndVertical();
                         }
-                    }
-                    else if (!enableSEGI && null != Graphics.Instance.CameraSettings.MainCamera)
-                    {
-                        if (null != segi)
-                            segi = Graphics.Instance.CameraSettings.MainCamera.GetComponent<SEGI>();
-                        if (null != segi)
-                            segi.enabled = false;
                     }
                 }
             }

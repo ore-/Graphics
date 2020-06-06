@@ -21,12 +21,12 @@ namespace Graphics
 
         public bool updateGI = true;
         public LayerMask giCullingMask = 2147483647;
-        public float shadowSpaceSize = 50.0f;
+        public float shadowSpaceSize = 100.0f;
         public Light sun;
 
-        public Color skyColor;
+        public Color skyColor = Color.white;
 
-        public float voxelSpaceSize = 25.0f;
+        public float voxelSpaceSize = 100.0f;
 
         public bool useBilateralFiltering = false;
 
@@ -544,6 +544,8 @@ namespace Graphics
             attachedCamera = this.GetComponent<Camera>();
             attachedCamera.depthTextureMode |= DepthTextureMode.Depth;
             attachedCamera.depthTextureMode |= DepthTextureMode.MotionVectors;
+
+            giCullingMask = attachedCamera.cullingMask;
 
             //Find the proxy shadow rendering camera if it exists
             GameObject scgo = GameObject.Find("SEGI_SHADOWCAM");

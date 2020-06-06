@@ -12,6 +12,7 @@ namespace Graphics.Inspector
         private static Vector2 spotLightScrollView;
         private static Vector2 inspectorScrollView;
         private static int customLightIndex = 0;
+        private static SEGI segi;
         internal static void Draw(GlobalSettings renderingSettings, LightManager lightManager, bool showAdvanced)
         {
             GUILayout.BeginVertical(GUIStyles.Skin.box);
@@ -96,6 +97,28 @@ namespace Graphics.Inspector
                                     GUILayout.Space(10);
                                     if (lightManager.SelectedLight.type == LightType.Directional)
                                     {
+                                        if (null != Graphics.Instance.CameraSettings.MainCamera && null == segi)
+                                            segi = Graphics.Instance.CameraSettings.MainCamera.GetOrAddComponent<SEGI>();
+
+                                        if (null != segi && segi.enabled)
+                                        {
+                                            bool isSEGISun = ReferenceEquals(lightManager.SelectedLight.light, segi.sun);
+                                            if (null != segi.sun && !isSEGISun)
+                                                GUI.enabled = false;
+                                            Toggle("SEGI Sun source", isSEGISun, false, sun =>
+                                            {
+                                                if (sun)
+                                                {
+                                                    segi.sun = lightManager.SelectedLight.light;
+                                                }
+                                                else
+                                                {
+                                                    segi.sun = null;
+                                                }
+                                            });
+                                            GUI.enabled = true;
+                                        }
+
                                         Vector3 rot = lightManager.SelectedLight.rotation;
                                         Slider("Vertical Rotation", rot.x, LightSettings.RotationXMin, LightSettings.RotationXMax, "N1", x => { rot.x = x; });
                                         Slider("Horizontal Rotation", rot.y, LightSettings.RotationYMin, LightSettings.RotationYMax, "N1", y => { rot.y = y; });

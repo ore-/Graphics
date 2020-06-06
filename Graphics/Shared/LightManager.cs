@@ -46,14 +46,14 @@ namespace Graphics
                 {
                     if (Graphics.Instance.Settings.UsePCSS)
                     {
-                        if( null != pcss ) 
+                        if (null == pcss)
                             pcss = allLights[i].light.GetOrAddComponent<PCSSLight>();
                         if (null != pcss)
                             pcss.enabled = true;
                     }
                     else
                     {
-                        if (null != pcss)
+                        if (null == pcss)
                             pcss = allLights[i].light.GetComponent<PCSSLight>();
                         if (null != pcss)
                             pcss.enabled = false;
