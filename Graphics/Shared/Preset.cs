@@ -91,16 +91,17 @@ namespace Graphics
                     byte[] bytes = File.ReadAllBytes(targetPath);
                     Load(bytes);
                     return true;
-                } catch (Exception e)
+                }
+                catch (Exception e)
                 {
-                    Debug.Log(string.Format("Couldn't open preset file '{0}'", name + ".preset"));
-                    Debug.LogError(e.Message);
+                    Graphics.Instance.Log.Log(BepInEx.Logging.LogLevel.Error, string.Format("Couldn't open preset file '{0}'", name + ".preset"));
+                    Graphics.Instance.Log.Log(BepInEx.Logging.LogLevel.Error, e.Message);
                     return false;
                 }
             }
             else
             {
-                Debug.Log(string.Format("Couldn't find preset file '{0}'", name + ".preset"));
+                Graphics.Instance.Log.Log(BepInEx.Logging.LogLevel.Error, string.Format("Couldn't find preset file '{0}'", name + ".preset"));
                 return false;
             }
         }

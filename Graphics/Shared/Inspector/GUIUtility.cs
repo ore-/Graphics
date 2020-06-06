@@ -77,7 +77,8 @@ namespace Graphics.Inspector
         }
 
         // useColorDisplayColor32 is for setting colour on skybox tint, Color<->Color32 conversion loses precision
-        internal static void SliderColor(string label, Color value, Action<Color> onChanged = null, bool useColorDisplayColor32 = false, bool enable = true, Action<bool> onChangedEnable = null)
+        internal static void SliderColor(string label, Color value, Action<Color> onChanged = null,
+            bool useColorDisplayColor32 = false, bool enable = true, Action<bool> onChangedEnable = null, string colourGradingName = "", float mincolourGrading = 0, float maxcolourGrading = 1)
         {
             GUILayout.BeginHorizontal();
             int spacing = 0;
@@ -99,6 +100,11 @@ namespace Graphics.Inspector
                 color.g = SliderColor("Green", color.g, spacing);
                 color.b = SliderColor("Blue", color.b, spacing);
                 Color newValue = color;
+                if (!colourGradingName.IsNullOrEmpty())
+                {
+                    float colourGradingValue = SliderColor(colourGradingName, color.a, spacing, mincolourGrading, maxcolourGrading, false);
+                    newValue.a = colourGradingValue;
+                }
                 if (onChanged != null && value != newValue)
                 {
                     onChanged(newValue);
@@ -111,6 +117,11 @@ namespace Graphics.Inspector
                 color.g = SliderColor("Green", color.g, spacing);
                 color.b = SliderColor("Blue", color.b, spacing);
                 Color newValue = color;
+                if (!colourGradingName.IsNullOrEmpty())
+                {
+                    float colourGradingValue = SliderColor(colourGradingName, value.a, spacing, mincolourGrading, maxcolourGrading, false);
+                    newValue.a = colourGradingValue;
+                }
                 if (onChanged != null && value != newValue)
                 {
                     onChanged(newValue);
@@ -123,57 +134,7 @@ namespace Graphics.Inspector
             }
         }
 
-        internal static void SliderTrackball(string label, Color value, Action<Color> onChanged = null, bool useColorDisplayColor32 = false, bool enable = true, Action<bool> onChangedEnable = null)
-        {
-            GUILayout.BeginHorizontal();
-            int spacing = 0;
-            EnableToggle(label, ref spacing, ref enable, onChangedEnable);
-            if (!enable)
-            {
-                GUI.enabled = false;
-            }
-
-            GUI.color = new Color(value.r, value.g, value.b, 1f);
-            GUILayout.Label(colourIndicator);
-            GUI.color = Color.white;
-            GUILayout.EndHorizontal();
-            GUILayout.BeginVertical();
-            if (useColorDisplayColor32)
-            {
-                Color color = value;
-                color.r = SliderColor("Red", color.r, spacing);
-                color.g = SliderColor("Green", color.g, spacing);
-                color.b = SliderColor("Blue", color.b, spacing);
-                color.a = SliderColorFloat("Value", color.a, -5f, 5f, spacing);
-                Color newValue = color;
-                if (onChanged != null && value != newValue)
-                {
-                    onChanged(newValue);
-                }
-            }
-            else
-            {
-                Color32 color = value;
-                color.r = SliderColor("Red", color.r, spacing);
-                color.g = SliderColor("Green", color.g, spacing);
-                color.b = SliderColor("Blue", color.b, spacing);
-                // This value needs to be a float even when using a Color32 since the value is out of the 0, 1 (or 0-255) range
-                float alpha = SliderColorFloat("Value", value.a, -5f, 5f, spacing);
-                Color newValue = color;
-                newValue.a = alpha;
-                if (onChanged != null && value != newValue)
-                {
-                    onChanged(newValue);
-                }
-            }
-            GUILayout.EndVertical();
-            if (!enable)
-            {
-                GUI.enabled = true;
-            }
-        }
-
-        internal static float SliderColor(string label, float value, int spacing)
+        internal static float SliderColor(string label, float value, int spacing, float min = 0, float max = 1, bool RGB = true)
         {
             GUILayout.BeginHorizontal();
             if (0 != spacing)
@@ -183,14 +144,15 @@ namespace Graphics.Inspector
             label = LocalizationManager.HasLocalization() ? LocalizationManager.Localized(label) : label;
             GUILayout.Label(label, GUILayout.ExpandWidth(false));
             GUILayout.Label("", GUILayout.Width(GUIStyles.labelWidth - GUI.skin.label.CalcSize(new GUIContent(label)).x - spacing));
-            float newValue = GUILayout.HorizontalSlider(value, 0, 1);
+            float newValue = GUILayout.HorizontalSlider(value, min, max);
             string valueString = value.ToString();
-            string newValueString = GUILayout.TextField((newValue * 255).ToString("N0"), GUILayout.Width(40), GUILayout.ExpandWidth(false));
+            string newValueString = RGB ? (newValue * 255).ToString("N0") : newValue.ToString();
+            newValueString = GUILayout.TextField(newValueString, GUILayout.Width(40), GUILayout.ExpandWidth(false));
             if (newValueString != valueString)
             {
                 if (float.TryParse(newValueString, out float parseResult))
                 {
-                    newValue = parseResult / 255;
+                    newValue = RGB ? parseResult / 255 : parseResult;
                 }
             }
             GUILayout.EndHorizontal();
@@ -214,30 +176,6 @@ namespace Graphics.Inspector
             if (newValueString != valueString)
             {
                 if (byte.TryParse(newValueString, out byte parseResult))
-                {
-                    newValue = parseResult;
-                }
-            }
-            return newValue;
-        }
-
-        internal static float SliderColorFloat(string label, float value, float minValue, float maxValue, int spacing)
-        {
-            GUILayout.BeginHorizontal();
-            if (0 != spacing)
-            {
-                GUILayout.Label("", GUILayout.Width(spacing));
-            }
-            label = LocalizationManager.HasLocalization() ? LocalizationManager.Localized(label) : label;
-            GUILayout.Label(label, GUILayout.ExpandWidth(false));
-            GUILayout.Label("", GUILayout.Width(GUIStyles.labelWidth - GUI.skin.label.CalcSize(new GUIContent(label)).x - spacing));
-            float newValue = GUILayout.HorizontalSlider(value, minValue, maxValue);
-            string valueString = value.ToString();
-            string newValueString = GUILayout.TextField(newValue.ToString(), GUILayout.Width(40), GUILayout.ExpandWidth(false));
-            GUILayout.EndHorizontal();
-            if (newValueString != valueString)
-            {
-                if (float.TryParse(newValueString, out float parseResult))
                 {
                     newValue = parseResult;
                 }
@@ -429,7 +367,7 @@ namespace Graphics.Inspector
         internal static void Label(string label, string text, bool bold = false)
         {
             label = LocalizationManager.HasLocalization() ? LocalizationManager.Localized(label) : label;
-            if(0 < text.Length) text = LocalizationManager.HasLocalization() ? LocalizationManager.Localized(text) : text;
+            if (0 < text.Length) text = LocalizationManager.HasLocalization() ? LocalizationManager.Localized(text) : text;
             GUILayout.BeginHorizontal();
             if (bold)
             {
@@ -444,7 +382,7 @@ namespace Graphics.Inspector
             GUILayout.EndHorizontal();
         }
 
-        internal static int Text(string label, int Integer, bool enable = true, Action<bool> onChangedEnable = null)
+        internal static void Text(string label, int Integer, Action<int> onChanged = null, bool enable = true, Action<bool> onChangedEnable = null)
         {
             GUILayout.BeginHorizontal();
             int spacing = 0;
@@ -461,10 +399,13 @@ namespace Graphics.Inspector
             }
 
             GUILayout.EndHorizontal();
-            return count;
+            if (onChanged != null && Integer != count)
+            {
+                onChanged(count);
+            }
         }
 
-        internal static float Text(string label, float Float, string format = "N0", bool enable = true, Action<bool> onChangedEnable = null)
+        internal static void Text(string label, float Float, string format = "N0", Action<float> onChanged = null, bool enable = true, Action<bool> onChangedEnable = null)
         {
             GUILayout.BeginHorizontal();
             int spacing = 0;
@@ -481,10 +422,13 @@ namespace Graphics.Inspector
             }
 
             GUILayout.EndHorizontal();
-            return count;
+            if (onChanged != null && Float != count)
+            {
+                onChanged(count);
+            }
         }
 
-        internal static string Text(string label, string text, bool enable = true, Action<bool> onChangedEnable = null)
+        internal static void Text(string label, string text, Action<string> onChanged = null, bool enable = true, Action<bool> onChangedEnable = null)
         {
             GUILayout.BeginHorizontal();
             int spacing = 0;
@@ -493,14 +437,17 @@ namespace Graphics.Inspector
             {
                 GUI.enabled = false;
             }
-            text = GUILayout.TextField(text, 32);
+            string newText = GUILayout.TextField(text, 32);
             if (!enable)
             {
                 GUI.enabled = true;
             }
 
             GUILayout.EndHorizontal();
-            return text;
+            if (onChanged != null && text != newText)
+            {
+                onChanged(newText);
+            }
         }
 
         internal static Vector3 Dimension(string label, Vector3 size, Action<Vector3> onChanged = null)

@@ -127,7 +127,8 @@ namespace Graphics
             _presetManager = new PresetManager(ConfigPresetPath.Value, this);
 
             yield return new WaitUntil(() => PCSSLight.LoadAssets());
-            
+            yield return new WaitUntil(() => SEGI.LoadAssets());
+
             _inspector = new Inspector.Inspector(this);
             _isLoaded = true;
         }

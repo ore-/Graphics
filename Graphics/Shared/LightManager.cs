@@ -13,7 +13,7 @@ namespace Graphics
         internal List<LightObject> SpotLights { get; private set; }
         internal bool UseAlloyLight { get; set; }
         internal LightObject SelectedLight { get; set; }
-
+        private PCSSLight pcss;
         private Graphics _parent;
         internal LightManager(Graphics parent)
         {
@@ -46,12 +46,17 @@ namespace Graphics
                 {
                     if (Graphics.Instance.Settings.UsePCSS)
                     {
-                        allLights[i].light.GetOrAddComponent<PCSSLight>();
+                        if( null != pcss ) 
+                            pcss = allLights[i].light.GetOrAddComponent<PCSSLight>();
+                        if (null != pcss)
+                            pcss.enabled = true;
                     }
                     else
                     {
-                        PCSSLight pcss = allLights[i].light.GetComponent<PCSSLight>();
-                        Object.DestroyImmediate(pcss as Object, true);
+                        if (null != pcss)
+                            pcss = allLights[i].light.GetComponent<PCSSLight>();
+                        if (null != pcss)
+                            pcss.enabled = false;
                     }
 
                     DirectionalLights.Add(allLights[i]);

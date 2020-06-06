@@ -36,7 +36,7 @@ namespace Graphics.Inspector
                 GUILayout.Space(1);
                 Label("Colour Space", QualitySettings.activeColorSpace.ToString());
                 Label("Quality Level", QualitySettings.names[QualitySettings.GetQualityLevel()]);
-                renderingSettings.PixelLightCount = Text("Pixel Light Count", renderingSettings.PixelLightCount);
+                Text("Pixel Light Count", renderingSettings.PixelLightCount, count => renderingSettings.PixelLightCount = count);
                 Selection("Anisotropic Textures", renderingSettings.AnisotropicFiltering, filtering => renderingSettings.AnisotropicFiltering = filtering);
                 Slider("MSAA Multiplier", renderingSettings.AntiAliasing, 0, 8, aa => renderingSettings.AntiAliasing = aa);
                 Toggle("Realtime Reflection Probes", renderingSettings.RealtimeReflectionProbes, false, realtime => renderingSettings.RealtimeReflectionProbes = realtime);
@@ -47,8 +47,8 @@ namespace Graphics.Inspector
                 Selection("Shadows", renderingSettings.ShadowQualitySetting, setting => renderingSettings.ShadowQualitySetting = setting);
                 Selection("Shadow Resolution", renderingSettings.ShadowResolutionSetting, resolution => renderingSettings.ShadowResolutionSetting = resolution);
                 Selection("Shadow Projection", renderingSettings.ShadowProjectionSetting, projection => renderingSettings.ShadowProjectionSetting = projection);
-                renderingSettings.ShadowDistance = Text("Shadow Distance", renderingSettings.ShadowDistance);
-                renderingSettings.ShadowNearPlaneOffset = Text("Shadow Near Plane Offset", renderingSettings.ShadowNearPlaneOffset);
+                Text("Shadow Distance", renderingSettings.ShadowDistance, "N2", distance => renderingSettings.ShadowDistance = distance);
+                Text("Shadow Near Plane Offset", renderingSettings.ShadowNearPlaneOffset, "N2", offset => renderingSettings.ShadowNearPlaneOffset = offset);
                 if (showAdvanced)
                 {
                     Toggle("Use PCSS (Experimental)", renderingSettings.UsePCSS, false, pcss => renderingSettings.UsePCSS = pcss);

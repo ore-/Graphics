@@ -66,7 +66,7 @@ namespace Graphics.Inspector
                     }
                     catch (Exception ex)
                     {
-                        Debug.Log("Could not load custom GUISkin - " + ex.Message);
+                        Graphics.Instance.Log.Log(BepInEx.Logging.LogLevel.Fatal, "Could not load custom GUISkin - " + ex.Message);
                         _skin = GUI.skin;
                     }
                 }

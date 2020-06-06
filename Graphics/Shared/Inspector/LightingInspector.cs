@@ -21,7 +21,13 @@ namespace Graphics.Inspector
 
         private static Vector2 probeSettingsScrollView;
         private static Vector2 dynSkyScrollView;
+        private static Vector2 segiScrollView;
         private static int selectedProbe = 0;
+
+        private static bool inspectReflectionProbes = true;
+        private static bool inspectSEGI = true;
+        private static bool enableSEGI = false;
+        private static SEGI segi;
 
         internal static void Draw(LightingSettings lightingSettings, SkyboxManager skyboxManager, bool showAdvanced)
         {
@@ -86,47 +92,132 @@ namespace Graphics.Inspector
             GUILayout.Space(1);
             GUILayout.BeginVertical(GUIStyles.Skin.box);
             {
-                Label("Reflection Probes", "", true);
-                ReflectionProbe[] rps = skyboxManager.GetReflectinProbes();
-                if (0 < rps.Length)
+                Toggle("Reflection Probes", inspectReflectionProbes, true, inspect => inspectReflectionProbes = inspect);
+                if (inspectReflectionProbes)
                 {
-                    string[] probeNames = rps.Select(probe => probe.name).ToArray();
-                    selectedProbe = GUILayout.SelectionGrid(selectedProbe, probeNames, 3, GUIStyles.toolbarbutton);
-                    ReflectionProbe rp = rps[selectedProbe];
-                    GUILayout.Space(1);
-                    GUILayout.BeginVertical(GUIStyles.Skin.box);
-                    probeSettingsScrollView = GUILayout.BeginScrollView(probeSettingsScrollView);
+                    ReflectionProbe[] rps = skyboxManager.GetReflectinProbes();
+                    if (0 < rps.Length)
                     {
-                        Label("Type", rp.mode.ToString());
-                        Label("Runtime settings", "");
-                        Slider("Importance", rp.importance, 0, 1000, importance => rp.importance = importance);
-                        Slider("Intensity", rp.intensity, 0, 10, "N2", intensity => rp.intensity = intensity);
-                        Toggle("Box Projection", rp.boxProjection, false, box => rp.boxProjection = box);
-                        rp.blendDistance = Text("Blend Distance", rp.blendDistance);
-                        Dimension("Box Size", rp.size, size => rp.size = size);
-                        Dimension("Box Offset", rp.center, size => rp.center = size);
-                        GUILayout.Space(10);
-                        Label("Cubemap capture settings", "");
-                        Selection("Resolution", rp.resolution, LightingSettings.ReflectionResolutions, resolution => rp.resolution = resolution);
-                        Toggle("HDR", rp.hdr, false, hdr => rp.hdr = hdr);
-                        rp.shadowDistance = Text("Shadow Distance", rp.shadowDistance);
-                        Selection("Clear Flags", rp.clearFlags, flag => rp.clearFlags = flag);
-                        if (showAdvanced)
+                        string[] probeNames = rps.Select(probe => probe.name).ToArray();
+                        selectedProbe = GUILayout.SelectionGrid(selectedProbe, probeNames, 3, GUIStyles.toolbarbutton);
+                        ReflectionProbe rp = rps[selectedProbe];
+                        GUILayout.Space(1);
+                        GUILayout.BeginVertical(GUIStyles.Skin.box);
+                        probeSettingsScrollView = GUILayout.BeginScrollView(probeSettingsScrollView);
                         {
-                            SelectionMask("Culling Mask", rp.cullingMask, mask => rp.cullingMask = mask);
+                            Label("Type", rp.mode.ToString());
+                            Label("Runtime settings", "");
+                            Slider("Importance", rp.importance, 0, 1000, importance => rp.importance = importance);
+                            Slider("Intensity", rp.intensity, 0, 10, "N2", intensity => rp.intensity = intensity);
+                            Toggle("Box Projection", rp.boxProjection, false, box => rp.boxProjection = box);
+                            Text("Blend Distance", rp.blendDistance, "N2", distance => rp.blendDistance = distance);
+                            Dimension("Box Size", rp.size, size => rp.size = size);
+                            Dimension("Box Offset", rp.center, size => rp.center = size);
+                            GUILayout.Space(10);
+                            Label("Cubemap capture settings", "");
+                            Selection("Resolution", rp.resolution, LightingSettings.ReflectionResolutions, resolution => rp.resolution = resolution);
+                            Toggle("HDR", rp.hdr, false, hdr => rp.hdr = hdr);
+                            Text("Shadow Distance", rp.shadowDistance, "N2", distance => rp.shadowDistance = distance);
+                            Selection("Clear Flags", rp.clearFlags, flag => rp.clearFlags = flag);
+                            if (showAdvanced)
+                            {
+                                SelectionMask("Culling Mask", rp.cullingMask, mask => rp.cullingMask = mask);
+                            }
+                            Text("Clipping Planes - Near", rp.nearClipPlane, "N2", plane => rp.nearClipPlane = plane);
+                            Text("Clipping Planes - Far", rp.farClipPlane, "N2", plane => rp.farClipPlane = plane);
+                            SliderColor("Background", rp.backgroundColor, colour => { rp.backgroundColor = colour; });
+                            Selection("Time Slicing Mode", rp.timeSlicingMode, mode => rp.timeSlicingMode = mode);
                         }
-                        rp.nearClipPlane = Text("Clipping Planes - Near", rp.nearClipPlane, "N2");
-                        rp.farClipPlane = Text("Clipping Planes - Far", rp.farClipPlane, "N2");
-                        SliderColor("Background", rp.backgroundColor, colour => { rp.backgroundColor = colour; });
-                        Selection("Time Slicing Mode", rp.timeSlicingMode, mode => rp.timeSlicingMode = mode);
+                        GUILayout.EndScrollView();
+                        GUILayout.EndVertical();
                     }
-                    GUILayout.EndScrollView();
-                    GUILayout.EndVertical();
+                }
+            }
+            GUILayout.EndVertical();
+            GUILayout.BeginVertical(GUIStyles.Skin.box);
+            {
+                Toggle("SEGI", inspectSEGI, true, inspect => inspectSEGI = inspect);
+                if (inspectSEGI)
+                {
+                    Toggle("Enable", enableSEGI, false, enable => enableSEGI = enable);
+                    if (enableSEGI && null != Graphics.Instance.CameraSettings.MainCamera)
+                    {
+                        if (null != segi)
+                            segi = Graphics.Instance.CameraSettings.MainCamera.GetOrAddComponent<SEGI>();
+                        if (null != segi)
+                        {
+                            segi.enabled = true;
+                            GUILayout.BeginVertical(GUIStyles.Skin.box);
+                            segiScrollView = GUILayout.BeginScrollView(segiScrollView);
+                            {
+                                Label("Main Configuration", "", true);
+                                Selection("Voxel Resolution", segi.voxelResolution, resolution => segi.voxelResolution = resolution);
+                                Toggle("Volex AA", segi.voxelAA, false, aa => segi.voxelAA = aa);
+                                Slider("Inner Occlusion Layers", segi.innerOcclusionLayers, 0, 2, layers => segi.innerOcclusionLayers = layers);
+                                Toggle("Gaussian Mip Filter", segi.gaussianMipFilter, false, filter => segi.gaussianMipFilter = filter);
+                                Text("Voxel Space Size", segi.voxelSpaceSize, "N2", size => segi.voxelSpaceSize = size);
+                                Text("Shadow Space Size", segi.shadowSpaceSize, "N2", size => segi.shadowSpaceSize = size);
+                                SelectionMask("GI Culling Mask", segi.giCullingMask, mask => segi.giCullingMask = mask);
+                                Toggle("Update GI", segi.updateGI, false, update => segi.updateGI = update);
+                                Toggle("Infinite Bounces", segi.infiniteBounces, false, bounce => segi.infiniteBounces = bounce);
+                                Label("VRAM usage", segi.vramUsage.ToString("N2") + " MB");
+                                GUILayout.Space(10);
+                                Label("Environmental Properties", "", true);
+                                string sun = segi.sun ? segi.sun.ToString() : "Please set one directional light as sunlight";
+                                Label("Sun", sun);
+                                Slider("Soft Sunlight", segi.softSunlight, 0f, 16f, "N2", soft => segi.softSunlight = soft);
+                                SliderColor("Sky Colour", segi.skyColor, colour => segi.skyColor = colour);
+                                Slider("Sky Intensity", segi.skyIntensity, 0f, 8f, "N2", intensity => segi.skyIntensity = intensity);
+                                Toggle("Spherical Skylight", segi.sphericalSkylight, false, spherical => segi.sphericalSkylight = spherical);
+                                GUILayout.Space(10);
+                                Label("Tracing Properties", "", true);
+                                Slider("Temporal Blend Weight", segi.temporalBlendWeight, 0f, 1f, "N2", weight => segi.temporalBlendWeight = weight);
+                                Toggle("Bilateral Filtering", segi.useBilateralFiltering, false, filter => segi.useBilateralFiltering = filter);
+                                Toggle("Half Resolution", segi.halfResolution, false, half => segi.halfResolution = half);
+                                Toggle("Stochastic Sampling", segi.stochasticSampling, false, sampling => segi.stochasticSampling = sampling);
+                                Slider("Cones", segi.cones, 1, 128, cones => segi.cones = cones);
+                                Slider("Cones Trace Steps", segi.coneTraceSteps, 1, 32, cones => segi.coneTraceSteps = cones);
+                                Slider("Cones Length", segi.coneLength, 0.1f, 2f, "N2", cones => segi.coneLength = cones);
+                                Slider("Cones Width", segi.coneWidth, 0.5f, 6f, "N2", cones => segi.coneWidth = cones);
+                                Slider("Cones Trace Bias", segi.coneTraceBias, 0f, 4f, "N2", cones => segi.coneTraceBias = cones);
+                                Slider("Occlusion Strength", segi.occlusionStrength, 0f, 4f, "N2", cones => segi.occlusionStrength = cones);
+                                Slider("Near Occlusion Strength", segi.nearOcclusionStrength, 0f, 4f, "N2", cones => segi.nearOcclusionStrength = cones);
+                                Slider("Far Occlusion Strength", segi.farOcclusionStrength, 0f, 4f, "N2", cones => segi.farOcclusionStrength = cones);
+                                Slider("Farthest Occlusion Strength", segi.farthestOcclusionStrength, 0f, 4f, "N2", cones => segi.farthestOcclusionStrength = cones);
+                                Slider("Occlusion Power", segi.occlusionPower, 0.001f, 4f, "N2", cones => segi.occlusionPower = cones);
+                                Slider("Near Light Gain", segi.nearLightGain, 0f, 4f, "N2", cones => segi.nearLightGain = cones);
+                                Slider("GI Gain", segi.giGain, 0f, 4f, "N2", cones => segi.giGain = cones);
+                                GUILayout.Space(10);
+                                Slider("Secondary Bounce Gain", segi.secondaryBounceGain, 0f, 4f, "N2", cones => segi.secondaryBounceGain = cones);
+                                Slider("Secondary Cones", segi.secondaryCones, 3, 16, cones => segi.secondaryCones = cones);
+                                Slider("Secondary Occlusion Strength", segi.secondaryOcclusionStrength, 0.1f, 4f, "N2", cones => segi.secondaryOcclusionStrength = cones);
+                                GUILayout.Space(10);
+                                Label("Reflection Properties", "", true);
+                                Toggle("Do Reflections", segi.doReflections, false, reflections => segi.doReflections = reflections);
+                                Slider("Reflection Steps", segi.reflectionSteps, 12, 128, cones => segi.reflectionSteps = cones);
+                                Slider("Reflection Occlusion Power", segi.reflectionOcclusionPower, 0.001f, 4f, "N2", cones => segi.reflectionOcclusionPower = cones);
+                                Slider("Sky Reflection Intensity", segi.skyReflectionIntensity, 0f, 1f, "N2", intensity => segi.skyReflectionIntensity = intensity);
+                                GUILayout.Space(10);
+                                Label("Debug Tools", "", true);
+                                Toggle("Visualize Sun Depth Texture", segi.visualizeSunDepthTexture, false, visual => segi.visualizeSunDepthTexture = visual);
+                                Toggle("Visualize GI", segi.visualizeGI, false, visual => segi.visualizeGI = visual);
+                                Toggle("Visualize Voxels", segi.visualizeVoxels, false, visual => segi.visualizeVoxels = visual);
+                            }
+                            GUILayout.EndScrollView();
+                            GUILayout.EndVertical();
+                        }
+                    }
+                    else if (!enableSEGI && null != Graphics.Instance.CameraSettings.MainCamera)
+                    {
+                        if (null != segi)
+                            segi = Graphics.Instance.CameraSettings.MainCamera.GetComponent<SEGI>();
+                        if (null != segi)
+                            segi.enabled = false;
+                    }
                 }
             }
             GUILayout.EndVertical();
         }
-
         internal static void DrawDynSkyboxOptions(LightingSettings lightingSettings, SkyboxManager skyboxManager, bool showAdvanced)
         {
             if (skyboxManager != null && skyboxManager.Skybox != null)
