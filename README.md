@@ -14,3 +14,4 @@ Not compatible with DHH, the plugin won't load if you have DHH installed.
 [SEGI](https://github.com/sonicether/SEGI)  
 [PCSS](https://github.com/TheMasonX/UnityPCSS)  
 [keijiro/PostProcessingUtilities](https://github.com/keijiro/PostProcessingUtilities)
+[IllusionModdingAPI](https://github.com/IllusionMods/IllusionModdingAPI)
