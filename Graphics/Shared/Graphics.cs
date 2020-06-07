@@ -21,7 +21,7 @@ namespace Graphics
     {
         public const string GUID = "ore.graphics";
         public const string PluginName = "Graphics";
-        public const string Version = "0.4.0";
+        public const string Version = "0.3.3";
 
         public static ConfigEntry<KeyCode> ConfigShortcut { get; private set; }
         public static ConfigEntry<string> ConfigCubeMapPath { get; private set; }
