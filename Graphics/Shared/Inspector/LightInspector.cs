@@ -98,7 +98,7 @@ namespace Graphics.Inspector
                                     if (lightManager.SelectedLight.type == LightType.Directional)
                                     {
                                         if (null != Graphics.Instance.CameraSettings.MainCamera && null == segi)
-                                            segi = Graphics.Instance.CameraSettings.MainCamera.GetOrAddComponent<SEGI>();
+                                            segi = Graphics.Instance.CameraSettings.MainCamera.GetComponent<SEGI>();
 
                                         if (null != segi && segi.enabled)
                                         {
