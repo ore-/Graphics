@@ -10,6 +10,70 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)Alloy\AreaLight\Defaults\DefaultSpotCookie.tif" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_0.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_1.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_10.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_11.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_12.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_13.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_14.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_15.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_16.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_17.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_18.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_19.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_2.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_20.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_21.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_22.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_23.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_24.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_25.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_26.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_27.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_28.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_29.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_3.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_30.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_31.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_32.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_33.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_34.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_35.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_36.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_37.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_38.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_39.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_4.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_40.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_41.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_42.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_43.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_44.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_45.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_46.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_47.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_48.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_49.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_5.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_50.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_51.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_52.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_53.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_54.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_55.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_56.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_57.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_58.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_59.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_6.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_60.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_61.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_62.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_63.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_7.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_8.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_9.png" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\blue noise.png" />
     <Content Include="$(MSBuildThisFileDirectory)Resources\localization.chinesesimplified.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -45,6 +109,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)PresetManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ReflectionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SceneController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SEGI\SEGI.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SEGI\SEGIPreset.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Setting\CameraSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Setting\DynamicSkyboxSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Setting\GlobalSettings.cs" />
@@ -103,5 +169,8 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\pcss" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\segi" />
   </ItemGroup>
 </Project>

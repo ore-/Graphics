@@ -98,7 +98,7 @@ namespace Graphics
                 }
                 catch
                 {
-                    Debug.Log("Failed to read from " + localization);
+                    Graphics.Instance.Log.Log(BepInEx.Logging.LogLevel.Error, "Failed to read from " + localization);
                     continue;
                 }
                 yield return lines;

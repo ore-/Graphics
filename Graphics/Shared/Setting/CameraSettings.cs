@@ -55,7 +55,7 @@ namespace Graphics.Settings
             get => MainCamera.cullingMask;
             set
             {
-                Debug.Log("setting culling mask from " + MainCamera.cullingMask + " to " + value);
+                //Debug.Log("trying to set culling mask from " + MainCamera.cullingMask + " to " + value);
                 //MainCamera.cullingMask = value;
             }
         }

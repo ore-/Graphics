@@ -21,7 +21,7 @@ namespace Graphics
     {
         public const string GUID = "ore.graphics";
         public const string PluginName = "Graphics";
-        public const string Version = "0.3.2";
+        public const string Version = "0.3.3";
 
         public static ConfigEntry<KeyCode> ConfigShortcut { get; private set; }
         public static ConfigEntry<string> ConfigCubeMapPath { get; private set; }
@@ -127,7 +127,8 @@ namespace Graphics
             _presetManager = new PresetManager(ConfigPresetPath.Value, this);
 
             yield return new WaitUntil(() => PCSSLight.LoadAssets());
-            
+            yield return new WaitUntil(() => SEGI.LoadAssets());
+
             _inspector = new Inspector.Inspector(this);
             _isLoaded = true;
         }
