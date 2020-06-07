@@ -13,5 +13,5 @@ Not compatible with DHH, the plugin won't load if you have DHH installed.
 [Alloy](https://github.com/Josh015/Alloy)  
 [SEGI](https://github.com/sonicether/SEGI)  
 [PCSS](https://github.com/TheMasonX/UnityPCSS)  
-[keijiro/PostProcessingUtilities](https://github.com/keijiro/PostProcessingUtilities)
+[keijiro/PostProcessingUtilities](https://github.com/keijiro/PostProcessingUtilities)  
 [IllusionModdingAPI](https://github.com/IllusionMods/IllusionModdingAPI)
