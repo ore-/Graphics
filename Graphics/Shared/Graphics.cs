@@ -5,6 +5,7 @@ using Graphics.Patch;
 using Graphics.Settings;
 using Graphics.Textures;
 using KKAPI;
+using KKAPI.Chara;
 using KKAPI.Studio.SaveLoad;
 using System;
 using System.Collections;
@@ -41,10 +42,10 @@ namespace Graphics
         private bool _isLoaded = false;
         private CursorLockMode _previousCursorLockState;
         private bool _previousCursorVisible;
+#if AI
         private float _previousTimeScale;
-
+#endif 
         private SkyboxManager _skyboxManager;
-        private FocusPuller _focusPuller;
         private LightManager _lightManager;
         private PostProcessingManager _postProcessingManager;
         private PresetManager _presetManager;
@@ -88,6 +89,7 @@ namespace Graphics
 
         private void Awake()
         {
+            CharacterApi.RegisterExtraBehaviour<CharaController>(GUID);
             StudioSaveLoadApi.RegisterExtraBehaviour<SceneController>(GUID);
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
@@ -120,10 +122,6 @@ namespace Graphics
             LocalizationManager.CurrentLanguage = ConfigLanguage.Value;
 
             _lightManager = new LightManager(this);
-
-            _focusPuller = Instance.GetOrAddComponent<FocusPuller>();
-            _focusPuller.init(this);
-            DontDestroyOnLoad(_focusPuller);
             _presetManager = new PresetManager(ConfigPresetPath.Value, this);
 
             yield return new WaitUntil(() => PCSSLight.LoadAssets());
@@ -136,7 +134,6 @@ namespace Graphics
         internal SkyboxManager SkyboxManager => _skyboxManager;
         internal PostProcessingManager PostProcessingManager => _postProcessingManager;
         internal LightManager LightManager => _lightManager;
-        internal FocusPuller FocusPuller => _focusPuller;
         internal PresetManager PresetManager => _presetManager;
 
         internal void OnGUI()
@@ -195,21 +192,24 @@ namespace Graphics
                 {
                     if (value)
                     {
+#if AI
                         if (KKAPI.KoikatuAPI.GetCurrentGameMode() == KKAPI.GameMode.MainGame)
                         {
                             _previousTimeScale = Time.timeScale;
                             Time.timeScale = 0;
                         }
+#endif
                         _previousCursorLockState = Cursor.lockState;
                         _previousCursorVisible = Cursor.visible;
                     }
                     else
                     {
+#if AI
                         if (KKAPI.KoikatuAPI.GetCurrentGameMode() == KKAPI.GameMode.MainGame)
                         {
                             Time.timeScale = _previousTimeScale;
                         }
-
+#endif
                         if (!_previousCursorVisible || _previousCursorLockState != CursorLockMode.None)
                         {
                             Cursor.lockState = _previousCursorLockState;

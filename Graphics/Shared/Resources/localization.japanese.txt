@@ -16,7 +16,7 @@ Baked,ベイク
 bias,バイアス
 Blend Distance,ブレンド距離
 Bloom,ブルーム
-Blue,緑
+Blue,青
 Bounces,バウンス
 Box Offset,オフセット
 Box Projection,ボックスプロジェクション
@@ -69,7 +69,7 @@ FromQualitySettings,品質設定から
 gain,ゲイン
 gamma,ガンマ
 Grain,グレイン
-Green,青
+Green,緑
 hard only,ハード
 HDR,高度なレンダリング機能 (HDR)
 high,高

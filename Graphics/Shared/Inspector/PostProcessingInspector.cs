@@ -9,8 +9,21 @@ namespace Graphics.Inspector
     internal static class PostProcessingInspector
     {
         private static Vector2 postScrollView;
+        private static FocusPuller focusPuller;
+        private static bool _autoFocusEnabled;
 
-        internal static void Draw(PostProcessingSettings postProcessingSettings, PostProcessingManager postprocessingManager, FocusPuller focusPuller, bool showAdvanced)
+        internal static bool AutoFocusEnabled
+        {
+            get => null == focusPuller ? false : focusPuller.enabled;
+            set
+            {
+                _autoFocusEnabled = value;
+                if (null != focusPuller)
+                    focusPuller.enabled = true;
+            }
+        }
+
+        internal static void Draw(PostProcessingSettings postProcessingSettings, PostProcessingManager postprocessingManager, bool showAdvanced)
         {
             GUILayout.BeginVertical(GUIStyles.Skin.box);
             {
@@ -20,7 +33,8 @@ namespace Graphics.Inspector
                 {
                     Label("Volume blending", "", true);
                     GUILayout.Space(1);
-                    Label("Trigger", postProcessingSettings.VolumeTriggerSetting?.name);
+                    string trigger = null != postProcessingSettings && null != postProcessingSettings.VolumeTriggerSetting ? postProcessingSettings.VolumeTriggerSetting.name : "";
+                    Label("Trigger", trigger);
                     Label("Layer", LayerMask.LayerToName(Mathf.RoundToInt(Mathf.Log(postProcessingSettings.VolumeLayerSetting.value, 2))));
                     GUILayout.Space(10);
                 }
@@ -54,14 +68,14 @@ namespace Graphics.Inspector
                 }
                 Label(volumeLabel, "", true);
                 postScrollView = GUILayout.BeginScrollView(postScrollView);
-                PostProcessVolumeSettings(postProcessingSettings, postprocessingManager, focusPuller, showAdvanced);
+                PostProcessVolumeSettings(postProcessingSettings, postprocessingManager, showAdvanced);
                 GUILayout.EndScrollView();
             }
 
             GUILayout.EndVertical();
         }
 
-        private static void PostProcessVolumeSettings(PostProcessingSettings settings, PostProcessingManager postprocessingManager, FocusPuller focusPuller, bool showAdvanced)
+        private static void PostProcessVolumeSettings(PostProcessingSettings settings, PostProcessingManager postprocessingManager, bool showAdvanced)
         {
             PostProcessVolume volume = settings.Volume;
             GUILayout.Space(10);
@@ -304,7 +318,18 @@ namespace Graphics.Inspector
                 Toggle("Depth Of Field", settings.depthOfFieldLayer.enabled.value, true, enabled => settings.depthOfFieldLayer.active = settings.depthOfFieldLayer.enabled.value = enabled);
                 if (settings.depthOfFieldLayer.enabled.value)
                 {
-                    Toggle("Auto Focus", focusPuller.enabled, false, enabled => focusPuller.enabled = enabled);
+                    if (null != Graphics.Instance.CameraSettings.MainCamera && null == focusPuller)
+                    {
+                        focusPuller = Graphics.Instance.CameraSettings.MainCamera.gameObject.GetOrAddComponent<FocusPuller>();
+                        if (null != focusPuller)
+                            focusPuller.enabled = _autoFocusEnabled;
+                    }
+
+                    if (null != focusPuller)
+                    {
+                        Toggle("Auto Focus", focusPuller.enabled, false, enabled => focusPuller.enabled = enabled);
+                        Slider("Auto Focus Speed", focusPuller.Speed, FocusPuller.MinSpeed, FocusPuller.MaxSpeed, "N2", speed => focusPuller.Speed = speed, focusPuller.enabled);
+                    }
                     Slider("Focal Distance", settings.depthOfFieldLayer.focusDistance.value, 0.1f, 1000f, "N2", focusDistance => settings.depthOfFieldLayer.focusDistance.value = focusDistance,
                         settings.depthOfFieldLayer.focusDistance.overrideState && !focusPuller.enabled, overrideState => settings.depthOfFieldLayer.focusDistance.overrideState = overrideState);
                     Slider("Aperture", settings.depthOfFieldLayer.aperture.value, 1f, 22f, "N1", aperture => settings.depthOfFieldLayer.aperture.value = aperture,
@@ -313,6 +338,19 @@ namespace Graphics.Inspector
                         settings.depthOfFieldLayer.focalLength.overrideState, overrideState => settings.depthOfFieldLayer.focalLength.overrideState = overrideState);
                     Selection("Max Blur Size", settings.depthOfFieldLayer.kernelSize.value, kernelSize => settings.depthOfFieldLayer.kernelSize.value = kernelSize, -1,
                         settings.depthOfFieldLayer.kernelSize.overrideState, overrideState => settings.depthOfFieldLayer.kernelSize.overrideState = overrideState);
+
+                    if (showAdvanced)
+                    {
+                        SelectionMask("Focus culling mask", focusPuller.HitLayer, mask => focusPuller.HitLayer = mask);
+                        GUI.enabled = false;
+                        Label("Max Distance", focusPuller.MaxDistance.ToString());
+                        Dimension("Target Focus Point", focusPuller.TargetFocusPoint);
+                        Dimension("Target Position", focusPuller.TargetPosition);
+                        Dimension("Transform Position", focusPuller.TransformPosition);
+                        Dimension("Hit Point", focusPuller.HitPoint);
+                        Dimension("Ray Origin", focusPuller.RayOrigin);
+                        GUI.enabled = true;
+                    }
                 }
                 GUILayout.EndVertical();
             }

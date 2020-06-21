@@ -79,7 +79,7 @@ namespace Graphics.Inspector
                     LightInspector.Draw(Parent.Settings, Parent.LightManager, Parent.Settings.ShowAdvancedSettings);
                     break;
                 case Tab.PostProcessing:
-                    PostProcessingInspector.Draw(Parent.PostProcessingSettings, Parent.PostProcessingManager, Parent.FocusPuller, Parent.Settings.ShowAdvancedSettings);
+                    PostProcessingInspector.Draw(Parent.PostProcessingSettings, Parent.PostProcessingManager, Parent.Settings.ShowAdvancedSettings);
                     break;
                 case Tab.Presets:
                     PresetInspector.Draw(Parent.PresetManager);
