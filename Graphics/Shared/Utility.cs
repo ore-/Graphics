@@ -8,10 +8,10 @@ namespace Graphics
 {
     internal class Util
     {
-        internal static void ResizeTexture(Texture2D tex, int width, int height, FilterMode mode = FilterMode.Trilinear)
+        internal static void ResizeTexture(Texture2D tex, int width, int height, bool doVFlip, FilterMode mode = FilterMode.Trilinear)
         {
             Scale(tex, width, height);
-            FlipTextureVertically(tex);
+            if (doVFlip) FlipTextureVertically(tex);
         }
 
         //https://pastebin.com/qkkhWs2J
