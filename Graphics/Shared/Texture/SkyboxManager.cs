@@ -263,7 +263,7 @@ namespace Graphics.Textures
             Texture2D texture = new Texture2D(cubemap.width, cubemap.height);
             Color[] CubeMapColors = cubemap.GetPixels(CubemapFace.PositiveX);
             texture.SetPixels(CubeMapColors);
-            Util.ResizeTexture(texture, 128, 128);
+            Util.ResizeTexture(texture, 128, 128, true);
             Previews.Add(texture);
             TexturePaths.Add(filePath);
             cubemapbundle.Unload(false);

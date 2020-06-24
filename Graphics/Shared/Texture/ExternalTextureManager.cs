@@ -24,7 +24,7 @@ namespace Graphics.Textures
             yield return texture;
             Texture2D preview = new Texture2D(texture.width, texture.height, texture.format, false);
             UnityEngine.Graphics.CopyTexture(texture, preview);
-            Util.ResizeTexture(preview, 64, 64);
+            Util.ResizeTexture(preview, 64, 64, false);
             Previews.Add(preview);
             TexturePaths.Add(path);
             texture = null;
