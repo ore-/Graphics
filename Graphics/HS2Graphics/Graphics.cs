@@ -1,9 +1,7 @@
 ﻿using BepInEx;
 using KKAPI;
-using KKAPI.Studio.SaveLoad;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 namespace Graphics
@@ -11,7 +9,7 @@ namespace Graphics
     public partial class Graphics : BaseUnityPlugin
     {
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-        {   
+        {
             StartCoroutine(InitializeLight(scene));
             CullingMaskExtensions.RefreshLayers();
         }
@@ -49,7 +47,7 @@ namespace Graphics
                 case GameMode.Studio:
                     return KKAPI.Studio.StudioAPI.StudioLoaded;
                 case GameMode.MainGame:
-                    return null != GameObject.Find("MapScene") && SceneManager.GetActiveScene().isLoaded && null != Camera.main; //KKAPI doesn't provide an api for in game check 
+                    return "MyRoom" == SceneManager.GetActiveScene().name && SceneManager.GetActiveScene().isLoaded && null != Camera.main; //HS2API doesn't provide an api for in game check 
                 default:
                     return false;
             }

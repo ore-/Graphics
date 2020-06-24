@@ -1,4 +1,5 @@
-﻿using MessagePack;
+﻿using Graphics.Inspector;
+using MessagePack;
 using UnityEngine;
 #if AI
 using static AmplifyOcclusionBase;
@@ -435,9 +436,7 @@ namespace Graphics.Settings
         {
             if (layer != null)
             {
-                if (Graphics.Instance.FocusPuller != null)
-                    focusPuller = Graphics.Instance.FocusPuller.enabled;
-
+                focusPuller = PostProcessingInspector.AutoFocusEnabled;
                 enabled = new BoolValue(layer.enabled);
                 focusDistance = new FloatValue(layer.focusDistance);
                 aperture = new FloatValue(layer.aperture);
@@ -450,9 +449,7 @@ namespace Graphics.Settings
         {
             if (layer != null)
             {
-                if (Graphics.Instance.FocusPuller != null)
-                    Graphics.Instance.FocusPuller.enabled = this.focusPuller;
-
+                PostProcessingInspector.AutoFocusEnabled = focusPuller;
                 enabled.Fill(layer.enabled);
                 layer.active = layer.enabled.value;
                 focusDistance.Fill(layer.focusDistance);

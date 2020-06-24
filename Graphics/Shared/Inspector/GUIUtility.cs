@@ -457,11 +457,11 @@ namespace Graphics.Inspector
             GUILayout.Label(label, GUILayout.ExpandWidth(false));
             GUILayout.Label("", GUILayout.Width(GUIStyles.labelWidth - GUI.skin.label.CalcSize(new GUIContent(label)).x));
             GUILayout.Label("X", GUILayout.ExpandWidth(false));
-            float.TryParse(GUILayout.TextField(size.x.ToString()), out float x);
+            float.TryParse(GUILayout.TextField(size.x.ToString("N2")), out float x);
             GUILayout.Label("Y", GUILayout.ExpandWidth(false));
-            float.TryParse(GUILayout.TextField(size.y.ToString()), out float y);
+            float.TryParse(GUILayout.TextField(size.y.ToString("N2")), out float y);
             GUILayout.Label("Z", GUILayout.ExpandWidth(false));
-            float.TryParse(GUILayout.TextField(size.z.ToString()), out float z);
+            float.TryParse(GUILayout.TextField(size.z.ToString("N2")), out float z);
             Vector3 newSize = size;
             if (x != size.x || y != size.y || z != size.z)
             {
