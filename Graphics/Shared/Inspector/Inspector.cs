@@ -82,7 +82,7 @@ namespace Graphics.Inspector
                     PostProcessingInspector.Draw(Parent.PostProcessingSettings, Parent.PostProcessingManager, Parent.Settings.ShowAdvancedSettings);
                     break;
                 case Tab.SSS:
-                    SSSInspector.Draw(Parent.SSSManager);
+                    SSSInspector.Draw();
                     break;
                 case Tab.Presets:
                     PresetInspector.Draw(Parent.PresetManager);

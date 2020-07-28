@@ -106,7 +106,7 @@ namespace Graphics
             CameraSettings = new CameraSettings();
             LightingSettings = new LightingSettings();
             PostProcessingSettings = new PostProcessingSettings(CameraSettings.MainCamera);
-
+            CameraSettings.MainCamera.GetOrAddComponent<SSS>();
             _skyboxManager = Instance.GetOrAddComponent<SkyboxManager>();
             _skyboxManager.Parent = this;
             _skyboxManager.AssetPath = ConfigCubeMapPath.Value;
