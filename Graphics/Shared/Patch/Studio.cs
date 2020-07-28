@@ -1,5 +1,4 @@
-﻿using BepInEx.Harmony;
-using Graphics.Settings;
+﻿using Graphics.Settings;
 using HarmonyLib;
 using Studio;
 using System;
@@ -12,7 +11,8 @@ namespace Graphics.Patch
     {
         public static void Init()
         {
-            HarmonyWrapper.PatchAll(typeof(StudioHooks));
+            //HarmonyWrapper.PatchAll(typeof(StudioHooks));
+            HarmonyLib.Harmony.CreateAndPatchAll(typeof(StudioHooks));
         }
 
         [HarmonyPostfix, HarmonyPatch(typeof(MPLightCtrl), "Awake")]

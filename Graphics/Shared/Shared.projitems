@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)Alloy\AreaLight\Defaults\DefaultSpotCookie.tif" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bluenoise.tga" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_0.png" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_1.png" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_10.png" />
@@ -101,6 +102,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Inspector\PostProcessingInspector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Inspector\PresetInspector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Inspector\SettingsInspector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Inspector\SSSInspector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LightManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LocalizationManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Patch\Studio.cs" />
@@ -120,6 +122,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Setting\PostProcessingParameters.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Setting\PostProcessingSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Setting\PostProcessingValues.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SSS\SSS.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SSS\SSS_buffers_viewer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SSS\SSS_convolution.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Texture\ExternalTextureManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Texture\InternalTextureManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Texture\SkyboxManager.cs" />
@@ -170,5 +175,8 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\segi" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\sss" />
   </ItemGroup>
 </Project>
