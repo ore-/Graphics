@@ -65,7 +65,7 @@ namespace Graphics
         //    SSS_Layer = 1 << LayerMask.NameToLayer(_SSS_LayerName);
         //}
         #endregion
-        public int maxDistance = 10;
+        public int maxDistance = 10000;
         Camera cam;
         Camera LightingCamera;
         Camera ProfileCamera;

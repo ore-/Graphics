@@ -17,7 +17,7 @@ namespace Graphics.Settings
         public int ProcessIterations = 1; 
         public int ShaderIterations = 1;
         public float DownscaleFactor = 1; // Default Resolution by defualt.
-        public int MaxDistance = 0;
+        public int MaxDistance = 10000;
         public bool DebugDistance = false;
         public int LayerBitMask;
         public bool Dither = false; // disabled by default.
