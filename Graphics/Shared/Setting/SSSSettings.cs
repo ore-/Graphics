@@ -76,6 +76,7 @@ namespace Graphics.Settings
         {
             var instance = SSSManager.SSSInstance;
             if (ReferenceEquals(null, instance)) return;
+            RescueWithHelicopter();
 
             instance.Enabled = Enabled;
             instance.ProfilePerObject = ProfilePerObject;
@@ -101,7 +102,6 @@ namespace Graphics.Settings
             instance.ProfileColorTest = ProfileColorTest;
             instance.ProfileRadiusTest = ProfileRadiusTest;
             
-            RescueWithHelicopter();
         }
     }
 }

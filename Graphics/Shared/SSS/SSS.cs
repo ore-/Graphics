@@ -140,6 +140,8 @@ namespace Graphics
 
         protected void GetRT(ref RenderTexture rt, int x, int y, string name)
         {
+            if (x <= 0 || y <= 0) return; // Below-equal zero request will crash the game.
+            
             ReleaseRT(rt);
             if (cam.allowMSAA && QualitySettings.antiAliasing > 0)
             {
