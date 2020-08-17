@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Graphics
 {
     [RequireComponent(typeof(Camera))]
-    internal class SSS : MonoBehaviour
+    public class SSS : MonoBehaviour
     {
         internal bool Enabled { get; set; }
         internal float Downsampling { get; set; }

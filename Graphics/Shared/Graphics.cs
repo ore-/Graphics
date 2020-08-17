@@ -49,12 +49,14 @@ namespace Graphics
         private LightManager _lightManager;
         private PostProcessingManager _postProcessingManager;
         private PresetManager _presetManager;
+        private SSSManager _sssManager;
         private Inspector.Inspector _inspector;
 
         internal GlobalSettings Settings { get; private set; }
         internal CameraSettings CameraSettings { get; private set; }
         internal LightingSettings LightingSettings { get; private set; }
         internal PostProcessingSettings PostProcessingSettings { get; private set; }
+        internal SSSSettings SSSSettings { get; private set; }
 
         internal BepInEx.Logging.ManualLogSource Log => Logger;
 
@@ -106,7 +108,11 @@ namespace Graphics
             CameraSettings = new CameraSettings();
             LightingSettings = new LightingSettings();
             PostProcessingSettings = new PostProcessingSettings(CameraSettings.MainCamera);
-            CameraSettings.MainCamera.GetOrAddComponent<SSS>();
+            SSSSettings = new SSSSettings();
+            
+            _sssManager = new SSSManager();
+            _sssManager.Initialize();
+            
             _skyboxManager = Instance.GetOrAddComponent<SkyboxManager>();
             _skyboxManager.Parent = this;
             _skyboxManager.AssetPath = ConfigCubeMapPath.Value;
@@ -135,6 +141,7 @@ namespace Graphics
         internal PostProcessingManager PostProcessingManager => _postProcessingManager;
         internal LightManager LightManager => _lightManager;
         internal PresetManager PresetManager => _presetManager;
+        internal SSSManager SSSManager => _sssManager;
 
         internal void OnGUI()
         {

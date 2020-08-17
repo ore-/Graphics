@@ -105,11 +105,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Inspector\SSSInspector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LightManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LocalizationManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PostProcessingManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PresetManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SSSManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Patch\Studio.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PCSS\PCSSLight.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)PostProcessingManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Preset.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)PresetManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ReflectionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SceneController.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SEGI\SEGI.cs" />
@@ -122,6 +123,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Setting\PostProcessingParameters.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Setting\PostProcessingSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Setting\PostProcessingValues.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Setting\SSSSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SSS\SSS.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SSS\SSS_buffers_viewer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SSS\SSS_convolution.cs" />

@@ -7,8 +7,10 @@ namespace Graphics.Inspector
     {
         internal static void Draw()
         {
-            SSS sss = Graphics.Instance.CameraSettings.MainCamera.GetComponent<SSS>();
-            if (null == sss)
+            if (ReferenceEquals(null, Graphics.Instance.CameraSettings.MainCamera)) return;
+            
+            SSS sss = SSSManager.SSSInstance;
+            if (ReferenceEquals(null, sss))
             {
                 Label("No subsurface scattering settings found on camera.", "");
                 return;
@@ -46,7 +48,7 @@ namespace Graphics.Inspector
                 Label("Camera Name", sss.transform.parent.name);
                 if (sss.LightingTex)
                     Label("Buffer size", sss.LightingTex.width + " x " + sss.LightingTex.height);
-                Label("Light pass shader", sss.LightingPassShader.name);
+                Label("Light pass shader", ReferenceEquals(sss.LightingPassShader, null) ? "NULL" : sss.LightingPassShader.name);
                 Selection("View Buffer", sss.toggleTexture, texture => sss.toggleTexture = texture);
                 GUILayout.Space(1);
                 Label("Edge test", "", true);
