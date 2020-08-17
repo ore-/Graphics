@@ -15,7 +15,12 @@ namespace Graphics.Inspector
                 Label("No subsurface scattering settings found on camera.", "");
                 return;
             }
-            Toggle("Enabled", sss.Enabled, false, enabled => sss.Enabled = enabled);
+            Toggle("Enabled", sss.Enabled, false, enabled =>
+            {
+                sss.Enabled = enabled;
+                if (!enabled) Graphics.Instance.SSSManager.Destroy();
+                else Graphics.Instance.SSSManager.Start();
+            });
             if (!sss.Enabled) return;
             GUILayout.BeginVertical(GUIStyles.Skin.box);
             {

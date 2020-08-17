@@ -1,44 +1,42 @@
-using System;
-using ADV.Commands.Base;
+using System.Diagnostics.CodeAnalysis;
 using MessagePack;
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
 
 namespace Graphics.Settings
 {
-    [MessagePackObject(keyAsPropertyName: true)]
+    [MessagePackObject(true)]
+    [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
     public class SSSSettings
     {
-        // set value to modify.
-        public bool Enabled = false; // disabled by default.
-        public bool ProfilePerObject;
-        public float[] Color = new []{1f,0f,0f}; // red by default.
         public float BlurSize = 0.1f; // Small Values by default.
-        public int ProcessIterations = 1; 
-        public int ShaderIterations = 1;
-        public float DownscaleFactor = 1; // Default Resolution by defualt.
-        public int MaxDistance = 10000;
+        public float[] Color = {1f, 0f, 0f}; // red by default.
+        public bool Debug = false;
         public bool DebugDistance = false;
-        public int LayerBitMask;
-        public bool Dither = false; // disabled by default.
+        public float DepthTest;
+        public bool Dither; // disabled by default.
         public float DitherIntensity;
         public float DitherScale;
-        public bool Debug = false;
-        public SSS.ToggleTexture ToggleTexture;
-        public float DepthTest;
-        public float NormalTest;
+        public float DownscaleFactor = 1; // Default Resolution by default.
         public bool EdgeDitherNoise;
+        public bool Enabled; // disabled by default.
         public bool FixPixelLeaks;
         public float FixPixelLeaksNormal;
-        public bool ProfileTest;
+        public int LayerBitMask;
+        public int MaxDistance = 10000;
+        public float NormalTest;
+        public int ProcessIterations = 1;
         public float ProfileColorTest;
+        public bool ProfilePerObject;
         public float ProfileRadiusTest;
+        public bool ProfileTest;
+        public int ShaderIterations = 1;
+        public SSS.ToggleTexture ToggleTexture;
 
         public void SaveParameters()
         {
-            var instance = SSSManager.SSSInstance;
+            SSS instance = SSSManager.SSSInstance;
             if (ReferenceEquals(null, instance)) return;
-            
+
             Enabled = instance.Enabled;
             ProfilePerObject = instance.ProfilePerObject;
             Color = new[] {instance.sssColor.r, instance.sssColor.g, instance.sssColor.b};
@@ -74,9 +72,11 @@ namespace Graphics.Settings
 
         public void LoadParameters()
         {
-            var instance = SSSManager.SSSInstance;
+            SSS instance = SSSManager.SSSInstance;
             if (ReferenceEquals(null, instance)) return;
             RescueWithHelicopter();
+            if (!Enabled) Graphics.Instance.SSSManager.Destroy();
+            else Graphics.Instance.SSSManager.Start();
 
             instance.Enabled = Enabled;
             instance.ProfilePerObject = ProfilePerObject;
@@ -101,7 +101,6 @@ namespace Graphics.Settings
             instance.UseProfileTest = ProfileTest;
             instance.ProfileColorTest = ProfileColorTest;
             instance.ProfileRadiusTest = ProfileRadiusTest;
-            
         }
     }
 }
