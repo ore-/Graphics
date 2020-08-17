@@ -10,7 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)Alloy\AreaLight\Defaults\DefaultSpotCookie.tif" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bluenoise.tga" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bluenoise.png" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_0.png" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_1.png" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Noise Textures\LDR_RGBA_10.png" />

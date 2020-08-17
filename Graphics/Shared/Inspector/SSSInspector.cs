@@ -42,8 +42,8 @@ namespace Graphics.Inspector
                 Toggle("Dither", sss.Dither, false, dither => sss.Dither = dither);
                 if (sss.Dither)
                 {
-                    Slider("Dither intensity", sss.DitherIntensity, 0f, 0.5f, "N1", intensity => sss.DitherIntensity = intensity);
-                    Slider("Dither scale", sss.DitherScale, 1f, 5f, "N1", scale => sss.DitherScale = scale);
+                    Slider("Dither intensity", sss.DitherIntensity, 0f, 5f, "N1", intensity => sss.DitherIntensity = intensity);
+                    Slider("Dither scale", sss.DitherScale, 1f, 100f, "N1", scale => sss.DitherScale = scale);
                 }
             }
             GUILayout.EndVertical();

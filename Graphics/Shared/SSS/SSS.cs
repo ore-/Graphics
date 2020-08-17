@@ -233,7 +233,7 @@ namespace Graphics
             _separableSSS = assetBundle.LoadAsset<Shader>("Assets/SSS/Resources/SeparableSSS.shader");
             _profile = assetBundle.LoadAsset<Shader>("Assets/SSS/Resources/SSS_Profile.shader");
             assetBundle.Unload(false);
-            NoiseTexture = KKAPI.Utilities.TextureUtils.LoadTexture(ResourceUtils.GetEmbeddedResource("bluenoise.tga"));
+            NoiseTexture = KKAPI.Utilities.TextureUtils.LoadTexture(ResourceUtils.GetEmbeddedResource("bluenoise.png"));
             ScatteringRadius = 0.2f;
             Downsampling = 1;
             ScatteringIterations = 5;
