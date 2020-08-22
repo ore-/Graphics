@@ -1,10 +1,12 @@
 ﻿using KKAPI;
 using KKAPI.Chara;
 using System.Collections;
+using AIChara;
 using UnityEngine;
 
 namespace Graphics
 {
+    // TODO: Optimize Character Focus Controller... Somehow adding male is killing fps!?
     internal class CharaController : CharaCustomFunctionController
     {
         protected override void OnCardBeingSaved(GameMode currentGameMode)
@@ -21,7 +23,7 @@ namespace Graphics
         {
             if (GameMode.Maker == currentGameMode || GameMode.Studio == currentGameMode)
                 ChaControl.LoadHitObject();
-
+            
             yield return new WaitUntil(() => null != ChaControl.objHitBody && null != ChaControl.objHitHead);
             ForceColliderUpdate(false);
         }
@@ -29,12 +31,12 @@ namespace Graphics
         internal void ForceColliderUpdate(bool force)
         {
             GameObject[] hitObjects = { ChaControl.objHitBody, ChaControl.objHitHead };
-            foreach (GameObject ho in hitObjects)
+            foreach (GameObject hitObject in hitObjects)
             {
-                if (null == ho)
+                if (ReferenceEquals(null, hitObject))
                     return;
-
-                SkinnedCollisionHelper[] componentsInChildren = ho.GetComponentsInChildren<SkinnedCollisionHelper>(true);
+            
+                SkinnedCollisionHelper[] componentsInChildren = hitObject.GetComponentsInChildren<SkinnedCollisionHelper>(true);
                 foreach (SkinnedCollisionHelper skinnedCollisionHelper in componentsInChildren)
                 {
                     skinnedCollisionHelper.gameObject.SetActive(true);

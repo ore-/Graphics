@@ -97,7 +97,7 @@ namespace Graphics.Settings
             if (SettingValues.profile == null)
             {
                 // Just in case
-                SettingValues.profile = (PostProcessProfile)ScriptableObject.CreateInstance("PostProcessProfile");
+                SettingValues.profile = ScriptableObject.CreateInstance<PostProcessProfile>();
                 InitializeProfiles();
             }
 

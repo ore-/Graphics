@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace Graphics
 {
+    // TODO: Find better way to save the data... maybe builder? idk...
     [MessagePackObject(keyAsPropertyName: true)]
     public struct Preset
     {
@@ -14,16 +15,18 @@ namespace Graphics
         public CameraSettings camera;
         public LightingSettings lights;
         public PostProcessingSettings pp;
+        public SSSSettings sss;
         public SkyboxParams skybox;
         public SkyboxSettings skyboxSetting;
 
-        public Preset(GlobalSettings global, CameraSettings camera, LightingSettings lights, PostProcessingSettings pp, SkyboxParams skybox)
+        public Preset(GlobalSettings global, CameraSettings camera, LightingSettings lights, PostProcessingSettings pp, SkyboxParams skybox, SSSSettings sss)
         {
             this.camera = camera;
             this.global = global;
             this.lights = lights;
             this.pp = pp;
             this.skybox = skybox;
+            this.sss = sss;
 
             // Skybox setting is generated when preset is being saved.
             skyboxSetting = null;
@@ -32,6 +35,7 @@ namespace Graphics
         public void UpdateParameters()
         {
             pp.SaveParameters();
+            sss?.SaveParameters();
             SkyboxManager manager = Graphics.Instance.SkyboxManager;
 
             Material mat = manager.Skybox;
@@ -40,7 +44,10 @@ namespace Graphics
                 SkyboxSettings setting = null;
 
                 // Generate Setting Class
-                // TODO: Find better way
+                // TODO: Find better way...
+                // TODO: Add EnviroSky Support (AI)
+                // TODO: Add AIOSky Support (HS2)
+                // TODO: Stronger exception handling for different games.
                 if (mat.shader.name == ProceduralSkyboxSettings.shaderName) setting = new ProceduralSkyboxSettings();
                 else if (mat.shader.name == TwoPointColorSkyboxSettings.shaderName) setting = new TwoPointColorSkyboxSettings();
                 else if (mat.shader.name == FourPointGradientSkyboxSetting.shaderName) setting = new FourPointGradientSkyboxSetting();
@@ -120,6 +127,7 @@ namespace Graphics
         public void ApplyParameters()
         {
             pp.LoadParameters();
+            sss?.LoadParameters();
 
             SkyboxManager manager = Graphics.Instance.SkyboxManager;
             if (manager)

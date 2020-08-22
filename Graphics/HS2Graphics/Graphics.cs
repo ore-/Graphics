@@ -21,13 +21,13 @@ namespace Graphics
             if (GameMode.Maker == KoikatuAPI.GetCurrentGameMode() && scene.name == "CharaCustom")
             {
                 GameObject lights = GameObject.Find("CharaCustom/CustomControl/CharaCamera/Main Camera/Lights Custom");
-                if (lights != null)
+                if (ReferenceEquals(lights, null))
                 {
                     Transform backLight = lights.transform.Find("Directional Light Back");
-                    if (backLight != null)
+                    if (ReferenceEquals(backLight, null))
                     {
                         Light light = backLight.GetComponent<Light>();
-                        if (light != null)
+                        if (ReferenceEquals(light, null))
                         {
                             light.enabled = false;
                         }

@@ -9,7 +9,7 @@ namespace Graphics.Settings
     public static class SettingValues
     {
         public static PostProcessProfile profile;
-        public static PostProcessProfile defaultProfile = (PostProcessProfile)ScriptableObject.CreateInstance("PostProcessProfile");
+        public static PostProcessProfile defaultProfile = ScriptableObject.CreateInstance<PostProcessProfile>();
     }
 
     [MessagePackObject(keyAsPropertyName: true)]

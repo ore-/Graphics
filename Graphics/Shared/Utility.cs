@@ -69,6 +69,15 @@ namespace Graphics
             original.Apply();
         }
 
+        internal static void RenderToTarget(Camera dest, RenderTexture targetTexture, Shader CameraShader)
+        {
+            dest.targetTexture = targetTexture;
+            if (CameraShader != null)
+                dest.RenderWithShader(CameraShader, "RenderType");
+            else
+                dest.Render();
+        }
+
         internal static List<string> GetFiles(string path, string fileSearchPattern = "*", string dirSearchPattern = "*", SearchOption searchOption = SearchOption.AllDirectories)
         {
             List<string> files = GetFiles(path, fileSearchPattern);
