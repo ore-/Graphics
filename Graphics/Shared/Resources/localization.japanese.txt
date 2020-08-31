@@ -193,3 +193,28 @@ Weight,ウエート
 White Balance,ホワイトバランス
 Window Height,ウィンドウの高さ
 Window Width,ウィンドウ幅　
+Enabled, イネーブル
+Blur, ぼかし
+Profile per object, オブジェクトごとのプロファイル
+Scattering colour, 散り散り彩色する
+Blur size, ぼかしの大きさ
+Postprocess iterations, 後処理の繰り返し
+Shader iterations per pass, パスあたりのシェーダー反復数
+Downscale factor, ダウンスケール係数
+Max distance, 最大距離
+Debug distance, デバッグ距離
+Layers, レイヤー
+Dither, ディザ
+Dither intensity, ディザ強度
+Dither scale, ディザスケール
+Debug, デバッグ
+Camera Name, カメラ名
+Buffer size, バッファ サイズ
+Light Pass shader, ライト パス 陰影
+View Buffer, バッファの表示
+Edge test, エッジテスト
+Depth Test, 深度テスト
+Normal test, 通常のテスト
+Apply edge test to dither noise, エッジテストをディザノイズに適用
+Fix pixel leaks, ドット抜けの修正
+Profile Test (per obj), プロファイルテスト (オブジェクトごとに)
