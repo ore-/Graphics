@@ -179,3 +179,28 @@ Motion Blending,动态切换
 Sharpness,清晰度
 HardOnly,仅硬阴影
 ChineseSimplified,简体中文
+Enabled, 启用
+Blur, 模糊
+Profile per object, 每个用户的配置文件
+Scattering colour, 散射颜色
+Blur size, 模糊大小
+Postprocess iterations, 后期处理迭代
+Shader iterations per pass,每轮着色器迭代次数
+Downscale factor, 缩放比例因子
+Max distance, 最大距离
+Debug distance, 调试距离
+Layers, 层级
+Dither,抖动
+Dither intensity, 抖动强度
+Dither scale,  抖动范围
+Debug, 调试
+Camera Name, 摄像机名称
+Buffer size,缓存大小
+Light Pass shader,光通道着色器
+View Buffer,查看缓存
+Edge test, 边缘检测
+Depth Test,深度测试
+Normal test,正态检验
+Apply edge test to dither noise,抖动噪声的边缘检测
+Fix pixel leaks,修复像素漏洞
+Profile Test (per obj),配置测试
