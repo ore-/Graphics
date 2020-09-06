@@ -179,3 +179,28 @@ Motion Blending,동작 전환
 Sharpness,선명도
 HardOnly,부드러움 없는 그림자
 ChineseSimplified,간체중국어
+Enabled, 활성화
+Blur, 흐림
+Profile per object, 오브젝트별 프로파일
+Scattering colour, 빛번짐 색상
+Blur size, 흐림 범위
+Postprocess iterations, 후처리 계산
+Shader iterations per pass, 패스당 셰이더 계산
+Downscale factor, 렌더 축소율
+Max distance, 최대 거리
+Debug distance, 디버그 거리
+Layers, 렌더링 레이어
+Dither, 디더링
+Dither intensity, 디더링 강도
+Dither scale, 디더링 범위
+Debug, 디버그
+Camera Name, 카메라 이름
+Buffer size, 버퍼 크기 
+Light Pass shader, 빛 패스 셰이더
+View Buffer, 범위 버퍼
+Edge test, 경계선 테스트
+Depth Test, 깊이 테스트
+Normal test , 노말 테스트
+Apply edge test to dither noise, 디더링 노이즈에 경계선 테스트 적용
+Fix pixel leaks, 픽셀 누출 수정
+Profile Test (per obj), 프로파일 테스트(오브젝트별)
