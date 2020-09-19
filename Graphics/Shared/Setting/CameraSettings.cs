@@ -228,11 +228,8 @@ namespace Graphics.Settings
         {
             get
             {
-                if (null == _camera && 0 < Camera.allCameras.Length)
-                {
-                    //foreach (var cam in Camera.allCameras)
-                    _camera = Camera.main;
-                }
+                if (_camera == null && Camera.allCameras.Length > 0)
+                    _camera = Camera.main; // It's expensive but whatever
                 return _camera;
             }
         }

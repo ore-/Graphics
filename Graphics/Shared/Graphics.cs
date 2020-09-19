@@ -98,12 +98,8 @@ namespace Graphics
 
         private IEnumerator Start()
         {
-            if (IsStudio())
-                StudioHooks.Init();
-            yield return new WaitUntil(() =>
-            {
-                return IsLoaded();
-            });
+            if (IsStudio()) StudioHooks.Init();
+            yield return new WaitUntil(IsLoaded);
             Settings = new GlobalSettings();
             CameraSettings = new CameraSettings();
             LightingSettings = new LightingSettings();
@@ -130,8 +126,8 @@ namespace Graphics
             _lightManager = new LightManager(this);
             _presetManager = new PresetManager(ConfigPresetPath.Value, this);
 
-            yield return new WaitUntil(() => PCSSLight.LoadAssets());
-            yield return new WaitUntil(() => SEGI.LoadAssets());
+            yield return new WaitUntil(PCSSLight.LoadAssets);
+            yield return new WaitUntil(SEGI.LoadAssets);
 
             _inspector = new Inspector.Inspector(this);
             _isLoaded = true;

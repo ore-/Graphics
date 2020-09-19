@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace Graphics
@@ -24,7 +25,7 @@ namespace Graphics
         {
             // cleanup render texture. 
             if (ReferenceEquals(SSSInstance, null)) return;
-            
+
             if (!ReferenceEquals(null, SSSInstance.LightingTex))
             {
                 Clear(ref SSSInstance.LightingTex);
@@ -36,7 +37,7 @@ namespace Graphics
                 Clear(ref SSSInstance.LightingTexBlurred);
                 SSSInstance.LightingTexBlurred.Release();
             }
-            
+
             if (!ReferenceEquals(null, SSSInstance.SSS_ProfileTex))
             {
                 Clear(ref SSSInstance.SSS_ProfileTex);
@@ -50,6 +51,18 @@ namespace Graphics
             RenderTexture.active = texture;
             GL.Clear(true, true, Color.clear);
             RenderTexture.active = rt;
+        }
+
+        IEnumerator WaitForCamera()
+        {
+            Camera camera = Graphics.Instance.CameraSettings.MainCamera;
+            yield return new WaitUntil(() => camera != null);
+            SSSInstance = camera.GetOrAddComponent<SSS>();
+        }
+        public void CheckInstance()
+        {
+            if (SSSInstance == null)
+                Graphics.Instance.StartCoroutine(WaitForCamera());
         }
     }
 }
