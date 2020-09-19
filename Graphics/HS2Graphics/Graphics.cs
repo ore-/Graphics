@@ -12,6 +12,7 @@ namespace Graphics
         {
             StartCoroutine(InitializeLight(scene));
             CullingMaskExtensions.RefreshLayers();
+            _sssManager?.CheckInstance();
         }
 
         private IEnumerator InitializeLight(Scene scene)
