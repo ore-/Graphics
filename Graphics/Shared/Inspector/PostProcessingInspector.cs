@@ -341,14 +341,9 @@ namespace Graphics.Inspector
 
                     if (showAdvanced)
                     {
-                        SelectionMask("Focus culling mask", focusPuller.HitLayer, mask => focusPuller.HitLayer = mask);
                         GUI.enabled = false;
                         Label("Max Distance", focusPuller.MaxDistance.ToString());
-                        Dimension("Target Focus Point", focusPuller.TargetFocusPoint);
                         Dimension("Target Position", focusPuller.TargetPosition);
-                        Dimension("Transform Position", focusPuller.TransformPosition);
-                        Dimension("Hit Point", focusPuller.HitPoint);
-                        Dimension("Ray Origin", focusPuller.RayOrigin);
                         GUI.enabled = true;
                     }
                 }
