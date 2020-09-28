@@ -53,6 +53,72 @@ namespace Graphics.Inspector
             {
                 GUILayout.Label("Please specify a valid file name.");
             }
+            GUILayout.Space(10);
+            GUILayout.BeginHorizontal();
+            if (Button("Load Main Game DEFAULT", true))
+            {
+                presetManager.LoadDefault(PresetDefaultType.MAIN_GAME);
+            }
+            GUILayout.Space(10);
+            if (Button("Save Current as Main Game DEFAULT", true))
+            {
+                presetManager.SaveDefault(PresetDefaultType.MAIN_GAME);
+            }
+            GUILayout.Space(10);
+            if (Button("Reset Main Game DEFAULT", true))
+            {
+                presetManager.RestoreDefault(PresetDefaultType.MAIN_GAME);
+            }
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+            if (Button("Load Maker DEFAULT", true))
+            {
+                presetManager.LoadDefault(PresetDefaultType.MAKER);
+            }
+            GUILayout.Space(10);
+            if (Button("Save Current as Maker DEFAULT", true))
+            {
+                presetManager.SaveDefault(PresetDefaultType.MAKER);
+            }
+            GUILayout.Space(10);
+            if (Button("Reset Maker DEFAULT", true))
+            {
+                presetManager.RestoreDefault(PresetDefaultType.MAKER);
+            }
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+            if (Button("Load VR DEFAULT", true))
+            {
+                presetManager.LoadDefault(PresetDefaultType.VR_GAME);
+            }
+            GUILayout.Space(10);
+            if (Button("Save Current as VR DEFAULT", true))
+            {
+                presetManager.SaveDefault(PresetDefaultType.VR_GAME);
+            }
+            GUILayout.Space(10);
+            if (Button("Reset VR DEFAULT", true))
+            {
+                presetManager.RestoreDefault(PresetDefaultType.VR_GAME);
+            }
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+            if (Button("Load Studio DEFAULT", true))
+            {
+                presetManager.LoadDefault(PresetDefaultType.STUDIO);
+            }
+            GUILayout.Space(10);
+            if (Button("Save Current as Studio DEFAULT", true))
+            {
+                presetManager.SaveDefault(PresetDefaultType.STUDIO);
+            }
+            GUILayout.Space(10);
+            if (Button("Reset Studio DEFAULT", true))
+            {
+                presetManager.RestoreDefault(PresetDefaultType.STUDIO);
+            }
+            GUILayout.EndHorizontal();
+
 
             GUILayout.EndVertical();
         }

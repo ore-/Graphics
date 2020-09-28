@@ -68,6 +68,7 @@ namespace Graphics
             {
                 throw new InvalidOperationException("Can only create one instance of Graphics");
             }
+            Log.LogInfo("Graphics Init");
 
             Instance = this;
 
@@ -98,6 +99,7 @@ namespace Graphics
 
         private IEnumerator Start()
         {
+            Log.LogInfo("Starting");
             if (IsStudio()) StudioHooks.Init();
             yield return new WaitUntil(IsLoaded);
             Settings = new GlobalSettings();
@@ -131,6 +133,11 @@ namespace Graphics
 
             _inspector = new Inspector.Inspector(this);
             _isLoaded = true;
+            float _fov = CameraSettings.MainCamera.fieldOfView; // Grab initial FOV before we override in the preset
+            _presetManager.LoadDefaultForCurrentGameMode();
+            CameraSettings.Fov = (float)_fov; // put it back
+            CameraSettings.MainCamera.fieldOfView = _fov;
+            Log.LogInfo("Graphics...ONLINE");
         }
 
         internal SkyboxManager SkyboxManager => _skyboxManager;

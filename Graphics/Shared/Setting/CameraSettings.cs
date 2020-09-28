@@ -229,7 +229,23 @@ namespace Graphics.Settings
             get
             {
                 if (_camera == null && Camera.allCameras.Length > 0)
-                    _camera = Camera.main; // It's expensive but whatever
+                {
+                    foreach (Camera c in Camera.allCameras)
+                    {
+                        Graphics.Instance.Log.LogDebug("Checking Camera: " + c.name);
+                        if (c.name.Equals("VRGIN_Camera (eye)")) {
+                            _camera = c;
+                        }
+                    }
+                    if (_camera == null)
+                    {
+                        _camera = Camera.main;
+                    }
+                    if (_camera != null)
+                    {
+                        Graphics.Instance.Log.LogDebug("Using Camera: " + _camera.name);
+                    }
+                }
                 return _camera;
             }
         }

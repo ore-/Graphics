@@ -13,15 +13,59 @@ namespace Graphics
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            if (scene.name == "map_title" && PostProcessingSettings != null)
+            if (_isLoaded)
             {
-                PostProcessingSettings.ResetVolume();
+                if (scene.name == "map_title" && PostProcessingSettings != null)
+                {
+                    PostProcessingSettings.ResetVolume();
+                }
+                else
+                {
+                    StartCoroutine(InitializeLight(scene));
+                }                
+                CullingMaskExtensions.RefreshLayers();
+                // Reset to known preset for everything except Studio -- this loads after scene data loads, don't want to wipe out saved scenes
+                if (KKAPI.KoikatuAPI.GetCurrentGameMode() != GameMode.Studio)
+                {
+                    StartCoroutine("ApplyPresets", scene);
+                }
             }
-            else
+        }
+
+        private IEnumerator ApplyPresets(Scene scene)
+        {
+            yield return new WaitUntil(() => scene.isLoaded && CameraSettings.MainCamera != null);
+
+            GameMode gameMode = KoikatuAPI.GetCurrentGameMode();
+            Log.LogInfo(string.Format("AIS Scene Loaded: {0} Game: {1} CAM FOV: {2}", scene.name, gameMode, CameraSettings.MainCamera.fieldOfView));
+
+            _sssManager?.CheckInstance();
+
+            if (CameraSettings.MainCamera.stereoEnabled) // VR...use VR
             {
-                StartCoroutine(InitializeLight(scene));
+                _presetManager?.LoadDefault(PresetDefaultType.VR_GAME);
+            }           
+            else if (gameMode == GameMode.MainGame)
+            {
+                // For other main games scenes, we need to preserve the original FOV and not replace from preset
+                float _fov = CameraSettings.MainCamera.fieldOfView;
+                if (CameraSettings.MainCamera.stereoEnabled)
+                {
+                    _presetManager?.LoadDefault(PresetDefaultType.VR_GAME);
+                }
+                else
+                {
+                    _presetManager?.LoadDefaultForCurrentGameMode();
+                }
+                CameraSettings.Fov = _fov;  // Not sure why this sometimes doesn't work...
+                CameraSettings.MainCamera.fieldOfView = _fov; // But this does...
+                Log.LogInfo(string.Format("After Load CAM FOV: {0}", CameraSettings.MainCamera.fieldOfView));
             }
-            CullingMaskExtensions.RefreshLayers();
+            else if (gameMode != GameMode.Unknown)
+            {
+                _presetManager?.LoadDefaultForCurrentGameMode();
+            }
+
         }
 
         private IEnumerator InitializeLight(Scene scene)

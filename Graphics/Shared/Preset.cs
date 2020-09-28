@@ -66,14 +66,8 @@ namespace Graphics
         {
             return MessagePackSerializer.Serialize(this);
         }
-        public void Save(string name = "default", string path = "", bool overwrite = true)
-        {
-            if (path == "")
-            {
-                path = Graphics.ConfigPresetPath.Value; // Runtime Config Preset Path.
-            }
-
-            string targetPath = Path.Combine(path, name + ".preset");
+        public void Save(string targetPath, bool overwrite = true)
+        {          
             Directory.CreateDirectory(Path.GetDirectoryName(targetPath));
             UpdateParameters();
             byte[] bytes = Serialize();
@@ -81,17 +75,16 @@ namespace Graphics
             {
                 File.Delete(targetPath);
                 File.WriteAllBytes(targetPath, bytes);
-                File.WriteAllText(Path.Combine(path, "debug.json"), MessagePackSerializer.ToJson(this));
+                File.WriteAllText(Path.Combine(Path.GetDirectoryName(targetPath), "debug.json"), MessagePackSerializer.ToJson(this));
             }
             else
             {
                 File.WriteAllBytes(targetPath, bytes);
             }
         }
-        public bool Load(string name = "default")
+        public bool Load(string targetPath, string name)
         {
-            string targetPath = Graphics.Instance.PresetManager.PresetPath(name);
-            if (File.Exists(targetPath))
+           if (File.Exists(targetPath))
             {
                 try
                 {
@@ -101,14 +94,14 @@ namespace Graphics
                 }
                 catch (Exception e)
                 {
-                    Graphics.Instance.Log.Log(BepInEx.Logging.LogLevel.Error, string.Format("Couldn't open preset file '{0}'", name + ".preset"));
+                    Graphics.Instance.Log.Log(BepInEx.Logging.LogLevel.Error, string.Format("Couldn't open preset file '{0}' at {1}", name + ".preset", targetPath));
                     Graphics.Instance.Log.Log(BepInEx.Logging.LogLevel.Error, e.Message);
                     return false;
                 }
             }
             else
             {
-                Graphics.Instance.Log.Log(BepInEx.Logging.LogLevel.Error, string.Format("Couldn't find preset file '{0}'", name + ".preset"));
+                Graphics.Instance.Log.Log(BepInEx.Logging.LogLevel.Error, string.Format("Couldn't find preset file '{0}' at {1}", name + ".preset", targetPath));
                 return false;
             }
         }

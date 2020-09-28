@@ -26,22 +26,35 @@ namespace Graphics
             // cleanup render texture. 
             if (ReferenceEquals(SSSInstance, null)) return;
 
-            if (!ReferenceEquals(null, SSSInstance.LightingTex))
+            if (SSSInstance.LightingTex != null)  // I believe textures have an overridden ReferenceEquals that doesn't do what we expect here...
             {
                 Clear(ref SSSInstance.LightingTex);
-                SSSInstance.LightingTex.Release();
+                SSSInstance.LightingTex?.Release();
             }
-
-            if (!ReferenceEquals(null, SSSInstance.LightingTexBlurred))
+            if (SSSInstance.LightingTexR != null)
+            {
+                Clear(ref SSSInstance.LightingTexR);
+                SSSInstance.LightingTexR?.Release();
+            }
+            if (SSSInstance.LightingTexBlurred != null)
             {
                 Clear(ref SSSInstance.LightingTexBlurred);
-                SSSInstance.LightingTexBlurred.Release();
+                SSSInstance.LightingTexBlurred?.Release();
             }
-
-            if (!ReferenceEquals(null, SSSInstance.SSS_ProfileTex))
+            if (SSSInstance.LightingTexBlurredR != null)
+            {
+                Clear(ref SSSInstance.LightingTexBlurredR);
+                SSSInstance.LightingTexBlurredR?.Release();
+            }
+            if (SSSInstance.SSS_ProfileTex != null)
             {
                 Clear(ref SSSInstance.SSS_ProfileTex);
-                SSSInstance.SSS_ProfileTex.Release();
+                SSSInstance.SSS_ProfileTex?.Release();
+            }
+            if (SSSInstance.SSS_ProfileTexR != null)
+            {
+                Clear(ref SSSInstance.SSS_ProfileTexR);
+                SSSInstance.SSS_ProfileTexR?.Release();
             }
         }
 
