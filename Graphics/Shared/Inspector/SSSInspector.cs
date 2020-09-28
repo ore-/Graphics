@@ -17,6 +17,7 @@ namespace Graphics.Inspector
             }
             Toggle("Enabled", sss.Enabled, false, enabled =>
             {
+                CullingMaskExtensions.RefreshLayers();
                 sss.Enabled = enabled;
                 if (!enabled) Graphics.Instance.SSSManager.Destroy();
                 else Graphics.Instance.SSSManager.Start();
