@@ -106,7 +106,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)LightManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LocalizationManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PostProcessingManager.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)PresetDefaultType - Copy.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PresetDefaultType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PresetManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SSSManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Patch\Studio.cs" />
