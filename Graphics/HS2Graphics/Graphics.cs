@@ -14,7 +14,6 @@ namespace Graphics
             if (_isLoaded)
             {
                 StartCoroutine(InitializeLight(scene));
-                CullingMaskExtensions.RefreshLayers();
 
                 // Reset to known preset for everything except Studio -- this loads after scene data loads, don't want to wipe out saved scenes
                 if (KKAPI.KoikatuAPI.GetCurrentGameMode() != GameMode.Studio)
@@ -26,7 +25,10 @@ namespace Graphics
 
         private IEnumerator ApplyPresets(Scene scene)
         {
-            yield return new WaitUntil( () => scene.isLoaded && CameraSettings.MainCamera != null);
+
+            yield return new WaitUntil(() => scene.isLoaded && CameraSettings.MainCamera != null &&
+                ( (scene.name.Equals("CharaCustom", System.StringComparison.OrdinalIgnoreCase) && KKAPI.Maker.MakerAPI.InsideAndLoaded) || (!scene.name.Equals("CharaCustom", System.StringComparison.OrdinalIgnoreCase)))
+            );
 
             GameMode gameMode = KoikatuAPI.GetCurrentGameMode();
             Log.LogInfo(string.Format("HS Scene Loaded: {0} Game: {1} CAM FOV: {2}", scene.name, gameMode, CameraSettings.MainCamera.fieldOfView));
@@ -62,7 +64,7 @@ namespace Graphics
                 CameraSettings.Fov = _fov;  // Not sure why this sometimes doesn't work...
                 CameraSettings.MainCamera.fieldOfView = _fov; // But this does...
                 Log.LogDebug(string.Format("After Load CAM FOV: {0}", CameraSettings.MainCamera.fieldOfView));
-            }
+            }        
             else
             {
                 _presetManager?.LoadDefaultForCurrentGameMode();

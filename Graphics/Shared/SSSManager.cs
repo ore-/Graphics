@@ -70,12 +70,15 @@ namespace Graphics
         {
             Camera camera = Graphics.Instance.CameraSettings.MainCamera;
             yield return new WaitUntil(() => camera != null);
-            SSSInstance = camera.GetOrAddComponent<SSS>();
+            CheckInstance();
         }
         public void CheckInstance()
         {
             if (SSSInstance == null)
-                Graphics.Instance.StartCoroutine(WaitForCamera());
+            {
+                Camera camera = Graphics.Instance.CameraSettings.MainCamera;
+                SSSInstance = camera.GetOrAddComponent<SSS>();
+            }
         }
     }
 }

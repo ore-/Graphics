@@ -23,7 +23,6 @@ namespace Graphics
                 {
                     StartCoroutine(InitializeLight(scene));
                 }                
-                CullingMaskExtensions.RefreshLayers();
                 // Reset to known preset for everything except Studio -- this loads after scene data loads, don't want to wipe out saved scenes
                 if (KKAPI.KoikatuAPI.GetCurrentGameMode() != GameMode.Studio)
                 {
