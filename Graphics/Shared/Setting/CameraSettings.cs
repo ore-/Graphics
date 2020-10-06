@@ -127,7 +127,7 @@ namespace Graphics.Settings
             }
             set
             {
-                if (value != _fov)
+                if (value != _fov && (MainCamera?.stereoEnabled == false))
                 {
                     if (InsideStudio)
                     {
@@ -166,15 +166,21 @@ namespace Graphics.Settings
             {
                 if (InsideStudio)
                 {
-                    Studio.CameraControl control = (Studio.CameraControl)MainCamera.GetComponent<CinemachineBrain>().ActiveVirtualCamera;
+                    Studio.CameraControl control = (Studio.CameraControl)MainCamera.GetComponent<CinemachineBrain>()?.ActiveVirtualCamera;
+                    if (control != null)
+                    {
+                        LensSettings lensSettings = control.GetFieldValue<LensSettings>("lensSettings");
+                        lensSettings.NearClipPlane = value;
+                        control.SetFieldValue<LensSettings>("lensSettings", lensSettings);
 
-                    LensSettings lensSettings = control.GetFieldValue<LensSettings>("lensSettings");
-                    lensSettings.NearClipPlane = value;
-                    control.SetFieldValue<LensSettings>("lensSettings", lensSettings);
-
-                    CameraState cameraState = control.GetFieldValue<CameraState>("cameraState");
-                    cameraState.Lens = lensSettings;
-                    control.SetFieldValue<CameraState>("cameraState", cameraState);
+                        CameraState cameraState = control.GetFieldValue<CameraState>("cameraState");
+                        cameraState.Lens = lensSettings;
+                        control.SetFieldValue<CameraState>("cameraState", cameraState);
+                    } 
+                    else
+                    {
+                        MainCamera.nearClipPlane = value;
+                    }
                 }
                 else
                 {
@@ -205,16 +211,22 @@ namespace Graphics.Settings
             set
             {
                 if (InsideStudio)
-                {
-                    Studio.CameraControl control = (Studio.CameraControl)MainCamera.GetComponent<CinemachineBrain>().ActiveVirtualCamera;
+                {                    
+                    Studio.CameraControl control = (Studio.CameraControl)MainCamera.GetComponent<CinemachineBrain>()?.ActiveVirtualCamera;
+                    if (control != null)
+                    {
+                        LensSettings lensSettings = control.GetFieldValue<LensSettings>("lensSettings");
+                        lensSettings.FarClipPlane = value;
+                        control.SetFieldValue<LensSettings>("lensSettings", lensSettings);
 
-                    LensSettings lensSettings = control.GetFieldValue<LensSettings>("lensSettings");
-                    lensSettings.FarClipPlane = value;
-                    control.SetFieldValue<LensSettings>("lensSettings", lensSettings);
-
-                    CameraState cameraState = control.GetFieldValue<CameraState>("cameraState");
-                    cameraState.Lens = lensSettings;
-                    control.SetFieldValue<CameraState>("cameraState", cameraState);
+                        CameraState cameraState = control.GetFieldValue<CameraState>("cameraState");
+                        cameraState.Lens = lensSettings;
+                        control.SetFieldValue<CameraState>("cameraState", cameraState);
+                    }
+                    else
+                    {
+                        MainCamera.farClipPlane = value;
+                    }
                 }
                 else
                 {
