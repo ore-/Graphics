@@ -6,18 +6,23 @@ namespace Graphics
     //https://www.gamasutra.com/blogs/CharlesCordingley/20141124/230710/Unity3D_Culling_Mask_Tip.php
     internal static class CullingMaskExtensions
     {
-        internal static List<string> Layers { get; private set; }
-
-        internal static void RefreshLayers()
-        {
-            List<string> layers = new List<string>();
-            for (int i = 0; i <= 31; i++)
-            {
-                var layerN = LayerMask.LayerToName(i);
-                if (layerN.Length > 0)
-                    layers.Add(layerN);
+        private static List<string> _layers;
+        internal static List<string> Layers { 
+            get
+            { 
+                if (_layers == null)
+                {
+                    List<string> layers = new List<string>();
+                    for (int i = 0; i <= 31; i++)
+                    {
+                        var layerN = LayerMask.LayerToName(i);
+                        if (layerN.Length > 0)
+                            layers.Add(layerN);
+                    }
+                    _layers = layers;
+                }
+                return _layers;
             }
-            Layers = layers;
         }
 
         internal static int LayerCullingShow(int cullingMask, int layerMask)
